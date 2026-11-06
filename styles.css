@@ -228,9 +228,9 @@ a:hover { color: var(--caramel-dark); }
 .amharic { font-family: "Noto Sans Ethiopic", "Nyala", var(--sans); font-size: .62em; font-weight: 500; color: var(--caramel); margin-left: .35rem; vertical-align: middle; }
 .flag-bar { display: flex; width: 84px; height: 4px; border-radius: 2px; overflow: hidden; margin-bottom: 1.4rem; }
 .flag-bar span { flex: 1; }
-.flag-bar span:nth-child(1) { background: #3f9a55; }
-.flag-bar span:nth-child(2) { background: #f0c419; }
-.flag-bar span:nth-child(3) { background: #d0473b; }
+.flag-bar span:nth-child(1) { background: var(--caramel); }
+.flag-bar span:nth-child(2) { background: #c08a4e; }
+.flag-bar span:nth-child(3) { background: #dcb88a; }
 .ethiopia-lead { font-size: 1.05rem; max-width: 34rem; }
 .roots-list { display: grid; gap: 1.25rem; margin-top: 1.75rem; }
 .roots-list li { display: flex; gap: 1rem; align-items: flex-start; }

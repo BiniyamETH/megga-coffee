@@ -302,7 +302,7 @@
       url: base,
       image: base + "assets/og-image.jpg",
       menu: base + "menu.html",
-      servesCuisine: ["Coffee", "Ethiopian", "Breakfast", "Brunch", "Greek", "Vegetarian"],
+      servesCuisine: ["Coffee", "Ethiopian", "Eritrean", "Breakfast", "Brunch", "Greek", "Vegetarian"],
       address: {
         "@type": "PostalAddress",
         streetAddress: a.street,
@@ -411,7 +411,11 @@
   function renderGalleryStrip() {
     var strip = $("[data-gallery-strip]");
     if (!strip) return;
-    strip.innerHTML = galleryItems().filter(function (g) { return g.src; }).slice(0, 6).map(function (g) {
+    // Skip photos already shown elsewhere on the page, and ones marked home: false.
+    var onPage = $$("img").map(function (img) { return img.getAttribute("src"); });
+    strip.innerHTML = galleryItems().filter(function (g) {
+      return g.src && g.home !== false && onPage.indexOf(g.src) === -1;
+    }).slice(0, 6).map(function (g) {
       return '<li><a class="strip-photo" href="gallery.html">' + imgHTML(g.src, g.alt || g.caption, 400, 300, g.caption) + "</a></li>";
     }).join("");
     watchImages(strip);
