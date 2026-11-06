@@ -362,10 +362,10 @@ a:hover { color: var(--caramel-dark); }
 
 /* menu page */
 .menu-tools { position: sticky; top: var(--header-h); z-index: 40; background: rgba(252, 248, 244, .97); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.menu-tabs { overflow-x: auto; scrollbar-width: none; margin: 0 -20px; padding: 0 20px; }
+.menu-tabs { flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; margin-right: -20px; padding-right: 20px; -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent); mask-image: linear-gradient(90deg, #000 88%, transparent); }
 .menu-tabs::-webkit-scrollbar { display: none; }
 .menu-tabs ul { display: flex; gap: .4rem; padding: .7rem 0; width: max-content; }
-.tab { display: inline-block; padding: .45rem 1rem; border-radius: 999px; border: 1px solid transparent; color: var(--ink); font-family: var(--display); font-size: .95rem; font-weight: 500; text-decoration: none; white-space: nowrap; }
+.tab { display: inline-flex; align-items: center; min-height: 40px; padding: .45rem 1rem; border-radius: 999px; border: 1px solid transparent; color: var(--ink); font-family: var(--display); font-size: .95rem; font-weight: 500; text-decoration: none; white-space: nowrap; }
 .tab:hover { border-color: var(--line-2); color: var(--ink); }
 .tab.is-active { background: var(--caramel); color: #fff; }
 .menu-filters { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; padding-top: 1.5rem; padding-bottom: .5rem; }
@@ -380,7 +380,7 @@ a:hover { color: var(--caramel-dark); }
 .menu-count { flex-basis: 100%; margin: 0; color: var(--muted); font-size: .88rem; min-height: 1.2em; }
 @media (min-width: 760px) { .search { flex: 1 1 320px; max-width: 420px; } }
 .menu-body { padding-bottom: 4rem; }
-.menu-cat { scroll-margin-top: calc(var(--header-h) + 70px); padding: 2rem 0 .5rem; }
+.menu-cat { padding: 2rem 0 .5rem; }
 .menu-cat-title { font-size: clamp(1.6rem, 4vw, 2.1rem); padding-bottom: .75rem; margin-bottom: .5rem; border-bottom: 1px solid var(--line-2); }
 .menu-cat-head { position: relative; height: 160px; margin-bottom: .75rem; border-radius: var(--radius-lg); overflow: hidden; background: var(--band); }
 .menu-cat-head img, .menu-cat-head .placeholder { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -423,3 +423,102 @@ a:hover { color: var(--caramel-dark); }
   .js .reveal { opacity: 1; transform: none; }
   .btn:hover, .menu-card:hover { transform: none; }
 }
+
+/* ---------- menu page: phone-first (customers arrive by QR code) ---------- */
+
+/* Compact top on phones so the food is on the first screen */
+@media (max-width: 899px) {
+  body[data-page="menu"] .hero-media { display: none; }
+  body[data-page="menu"] .hero-content { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+  body[data-page="menu"] .hero-title { font-size: 2.2rem; margin-bottom: .5rem; }
+  body[data-page="menu"] .hero .eyebrow { margin-bottom: .4rem; font-size: .7rem; }
+  body[data-page="menu"] .hero .btn-row { display: none; }
+  body[data-page="menu"] .hero-lead { font-size: .95rem; }
+}
+
+/* On phones only the category bar stays pinned; the logo bar scrolls away */
+@media (max-width: 1019px) {
+  body[data-page="menu"] .site-header { position: relative; }
+  body[data-page="menu"] .menu-tools { top: 0; }
+}
+
+.menu-bar { display: flex; align-items: center; gap: .5rem; }
+.sections-btn {
+  display: inline-flex; align-items: center; gap: .4rem; flex: none;
+  min-height: 40px; padding: .4rem .9rem .4rem .7rem;
+  border: 1.5px solid var(--caramel); border-radius: 999px;
+  background: var(--white); color: var(--caramel);
+  font-family: var(--display); font-size: .92rem; font-weight: 600;
+  cursor: pointer;
+}
+.sections-btn .icon { width: 18px; height: 18px; }
+.sections-btn[aria-expanded="true"] { background: var(--caramel); color: #fff; }
+
+.sections-panel {
+  border-top: 1px solid var(--line);
+  background: var(--page);
+  box-shadow: 0 14px 24px rgba(90, 60, 40, .12);
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
+  padding: .9rem 0 1.2rem;
+}
+.sections-title { margin: 0 0 .7rem; font-family: var(--display); font-weight: 600; color: var(--muted); font-size: .85rem; letter-spacing: .12em; text-transform: uppercase; }
+.sections-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
+.section-link {
+  display: flex; align-items: center; gap: .5rem;
+  min-height: 56px; padding: .45rem .6rem .45rem .45rem;
+  background: var(--card); border-radius: 12px;
+  color: var(--ink); text-decoration: none;
+}
+.section-link:hover, .section-link:focus-visible { background: var(--caramel-soft); color: var(--ink); }
+.section-link img { width: 40px; height: 40px; flex: none; object-fit: cover; border-radius: 8px; }
+.section-name { flex: 1; min-width: 0; font-family: var(--display); font-size: .88rem; font-weight: 600; line-height: 1.2; }
+.section-count { flex: none; min-width: 26px; padding: .1rem .45rem; border-radius: 999px; background: var(--white); color: var(--caramel); font-size: .75rem; font-weight: 700; text-align: center; }
+@media (min-width: 760px) { .sections-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+/* Section banners: shorter on phones, title on a solid fade so it is always readable */
+@media (max-width: 759px) {
+  .menu-cat-head { height: 112px; }
+  .menu-cat-head::after { background: linear-gradient(90deg, rgba(245, 238, 230, .98) 0%, rgba(245, 238, 230, .92) 48%, rgba(245, 238, 230, .2) 85%); }
+  .menu-cat-head .menu-cat-title { font-size: 1.55rem; left: 1.1rem; max-width: 70%; }
+}
+
+/* Dish photo button + viewer */
+.thumb-btn { display: block; padding: 0; border: 0; background: none; border-radius: 12px; cursor: zoom-in; }
+.thumb-btn:focus-visible { outline-offset: 2px; }
+.dish-viewer { width: min(520px, 92vw); }
+.dish-viewer .lightbox-figure img { aspect-ratio: 1; object-fit: cover; max-height: 70vh; }
+.dish-caption { display: grid; grid-template-columns: 1fr auto; gap: .2rem 1rem; align-items: baseline; }
+.dish-name { font-family: var(--display); font-size: 1.25rem; font-weight: 600; }
+.dish-price { font-family: var(--display); font-size: 1.2rem; font-weight: 600; color: #f0b07a; }
+.dish-desc { grid-column: 1 / -1; color: rgba(255, 255, 255, .75); font-family: var(--sans); font-size: .95rem; }
+.dish-desc:empty { display: none; }
+
+/* Back to top */
+.to-top {
+  display: none;
+  position: fixed; right: 16px; bottom: 18px; z-index: 45;
+  place-items: center;
+  width: 50px; height: 50px; border-radius: 50%;
+  background: var(--caramel); color: #fff;
+  box-shadow: 0 8px 20px rgba(90, 60, 40, .3);
+  opacity: 0; transform: translateY(12px); pointer-events: none;
+  transition: opacity .25s, transform .25s var(--ease);
+}
+.to-top.is-visible { opacity: 1; transform: none; pointer-events: auto; }
+/* Only on wider screens: on phones it would cover prices, and "Sections" already jumps anywhere */
+@media (min-width: 900px) { .to-top { display: grid; } }
+.to-top:hover { background: var(--caramel-dark); color: #fff; }
+.to-top .icon { width: 22px; height: 22px; stroke-width: 2.2; }
+
+.menu-empty { display: grid; justify-items: center; gap: .5rem; }
+
+/* Phones: filters on one swipeable row, tighter spacing so dishes show sooner */
+@media (max-width: 599px) {
+  .menu-filters { padding-top: 1rem; gap: .6rem; }
+  .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-right: -20px; padding-right: 20px; }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip { flex: none; }
+  .menu-cat { padding-top: 1.25rem; }
+}
+.menu-empty p { margin: 0; }

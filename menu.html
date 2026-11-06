@@ -64,6 +64,8 @@
     <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
     <symbol id="i-beans" viewBox="0 0 32 24"><path fill="currentColor" stroke="none" d="M15 21C9 20 5.5 15 7 9.5 11.5 10 15.5 14.5 15 21z"/><path fill="currentColor" stroke="none" d="M17 21c6-1 9.5-6 8-11.5C20.5 10 16.5 14.5 17 21z"/><path fill="currentColor" stroke="none" d="M16 13.5c-2.5-3-2.5-7.5 0-10.5 2.5 3 2.5 7.5 0 10.5z"/></symbol>
     <symbol id="i-google" viewBox="0 0 24 24"><path d="M20.5 12.2c0-.6-.1-1.2-.2-1.7H12v3.3h4.8a4.2 4.2 0 0 1-1.8 2.7v2.2h2.9c1.7-1.6 2.6-3.9 2.6-6.5z"/><path d="M12 21c2.4 0 4.4-.8 5.9-2.2L15 16.6c-.8.5-1.8.9-3 .9-2.3 0-4.3-1.6-5-3.7H4v2.3A9 9 0 0 0 12 21z"/><path d="M7 13.8a5.4 5.4 0 0 1 0-3.5V8H4a9 9 0 0 0 0 8z"/><path d="M12 6.6c1.3 0 2.5.5 3.4 1.3L18 5.4A9 9 0 0 0 4 8l3 2.3c.7-2.1 2.7-3.7 5-3.7z"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
   </svg>
 
   <a class="skip-link" href="#main">Skip to content</a>
@@ -99,7 +101,7 @@
   <main id="main">
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-media">
-        <img src="assets/cards/breakfast.jpg" alt="" width="1800" height="1200" fetchpriority="high" decoding="async">
+        <img src="assets/cards/breakfast.jpg" alt="" width="900" height="640" loading="lazy" decoding="async">
       </div>
       <div class="container hero-content">
         <p class="eyebrow">Breakfast · Brunch · Coffee</p>
@@ -113,10 +115,20 @@
     </section>
 
     <div class="menu-tools" data-menu-tools>
-      <div class="container">
+      <div class="container menu-bar">
+        <button class="sections-btn" type="button" aria-expanded="false" aria-controls="sections-panel" data-sections-toggle>
+          <svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg>
+          <span>Sections</span>
+        </button>
         <nav class="menu-tabs" aria-label="Menu categories">
           <ul role="list" data-menu-tabs></ul>
         </nav>
+      </div>
+      <div class="sections-panel" id="sections-panel" hidden data-sections-panel>
+        <div class="container">
+          <p class="sections-title">Jump to a section</p>
+          <ul class="sections-grid" role="list" data-sections-grid></ul>
+        </div>
       </div>
     </div>
 
@@ -139,7 +151,10 @@
 
     <div class="container menu-body">
       <div data-menu-root></div>
-      <p class="menu-empty" hidden data-menu-empty>No items match your search. Try a different word or clear the filters.</p>
+      <div class="menu-empty" hidden data-menu-empty>
+        <p>No items match your search.</p>
+        <button class="btn btn-outline" type="button" data-menu-reset>Show the full menu</button>
+      </div>
 
       <ul class="legend" role="list" aria-label="Menu key">
         <li><svg class="tag-icon tag-v" aria-hidden="true"><use href="#i-leaf"/></svg> Vegetarian</li>
@@ -147,6 +162,22 @@
         <li><svg class="tag-icon tag-gf" aria-hidden="true"><use href="#i-gf"/></svg> Gluten Free</li>
       </ul>
     </div>
+
+    <dialog class="lightbox dish-viewer" data-dish-viewer aria-label="Dish photo">
+      <button class="lightbox-btn lightbox-close" type="button" data-dish-close aria-label="Close">
+        <svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+      <figure class="lightbox-figure">
+        <img data-dish-img alt="">
+        <figcaption class="dish-caption">
+          <span class="dish-name" data-dish-name></span>
+          <span class="dish-price" data-dish-price></span>
+          <span class="dish-desc" data-dish-desc></span>
+        </figcaption>
+      </figure>
+    </dialog>
+
+    <a class="to-top" href="#top" aria-label="Back to top" data-to-top>
+      <svg class="icon" aria-hidden="true"><use href="#i-up"/></svg></a>
   </main>
 
   <!-- VISIT BAND (on every page) -->

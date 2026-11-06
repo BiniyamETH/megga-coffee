@@ -105,3 +105,11 @@ The category photos in `assets/menu/` are free stock photos from [Unsplash](http
 ### Ethiopian roots section
 
 The "Coffee, the Ethiopian Way" section on the homepage uses three free Unsplash photos in `assets/ethiopia/`: `jebena-pour.jpg` (photo-1774529233247-d3f34ed11994), `coffee-ceremony.jpg` (photo-1630861413071-a424a4d6d155) and `coffee-cherries.jpg` (photo-1515694590185-73647ba02c10). Its text is in `index.html`, under the comment `<!-- ETHIOPIAN ROOTS -->`. If the café holds coffee ceremonies or serves Ethiopian beans, add that there.
+
+## Menu QR code (for tables)
+
+- `qr-card.html` is a print-ready page (US Letter). Page 1 is a full-page sign, page 2 is four 4¼ × 5½ in table cards to cut out. Open it in a browser and click **Print**. It isn't linked from the site.
+- `assets/qr/menu-qr.svg` (sharp at any size) and `assets/qr/menu-qr.png` (1176 px) are the QR code on its own, for a designer or print shop.
+- The code opens `https://biniyameth.github.io/megga-coffee/menu.html`. It uses error-correction level H, so it still scans if up to 30% of it is scratched or covered.
+- **Never rename the GitHub repository or move `menu.html`.** The printed codes point to that exact address. Changing prices or items in `menu-data.js` is fine: the same QR code always shows the latest menu.
+- Print each QR code at least 2 cm (¾ in) wide. The table cards use 6.5 cm.

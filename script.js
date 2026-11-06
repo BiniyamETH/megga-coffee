@@ -556,6 +556,74 @@
     els.forEach(function (el) { io.observe(el); });
   }
 
+  // How much of the top of the screen is covered by sticky bars on the menu page,
+  // so jumping to a section lands just below them.
+  function setMenuOffset() {
+    var header = $("[data-header]");
+    var tools = $("[data-menu-tools]");
+    if (!tools) return;
+    var headerSticky = header && getComputedStyle(header).position === "sticky";
+    var offset = (headerSticky ? header.offsetHeight : 0) + tools.offsetHeight;
+    document.documentElement.style.setProperty("--menu-offset", offset + "px");
+    document.documentElement.style.scrollPaddingTop = (offset + 10) + "px";
+  }
+
+  // "Sections" button: a panel with every menu section.
+  function setupSectionsPanel() {
+    var btn = $("[data-sections-toggle]");
+    var panel = $("[data-sections-panel]");
+    if (!btn || !panel) return;
+    function setOpen(open) {
+      btn.setAttribute("aria-expanded", String(open));
+      panel.hidden = !open;
+      setMenuOffset();
+    }
+    btn.addEventListener("click", function () { setOpen(panel.hidden); });
+    panel.addEventListener("click", function (e) {
+      if (e.target.closest("a")) {
+        setOpen(false);
+      }
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !panel.hidden) { setOpen(false); btn.focus(); }
+    });
+    document.addEventListener("click", function (e) {
+      if (!panel.hidden && !e.target.closest("[data-sections-panel], [data-sections-toggle]")) setOpen(false);
+    });
+  }
+
+  // Tap a dish photo to see it large, with its name and price.
+  function setupDishViewer(root) {
+    var box = $("[data-dish-viewer]");
+    if (!box || typeof box.showModal !== "function") return;
+    var img = $("[data-dish-img]", box);
+    root.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-dish]");
+      if (!btn) return;
+      var idx = btn.getAttribute("data-dish").split("-");
+      var item = MENU[+idx[0]].items[+idx[1]];
+      var thumb = item.image;
+      img.onerror = function () { img.onerror = null; img.src = thumb; };
+      img.src = thumb.replace("/items/", "/items/large/");
+      img.alt = item.name;
+      $("[data-dish-name]", box).textContent = item.name;
+      $("[data-dish-price]", box).textContent = formatPrice(item.price);
+      $("[data-dish-desc]", box).textContent = item.desc || "";
+      box.showModal();
+    });
+    $("[data-dish-close]", box).addEventListener("click", function () { box.close(); });
+    box.addEventListener("click", function (e) { if (e.target === box) box.close(); });
+  }
+
+  // Round "back to top" button that appears after scrolling down.
+  function setupToTop() {
+    var btn = $("[data-to-top]");
+    if (!btn) return;
+    function onScroll() { btn.classList.toggle("is-visible", window.scrollY > 900); }
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+
   /* ---------- menu page ---------- */
 
   function renderMenu() {
@@ -572,8 +640,18 @@
       return '<li><a class="tab" href="#' + esc(cat.id) + '" data-tab="' + esc(cat.id) + '">' + esc(cat.name) + "</a></li>";
     }).join("");
 
-    root.innerHTML = MENU.map(function (cat) {
-      var items = cat.items.map(function (item) {
+    var sectionsGrid = $("[data-sections-grid]");
+    if (sectionsGrid) {
+      sectionsGrid.innerHTML = MENU.map(function (cat) {
+        return '<li><a class="section-link" href="#' + esc(cat.id) + '" data-section="' + esc(cat.id) + '">' +
+          (cat.image ? '<img src="' + esc(cat.image) + '" alt="" width="96" height="64" loading="lazy" decoding="async">' : "") +
+          '<span class="section-name">' + esc(cat.name) + '</span><span class="section-count" data-section-count>' +
+          cat.items.length + "</span></a></li>";
+      }).join("");
+    }
+
+    root.innerHTML = MENU.map(function (cat, ci) {
+      var items = cat.items.map(function (item, ii) {
         var tags = item.tags || [];
         var tagHTML = tags.filter(function (t) { return TAGS[t]; }).map(function (t) {
           return '<span class="tag" role="img" aria-label="' + TAGS[t].label + '" title="' + TAGS[t].label + '">' +
@@ -581,7 +659,8 @@
         }).join("");
         var haystack = (item.name + " " + (item.desc || "") + " " + cat.name).toLowerCase();
         var thumb = item.image
-          ? '<img class="item-thumb" src="' + esc(item.image) + '" alt="' + esc(item.name) + '" width="240" height="240" loading="lazy" decoding="async">'
+          ? '<button class="thumb-btn" type="button" data-dish="' + ci + "-" + ii + '" aria-label="View photo: ' + esc(item.name) + '">' +
+            '<img class="item-thumb" src="' + esc(item.image) + '" alt="" width="240" height="240" loading="lazy" decoding="async"></button>'
           : "";
         return '<li class="menu-item' + (thumb ? " has-photo" : "") + '" data-tags="' + esc(tags.join(" ")) + '" data-search="' + esc(haystack) + '">' +
           thumb +
@@ -608,8 +687,9 @@
     // A missing item photo just drops the thumbnail; the row stays text-only.
     $$(".item-thumb", root).forEach(function (img) {
       img.addEventListener("error", function () {
-        img.parentNode.classList.remove("has-photo");
-        img.remove();
+        var btn = img.closest(".thumb-btn");
+        btn.parentNode.classList.remove("has-photo");
+        btn.remove();
       }, { once: true });
     });
     var total = $$(".menu-item", root).length;
@@ -630,6 +710,11 @@
         sec.hidden = visibleInCat === 0;
         var tab = $('[data-tab="' + sec.id + '"]', tabsList);
         if (tab) tab.parentNode.hidden = visibleInCat === 0;
+        var link = sectionsGrid && $('[data-section="' + sec.id + '"]', sectionsGrid);
+        if (link) {
+          link.parentNode.hidden = visibleInCat === 0;
+          $("[data-section-count]", link).textContent = visibleInCat;
+        }
         shown += visibleInCat;
       });
       emptyEl.hidden = shown !== 0;
@@ -637,6 +722,16 @@
     }
 
     search.addEventListener("input", applyFilters);
+    var resetBtn = $("[data-menu-reset]");
+    if (resetBtn) {
+      resetBtn.addEventListener("click", function () {
+        search.value = "";
+        activeFilters = {};
+        $$("[data-filter]").forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+        applyFilters();
+        search.focus();
+      });
+    }
     $$("[data-filter]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         var key = btn.getAttribute("data-filter");
@@ -655,7 +750,9 @@
         if (active) {
           t.setAttribute("aria-current", "true");
           var bar = tabsList.parentNode;
-          var left = t.offsetLeft - (bar.clientWidth - t.offsetWidth) / 2;
+          // Position of the tab inside the scrolling bar (not the page), centred in view.
+          var inBar = t.getBoundingClientRect().left - bar.getBoundingClientRect().left + bar.scrollLeft;
+          var left = inBar - (bar.clientWidth - t.offsetWidth) / 2;
           bar.scrollTo({ left: left, behavior: reduceMotion ? "auto" : "smooth" });
         } else {
           t.removeAttribute("aria-current");
@@ -668,6 +765,13 @@
       }, { rootMargin: "-35% 0px -60% 0px" });
       $$(".menu-cat", root).forEach(function (sec) { spy.observe(sec); });
     }
+
+    setupSectionsPanel();
+    setupDishViewer(root);
+    setupToTop();
+    setMenuOffset();
+    window.addEventListener("resize", setMenuOffset);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(setMenuOffset);
 
     // Content is rendered by JS, so jump to #category from the homepage cards manually.
     if (location.hash) {
