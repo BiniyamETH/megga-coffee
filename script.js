@@ -558,12 +558,14 @@
 
   // How much of the top of the screen is covered by sticky bars on the menu page,
   // so jumping to a section lands just below them.
+  var menuOffsetPx = 0;
   function setMenuOffset() {
     var header = $("[data-header]");
     var tools = $("[data-menu-tools]");
     if (!tools) return;
     var headerSticky = header && getComputedStyle(header).position === "sticky";
     var offset = (headerSticky ? header.offsetHeight : 0) + tools.offsetHeight;
+    menuOffsetPx = offset;
     document.documentElement.style.setProperty("--menu-offset", offset + "px");
     document.documentElement.style.scrollPaddingTop = (offset + 10) + "px";
   }
@@ -654,6 +656,10 @@
     tabsList.innerHTML = MENU.map(function (cat) {
       return '<li><a class="tab" href="#' + esc(cat.id) + '" data-tab="' + esc(cat.id) + '">' + esc(cat.name) + "</a></li>";
     }).join("");
+
+    var tabsBar = tabsList.parentNode;
+    function markTabsScrolled() { tabsBar.classList.toggle("is-scrolled", tabsBar.scrollLeft > 4); }
+    tabsBar.addEventListener("scroll", markTabsScrolled, { passive: true });
 
     var sectionsGrid = $("[data-sections-grid]");
     if (sectionsGrid) {
@@ -761,8 +767,11 @@
       });
     });
 
-    // Highlight the tab for the category currently on screen.
+    // Highlight the tab for the section on screen and keep that tab centred in the bar.
+    var activeId = null;
     function setActive(id) {
+      if (!id || id === activeId) return;
+      activeId = id;
       $$(".tab", tabsList).forEach(function (t) {
         var active = t.getAttribute("data-tab") === id;
         t.classList.toggle("is-active", active);
@@ -771,19 +780,64 @@
           var bar = tabsList.parentNode;
           // Position of the tab inside the scrolling bar (not the page), centred in view.
           var inBar = t.getBoundingClientRect().left - bar.getBoundingClientRect().left + bar.scrollLeft;
-          var left = inBar - (bar.clientWidth - t.offsetWidth) / 2;
-          bar.scrollTo({ left: left, behavior: reduceMotion ? "auto" : "smooth" });
+          // Set directly: a sliding animation here gets cancelled when the page itself jumps.
+          bar.scrollLeft = Math.max(0, inBar - (bar.clientWidth - t.offsetWidth) / 2);
+          bar.classList.toggle("is-scrolled", bar.scrollLeft > 4);
         } else {
           t.removeAttribute("aria-current");
         }
       });
     }
-    if ("IntersectionObserver" in window) {
-      var spy = new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) { if (en.isIntersecting) setActive(en.target.id); });
-      }, { rootMargin: "-35% 0px -60% 0px" });
-      $$(".menu-cat", root).forEach(function (sec) { spy.observe(sec); });
+
+    // The section on screen is the last one whose heading has reached the bottom of the sticky bar.
+    function sectionOnScreen() {
+      var secs = $$(".menu-cat", root).filter(function (sec) { return !sec.hidden; });
+      if (!secs.length) return null;
+      var line = menuOffsetPx + 24;
+      var current = secs[0];
+      secs.forEach(function (sec) { if (sec.getBoundingClientRect().top <= line) current = sec; });
+      // At the very bottom of the page the last section wins, even if it is short.
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) current = secs[secs.length - 1];
+      return current.id;
     }
+
+    var jumping = false, jumpTimer = 0, ticking = false;
+    window.addEventListener("scroll", function () {
+      if (jumping || ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { ticking = false; setActive(sectionOnScreen()); });
+    }, { passive: true });
+
+    // Scroll so the section heading sits just below the sticky bar, and highlight its tab right away.
+    function jumpTo(id, smooth) {
+      var el = document.getElementById(id);
+      if (!el || el.hidden) return;
+      setMenuOffset();
+      var y = Math.max(0, el.getBoundingClientRect().top + window.scrollY - menuOffsetPx - 8);
+      // Slide to nearby sections; jump straight to far ones (a long slide is slow and dizzying).
+      var glide = smooth && !reduceMotion && Math.abs(y - window.scrollY) < 1400;
+      jumping = true;
+      setActive(id);
+      window.scrollTo({ top: y, behavior: glide ? "smooth" : "instant" });
+      clearTimeout(jumpTimer);
+      jumpTimer = setTimeout(function () { jumping = false; setActive(sectionOnScreen()); }, glide ? 700 : 80);
+      if (history.replaceState) history.replaceState(null, "", "#" + id);
+    }
+
+    // Tabs and the Sections panel both jump with the exact position above.
+    document.addEventListener("click", function (e) {
+      var link = e.target.closest(".tab, .section-link");
+      if (!link) return;
+      e.preventDefault();
+      var id = link.getAttribute("href").slice(1);
+      var panel = $("[data-sections-panel]");
+      if (panel && !panel.hidden) {
+        panel.hidden = true;
+        var btn = $("[data-sections-toggle]");
+        if (btn) btn.setAttribute("aria-expanded", "false");
+      }
+      jumpTo(id, true);
+    });
 
     setupSectionsPanel();
     setupSearchPanel(search, function () {
@@ -795,16 +849,16 @@
     window.addEventListener("resize", setMenuOffset);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(setMenuOffset);
 
-    // Content is rendered by JS, so jump to #category from the homepage cards manually.
-    if (location.hash) {
-      var target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
-      if (target) {
-        requestAnimationFrame(function () {
-          target.scrollIntoView({ block: "start" });
-          setActive(target.id);
-        });
-      }
-    }
+    // Content is rendered by JS, so jump to #category (e.g. from the homepage cards) once it exists.
+    var startId = location.hash ? decodeURIComponent(location.hash.slice(1)) : "";
+    requestAnimationFrame(function () {
+      if (startId && document.getElementById(startId)) jumpTo(startId, false);
+      else setActive(sectionOnScreen());
+    });
+    // Re-check once photos and fonts have settled the layout.
+    window.addEventListener("load", function () {
+      if (startId && document.getElementById(startId)) jumpTo(startId, false);
+    });
   }
 
   /* ---------- init ---------- */
