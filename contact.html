@@ -179,6 +179,54 @@
         </ul>
       </div>
     </section>
+
+    <!-- FAQ: answers fill in from menu-data.js (hours, address, phone, menu tags) -->
+    <section class="section faq" id="faq" aria-labelledby="faq-title">
+      <div class="container faq-inner">
+        <div class="section-head reveal">
+          <p class="eyebrow">FAQ</p>
+          <h2 id="faq-title" class="section-title lined">Questions We Get Asked</h2>
+        </div>
+        <div class="faq-list" data-faq>
+          <details class="faq-item reveal">
+            <summary>What are your hours?</summary>
+            <div class="faq-answer"><p><span data-bind="hoursSentence"></span> <span data-bind="openNowSentence"></span> You can see every day's hours in the table above.</p></div>
+          </details>
+          <details class="faq-item reveal">
+            <summary>Where are you located?</summary>
+            <div class="faq-answer"><p>We're at <span data-bind="addressLine1"></span>, <span data-bind="addressLine2"></span>, on Danforth Avenue in Toronto's Danforth East, a short walk east of Coxwell Station on TTC Line 2. <a data-href="directionsUrl" target="_blank" rel="noopener">Get directions in Google Maps</a>.</p></div>
+          </details>
+          <details class="faq-item reveal">
+            <summary>Do you have vegetarian options?</summary>
+            <div class="faq-answer"><p>Yes. Our menu has <span data-bind="vegCount"></span> vegetarian dishes, including <span data-bind="vegList"></span>. Look for the leaf icon on the <a href="menu.html#vegetarian">menu</a>, or tap the Vegetarian filter.</p></div>
+          </details>
+          <details class="faq-item reveal">
+            <summary>Do you have gluten-free options?</summary>
+            <div class="faq-answer"><p>We offer <span data-bind="gfList"></span>. If you have an allergy or a strict dietary need, please let us know when you order so we can help.</p></div>
+          </details>
+          <details class="faq-item reveal">
+            <summary>Do you have spicy dishes?</summary>
+            <div class="faq-answer"><p>Yes. Try <span data-bind="spicyList"></span>. Spicy items are marked with a chili icon on the <a href="menu.html">menu</a>.</p></div>
+          </details>
+          <details class="faq-item reveal" data-requires="payments">
+            <summary>How can I pay?</summary>
+            <div class="faq-answer"><p>We accept <span data-bind="paymentsLower"></span>.</p></div>
+          </details>
+          <details class="faq-item reveal" data-requires="phone">
+            <summary>Can I order ahead or call the café?</summary>
+            <div class="faq-answer"><p>Yes. Call us at <a data-href="phoneHref" data-bind="phone"></a> to place an order or ask a question. You can also check our <a data-href="orderUrl" target="_blank" rel="noopener">online ordering page</a>.</p></div>
+          </details>
+          <details class="faq-item reveal">
+            <summary>Is Megga Coffee an Ethiopian café?</summary>
+            <div class="faq-answer"><p>Yes. Megga is an Ethiopian neighbourhood café, and Ethiopia is the birthplace of coffee. Alongside espresso drinks we serve a full breakfast and brunch menu. Read more about <a href="about.html#ethiopia">our Ethiopian roots</a>.</p></div>
+          </details>
+          <details class="faq-item reveal">
+            <summary>How can I leave a review?</summary>
+            <div class="faq-answer"><p>We'd love to hear from you. Leave a review on <a data-href="reviewsUrl" target="_blank" rel="noopener">our Google Maps listing</a>. We're currently rated <span data-bind="ratingValue"></span> from <span data-bind="ratingCount"></span> reviews.</p></div>
+          </details>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- VISIT BAND (on every page) -->
@@ -217,6 +265,7 @@
           <li><a href="gallery.html">Gallery</a></li>
           <li><a href="reviews.html">Reviews</a></li>
           <li><a href="contact.html">Contact</a></li>
+          <li><a href="contact.html#faq">FAQ</a></li>
           <li><a data-href="orderUrl" target="_blank" rel="noopener">Order Online</a></li>
           <li data-requires="instagram"><a data-href="instagram" target="_blank" rel="noopener">Instagram</a></li>
         </ul>

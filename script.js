@@ -178,6 +178,46 @@
   }
   var payments = (SITE.payments || []).filter(Boolean);
 
+  // "a, b and c"
+  function listJoin(arr) {
+    if (arr.length < 2) return arr.join("");
+    return arr.slice(0, -1).join(", ") + " and " + arr[arr.length - 1];
+  }
+
+  // Menu items carrying a tag ("v", "s", "gf"), for the FAQ answers.
+  function taggedItems(tag) {
+    if (typeof MENU === "undefined") return [];
+    var out = [];
+    MENU.forEach(function (cat) {
+      cat.items.forEach(function (item) {
+        if ((item.tags || []).indexOf(tag) !== -1) out.push(item.name);
+      });
+    });
+    return out;
+  }
+
+  // "We're open right now until 9 p.m." / "We're closed right now and open again tomorrow at 8 a.m."
+  function openNowSentence() {
+    var st = openStatus();
+    if (!st) return "";
+    if (st.open) return st.text ? "We're open right now until " + st.text.replace(/^Closes /, "") : "We're open right now.";
+    var m = st.text.replace(/^Opens /, "").match(/^(.*?)(\d.*)$/);
+    if (!m) return "We're closed right now.";
+    return "We're closed right now and open again " + (m[1] ? m[1] + "at " : "at ") + m[2];
+  }
+
+  // "We're open daily from 8:00 a.m. to 9:00 p.m."
+  function hoursSentence() {
+    var g = hoursGroups();
+    // Times already end in "a.m." / "p.m.", so no extra full stop.
+    if (g.length === 1 && g[0].range) return "We're open daily from " + formatTime(g[0].range[0]) + " to " + formatTime(g[0].range[1]);
+    return "Our hours: " + hoursSummary();
+  }
+
+  var vegItems = taggedItems("v");
+  var gfItems = taggedItems("gf");
+  var spicyItems = taggedItems("s");
+
   var a = SITE.address;
   var values = {
     name: SITE.name,
@@ -198,7 +238,14 @@
     addressLine1Comma: a.street + ",",
     hoursLine1: hoursLines()[0],
     hoursLine2: hoursLines()[1],
-    payments: payments.join(" · ")
+    payments: payments.join(" · "),
+    paymentsLower: listJoin(payments.map(function (p) { return p.toLowerCase(); })),
+    openNowSentence: openNowSentence(),
+    hoursSentence: hoursSentence(),
+    vegCount: vegItems.length,
+    vegList: listJoin(vegItems.slice(0, 4).map(function (n) { return n.toLowerCase(); })),
+    gfList: gfItems.length ? listJoin(gfItems.map(function (n) { return n.toLowerCase(); })) : "a few gluten-free choices",
+    spicyList: listJoin(spicyItems.map(function (n) { return "the " + n; }))
   };
   var links = {
     orderUrl: SITE.orderUrl,
@@ -282,6 +329,27 @@
     if (payments.length) data.paymentAccepted = payments.join(", ");
     if (SITE.instagram) data.sameAs = [SITE.instagram];
 
+    var s = document.createElement("script");
+    s.type = "application/ld+json";
+    s.textContent = JSON.stringify(data);
+    document.head.appendChild(s);
+  }
+
+  // FAQPage structured data built from the FAQ on the page (after config values are filled in).
+  function injectFaqSchema() {
+    var items = $$("[data-faq] details").filter(function (d) { return !d.hidden; });
+    if (!items.length) return;
+    var data = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: items.map(function (d) {
+        return {
+          "@type": "Question",
+          name: $("summary", d).textContent.trim(),
+          acceptedAnswer: { "@type": "Answer", text: $(".faq-answer", d).textContent.replace(/\s+/g, " ").trim() }
+        };
+      })
+    };
     var s = document.createElement("script");
     s.type = "application/ld+json";
     s.textContent = JSON.stringify(data);
@@ -629,5 +697,6 @@
   setupHeader();
   setupReveal();
   injectSchema();
+  injectFaqSchema();
   setInterval(renderOpenStatus, 60 * 1000);
 })();
