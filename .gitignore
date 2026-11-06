@@ -1,0 +1,10 @@
+# Design references and source images (not part of the website)
+mockup*.png
+homeIMG.png
+*.psd
+
+# OS / editor clutter
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
