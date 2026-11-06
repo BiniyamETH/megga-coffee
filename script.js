@@ -592,6 +592,21 @@
     });
   }
 
+  // Magnifier button in the category bar: shows the search box and filters only when wanted.
+  function setupSearchPanel(input, isFiltering) {
+    var btn = $("[data-search-toggle]");
+    var panel = $("[data-search-panel]");
+    if (!btn || !panel) return;
+    btn.addEventListener("click", function () {
+      var open = panel.hidden;
+      panel.hidden = !open;
+      btn.setAttribute("aria-expanded", String(open));
+      setMenuOffset();
+      if (open) input.focus();
+      btn.classList.toggle("is-filtering", isFiltering());
+    });
+  }
+
   // Tap a dish photo to see it large, with its name and price.
   function setupDishViewer(root) {
     var box = $("[data-dish-viewer]");
@@ -674,10 +689,10 @@
           "</div>" +
           "</li>";
       }).join("");
-      var title = '<h2 class="menu-cat-title" id="h-' + esc(cat.id) + '">' + esc(cat.name) + "</h2>";
-      var head = cat.image
-        ? '<div class="menu-cat-head">' + imgHTML(cat.image, "", 960, 640, "") + title + "</div>"
-        : title;
+      var head = '<div class="cat-heading">' +
+        (cat.image ? '<img class="cat-icon" src="' + esc(cat.image) + '" alt="" width="96" height="96" loading="lazy" decoding="async">' : "") +
+        '<h2 class="menu-cat-title" id="h-' + esc(cat.id) + '">' + esc(cat.name) + "</h2>" +
+        '<span class="cat-count" data-cat-count>' + cat.items.length + " items</span></div>";
       return '<section class="menu-cat" id="' + esc(cat.id) + '" aria-labelledby="h-' + esc(cat.id) + '">' +
         head +
         '<ul class="menu-list" role="list">' + items + "</ul></section>";
@@ -708,6 +723,8 @@
           if (ok) visibleInCat++;
         });
         sec.hidden = visibleInCat === 0;
+        var catCount = $("[data-cat-count]", sec);
+        if (catCount) catCount.textContent = visibleInCat + (visibleInCat === 1 ? " item" : " items");
         var tab = $('[data-tab="' + sec.id + '"]', tabsList);
         if (tab) tab.parentNode.hidden = visibleInCat === 0;
         var link = sectionsGrid && $('[data-section="' + sec.id + '"]', sectionsGrid);
@@ -718,6 +735,8 @@
         shown += visibleInCat;
       });
       emptyEl.hidden = shown !== 0;
+      var sBtn = $("[data-search-toggle]");
+      if (sBtn) sBtn.classList.toggle("is-filtering", !!q || filters.length > 0);
       countEl.textContent = (q || filters.length) ? "Showing " + shown + " of " + total + " items" : "";
     }
 
@@ -767,6 +786,9 @@
     }
 
     setupSectionsPanel();
+    setupSearchPanel(search, function () {
+      return !!search.value.trim() || Object.keys(activeFilters).some(function (k) { return activeFilters[k]; });
+    });
     setupDishViewer(root);
     setupToTop();
     setMenuOffset();

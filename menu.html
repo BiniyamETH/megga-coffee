@@ -99,20 +99,7 @@
   </header>
 
   <main id="main">
-    <section class="hero" aria-labelledby="page-title">
-      <div class="hero-media">
-        <img src="assets/cards/breakfast.jpg" alt="" width="900" height="640" loading="lazy" decoding="async">
-      </div>
-      <div class="container hero-content">
-        <p class="eyebrow">Breakfast · Brunch · Coffee</p>
-        <h1 id="page-title" class="hero-title">Our <span class="accent">Menu</span></h1>
-        <p class="hero-lead"><span class="status" data-open-status aria-live="polite"></span> <span data-bind="hoursSummary"></span></p>
-        <div class="btn-row">
-          <a class="btn btn-caramel" data-href="orderUrl" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-bag"/></svg> Order Online</a>
-          <a class="btn btn-outline" data-href="phoneHref" data-requires="phone"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> Call to order</a>
-        </div>
-      </div>
-    </section>
+    <h1 class="visually-hidden">Megga Coffee menu</h1>
 
     <div class="menu-tools" data-menu-tools>
       <div class="container menu-bar">
@@ -123,6 +110,9 @@
         <nav class="menu-tabs" aria-label="Menu categories">
           <ul role="list" data-menu-tabs></ul>
         </nav>
+        <button class="search-btn" type="button" aria-expanded="false" aria-controls="search-panel" aria-label="Search and filter the menu" data-search-toggle>
+          <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
+        </button>
       </div>
       <div class="sections-panel" id="sections-panel" hidden data-sections-panel>
         <div class="container">
@@ -130,23 +120,24 @@
           <ul class="sections-grid" role="list" data-sections-grid></ul>
         </div>
       </div>
-    </div>
-
-    <div class="container menu-filters">
-      <div class="search">
-        <label for="menu-search" class="visually-hidden">Search the menu</label>
-        <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
-        <input id="menu-search" type="search" placeholder="Search the menu, e.g. benny, latte" autocomplete="off" data-menu-search>
+      <div class="search-panel" id="search-panel" hidden data-search-panel>
+        <div class="container menu-filters">
+          <div class="search">
+            <label for="menu-search" class="visually-hidden">Search the menu</label>
+            <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
+            <input id="menu-search" type="search" placeholder="Search the menu, e.g. benny, latte" autocomplete="off" data-menu-search>
+          </div>
+          <div class="chips" role="group" aria-label="Filter menu">
+            <button type="button" class="chip" aria-pressed="false" data-filter="v">
+              <svg class="icon icon-sm" aria-hidden="true"><use href="#i-leaf"/></svg> Vegetarian</button>
+            <button type="button" class="chip" aria-pressed="false" data-filter="s">
+              <svg class="icon icon-sm" aria-hidden="true"><use href="#i-chili"/></svg> Spicy</button>
+            <button type="button" class="chip" aria-pressed="false" data-filter="gf">
+              <svg class="icon icon-sm" aria-hidden="true"><use href="#i-gf"/></svg> Gluten Free</button>
+          </div>
+          <p class="menu-count" aria-live="polite" data-menu-count></p>
+        </div>
       </div>
-      <div class="chips" role="group" aria-label="Filter menu">
-        <button type="button" class="chip" aria-pressed="false" data-filter="v">
-          <svg class="icon icon-sm" aria-hidden="true"><use href="#i-leaf"/></svg> Vegetarian</button>
-        <button type="button" class="chip" aria-pressed="false" data-filter="s">
-          <svg class="icon icon-sm" aria-hidden="true"><use href="#i-chili"/></svg> Spicy</button>
-        <button type="button" class="chip" aria-pressed="false" data-filter="gf">
-          <svg class="icon icon-sm" aria-hidden="true"><use href="#i-gf"/></svg> Gluten Free</button>
-      </div>
-      <p class="menu-count" aria-live="polite" data-menu-count></p>
     </div>
 
     <div class="container menu-body">

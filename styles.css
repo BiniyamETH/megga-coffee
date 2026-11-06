@@ -361,7 +361,7 @@ a:hover { color: var(--caramel-dark); }
 .faq-answer p { margin: 0; }
 
 /* menu page */
-.menu-tools { position: sticky; top: var(--header-h); z-index: 40; background: rgba(252, 248, 244, .97); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.menu-tools { position: sticky; top: var(--header-h); z-index: 40; background: var(--page); box-shadow: 0 6px 14px rgba(90, 60, 40, .06); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .menu-tabs { flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; margin-right: -20px; padding-right: 20px; -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent); mask-image: linear-gradient(90deg, #000 88%, transparent); }
 .menu-tabs::-webkit-scrollbar { display: none; }
 .menu-tabs ul { display: flex; gap: .4rem; padding: .7rem 0; width: max-content; }
@@ -382,14 +382,6 @@ a:hover { color: var(--caramel-dark); }
 .menu-body { padding-bottom: 4rem; }
 .menu-cat { padding: 2rem 0 .5rem; }
 .menu-cat-title { font-size: clamp(1.6rem, 4vw, 2.1rem); padding-bottom: .75rem; margin-bottom: .5rem; border-bottom: 1px solid var(--line-2); }
-.menu-cat-head { position: relative; height: 160px; margin-bottom: .75rem; border-radius: var(--radius-lg); overflow: hidden; background: var(--band); }
-.menu-cat-head img, .menu-cat-head .placeholder { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.menu-cat-head::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(245, 238, 230, .96) 0%, rgba(245, 238, 230, .8) 30%, rgba(245, 238, 230, 0) 62%); }
-.menu-cat-head .menu-cat-title { position: absolute; left: 1.4rem; top: 50%; transform: translateY(-50%); z-index: 1; margin: 0; padding: 0; border: 0; }
-@media (min-width: 760px) {
-  .menu-cat-head { height: 220px; margin-bottom: 1rem; }
-  .menu-cat-head .menu-cat-title { left: 2rem; font-size: 2.4rem; }
-}
 .menu-list { display: grid; column-gap: 2.75rem; }
 @media (min-width: 900px) { .menu-list { grid-template-columns: 1fr 1fr; } }
 .menu-item { padding: 1.1rem 0; border-bottom: 1px solid var(--line); }
@@ -425,16 +417,6 @@ a:hover { color: var(--caramel-dark); }
 }
 
 /* ---------- menu page: phone-first (customers arrive by QR code) ---------- */
-
-/* Compact top on phones so the food is on the first screen */
-@media (max-width: 899px) {
-  body[data-page="menu"] .hero-media { display: none; }
-  body[data-page="menu"] .hero-content { padding-top: 1.25rem; padding-bottom: 1.25rem; }
-  body[data-page="menu"] .hero-title { font-size: 2.2rem; margin-bottom: .5rem; }
-  body[data-page="menu"] .hero .eyebrow { margin-bottom: .4rem; font-size: .7rem; }
-  body[data-page="menu"] .hero .btn-row { display: none; }
-  body[data-page="menu"] .hero-lead { font-size: .95rem; }
-}
 
 /* On phones only the category bar stays pinned; the logo bar scrolls away */
 @media (max-width: 1019px) {
@@ -476,13 +458,6 @@ a:hover { color: var(--caramel-dark); }
 .section-count { flex: none; min-width: 26px; padding: .1rem .45rem; border-radius: 999px; background: var(--white); color: var(--caramel); font-size: .75rem; font-weight: 700; text-align: center; }
 @media (min-width: 760px) { .sections-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
-/* Section banners: shorter on phones, title on a solid fade so it is always readable */
-@media (max-width: 759px) {
-  .menu-cat-head { height: 112px; }
-  .menu-cat-head::after { background: linear-gradient(90deg, rgba(245, 238, 230, .98) 0%, rgba(245, 238, 230, .92) 48%, rgba(245, 238, 230, .2) 85%); }
-  .menu-cat-head .menu-cat-title { font-size: 1.55rem; left: 1.1rem; max-width: 70%; }
-}
-
 /* Dish photo button + viewer */
 .thumb-btn { display: block; padding: 0; border: 0; background: none; border-radius: 12px; cursor: zoom-in; }
 .thumb-btn:focus-visible { outline-offset: 2px; }
@@ -522,3 +497,37 @@ a:hover { color: var(--caramel-dark); }
   .menu-cat { padding-top: 1.25rem; }
 }
 .menu-empty p { margin: 0; }
+
+/* Menu page goes straight to the dishes */
+.menu-tools { border-top: 0; }
+.menu-bar { padding-top: .1rem; padding-bottom: .1rem; }
+.search-btn {
+  display: grid; place-items: center; flex: none;
+  width: 42px; height: 42px; margin-left: .15rem;
+  border: 1.5px solid var(--line-2); border-radius: 50%;
+  background: var(--white); color: var(--ink);
+  cursor: pointer;
+  position: relative; z-index: 1;
+}
+.search-btn .icon { width: 19px; height: 19px; }
+.search-btn[aria-expanded="true"], .search-btn.is-filtering { border-color: var(--caramel); background: var(--caramel); color: #fff; }
+.menu-tabs {
+  margin-right: 0; padding-right: 0; padding-left: .35rem;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 24px), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 24px), transparent 100%);
+}
+.search-panel { border-top: 1px solid var(--line); background: var(--page); }
+.search-panel .menu-filters { padding-top: .75rem; padding-bottom: .75rem; }
+.search-panel .menu-count:empty { display: none; }
+
+/* Slim section heading instead of a big photo banner */
+.menu-cat { padding: 1.4rem 0 .25rem; }
+.menu-body > div > .menu-cat:first-child { padding-top: .9rem; }
+.cat-heading { display: flex; align-items: center; gap: .75rem; padding-bottom: .65rem; border-bottom: 2px solid var(--line); }
+.cat-icon { width: 44px; height: 44px; flex: none; border-radius: 50%; object-fit: cover; box-shadow: var(--shadow-sm); }
+.cat-heading .menu-cat-title { flex: 1; min-width: 0; margin: 0; padding: 0; border: 0; font-size: 1.45rem; }
+.cat-count { flex: none; padding: .15rem .6rem; border-radius: 999px; background: var(--card); color: var(--muted); font-size: .78rem; font-weight: 600; }
+@media (min-width: 760px) {
+  .cat-icon { width: 52px; height: 52px; }
+  .cat-heading .menu-cat-title { font-size: 1.85rem; }
+}
