@@ -658,7 +658,10 @@
     }).join("");
 
     var tabsBar = tabsList.parentNode;
-    function markTabsScrolled() { tabsBar.classList.toggle("is-scrolled", tabsBar.scrollLeft > 4); }
+    function markTabsScrolled() {
+      tabsBar.classList.toggle("is-scrolled", tabsBar.scrollLeft > 4);
+      tabsBar.classList.toggle("at-end", tabsBar.scrollLeft + tabsBar.clientWidth >= tabsBar.scrollWidth - 4);
+    }
     tabsBar.addEventListener("scroll", markTabsScrolled, { passive: true });
 
     var sectionsGrid = $("[data-sections-grid]");
@@ -674,9 +677,10 @@
     root.innerHTML = MENU.map(function (cat, ci) {
       var items = cat.items.map(function (item, ii) {
         var tags = item.tags || [];
+        // Dietary labels as small coloured pills with words, e.g. "Vegetarian".
         var tagHTML = tags.filter(function (t) { return TAGS[t]; }).map(function (t) {
-          return '<span class="tag" role="img" aria-label="' + TAGS[t].label + '" title="' + TAGS[t].label + '">' +
-            '<svg class="tag-icon tag-' + t + '" aria-hidden="true"><use href="#' + TAGS[t].icon + '"/></svg></span>';
+          return '<li class="tag-pill tag-pill-' + t + '"><svg class="tag-icon" aria-hidden="true"><use href="#' + TAGS[t].icon + '"/></svg>' +
+            TAGS[t].label + "</li>";
         }).join("");
         var haystack = (item.name + " " + (item.desc || "") + " " + cat.name).toLowerCase();
         var thumb = item.image
@@ -686,12 +690,12 @@
         return '<li class="menu-item' + (thumb ? " has-photo" : "") + '" data-tags="' + esc(tags.join(" ")) + '" data-search="' + esc(haystack) + '">' +
           thumb +
           '<div class="item-body">' +
-            '<div class="item-line">' +
-              '<h3 class="item-name">' + esc(item.name) + (tagHTML ? '<span class="item-tags">' + tagHTML + "</span>" : "") + "</h3>" +
-              '<span class="item-dots" aria-hidden="true"></span>' +
+            '<div class="item-top">' +
+              '<h3 class="item-name">' + esc(item.name) + "</h3>" +
               '<span class="item-price">' + formatPrice(item.price) + "</span>" +
             "</div>" +
             (item.desc ? '<p class="item-desc">' + esc(item.desc) + "</p>" : "") +
+            (tagHTML ? '<ul class="item-tags" role="list">' + tagHTML + "</ul>" : "") +
           "</div>" +
           "</li>";
       }).join("");
@@ -783,6 +787,7 @@
           // Set directly: a sliding animation here gets cancelled when the page itself jumps.
           bar.scrollLeft = Math.max(0, inBar - (bar.clientWidth - t.offsetWidth) / 2);
           bar.classList.toggle("is-scrolled", bar.scrollLeft > 4);
+          bar.classList.toggle("at-end", bar.scrollLeft + bar.clientWidth >= bar.scrollWidth - 4);
         } else {
           t.removeAttribute("aria-current");
         }

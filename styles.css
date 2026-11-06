@@ -554,3 +554,78 @@ a:hover { color: var(--caramel-dark); }
   .menu-bar { gap: .35rem; }
   .tab { padding: .4rem .8rem; font-size: .9rem; }
 }
+
+/* ---------- Menu items as soft cards ---------- */
+
+.menu-list { gap: .7rem; padding-top: .9rem; }
+.menu-item {
+  position: relative;
+  padding: .7rem;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 2px 10px rgba(80, 52, 28, .05);
+  transition: transform .25s var(--ease), box-shadow .25s, border-color .25s;
+}
+.menu-item:hover { border-color: var(--line-2); box-shadow: 0 10px 22px rgba(80, 52, 28, .1); }
+.menu-item.has-photo { grid-template-columns: 76px minmax(0, 1fr); gap: .9rem; align-items: center; }
+.thumb-btn { border-radius: 14px; }
+.item-thumb { width: 76px; height: 76px; border-radius: 14px; }
+
+.item-body { display: grid; gap: .35rem; min-width: 0; }
+.item-top { display: flex; align-items: flex-start; justify-content: space-between; gap: .75rem; }
+.item-name { display: block; font-size: 1.08rem; font-weight: 600; line-height: 1.3; color: var(--ink); }
+.item-price {
+  flex: none;
+  padding: .2rem .65rem;
+  border-radius: 999px;
+  background: #f3e2c9;
+  color: var(--caramel-dark);
+  font-family: var(--display);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.item-desc { margin: 0; color: var(--muted); font-size: .9rem; line-height: 1.45; }
+
+.item-tags { display: flex; flex-wrap: wrap; gap: .35rem; }
+.tag-pill {
+  display: inline-flex; align-items: center; gap: .3rem;
+  padding: .12rem .55rem .12rem .45rem;
+  border-radius: 999px;
+  font-size: .74rem; font-weight: 600; line-height: 1.5;
+}
+.tag-pill .tag-icon { width: 14px; height: 14px; }
+.tag-pill-v { background: #e6f1e2; color: #2d6a31; }
+.tag-pill-s { background: #fbe6df; color: #a3311d; }
+.tag-pill-gf { background: #f6ead2; color: #7d5410; }
+
+/* Section heading with a caramel accent */
+.cat-heading { position: relative; border-bottom: 0; padding-bottom: .5rem; }
+.cat-heading::after { content: ""; position: absolute; left: 0; bottom: 0; width: 64px; height: 3px; border-radius: 3px; background: var(--caramel); }
+.cat-icon { width: 50px; height: 50px; border: 2px solid var(--white); box-shadow: 0 4px 12px rgba(80, 52, 28, .15); }
+
+@media (min-width: 680px) {
+  .menu-item.has-photo { grid-template-columns: 92px minmax(0, 1fr); gap: 1rem; }
+  .item-thumb { width: 92px; height: 92px; }
+  .item-name { font-size: 1.15rem; }
+}
+@media (min-width: 900px) {
+  .menu-list { gap: .9rem 1.1rem; }
+  .menu-item:hover { transform: translateY(-2px); }
+  .cat-icon { width: 58px; height: 58px; }
+}
+@media (prefers-reduced-motion: reduce) { .menu-item:hover { transform: none; } }
+/* Phones: slightly tighter cards so five dishes fit on the first screen */
+@media (max-width: 679px) {
+  .menu-list { gap: .5rem; padding-top: .75rem; }
+  .menu-item { padding: .5rem .6rem .5rem .5rem; border-radius: 16px; }
+  .menu-item.has-photo { grid-template-columns: 68px minmax(0, 1fr); gap: .75rem; }
+  .item-thumb { width: 68px; height: 68px; border-radius: 12px; }
+  .cat-icon { width: 44px; height: 44px; }
+}
+/* No right-edge fade once the last tab is in view */
+.menu-tabs.at-end {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 18px);
+  mask-image: linear-gradient(90deg, transparent 0, #000 18px);
+}
