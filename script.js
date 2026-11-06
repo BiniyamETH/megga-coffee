@@ -699,10 +699,14 @@
           "</div>" +
           "</li>";
       }).join("");
-      var head = '<div class="cat-heading">' +
-        (cat.image ? '<img class="cat-icon" src="' + esc(cat.image) + '" alt="" width="96" height="96" loading="lazy" decoding="async">' : "") +
-        '<h2 class="menu-cat-title" id="h-' + esc(cat.id) + '">' + esc(cat.name) + "</h2>" +
-        '<span class="cat-count" data-cat-count>' + cat.items.length + " items</span></div>";
+      // Photo banner that separates each section (plain heading if the section has no photo).
+      var titleHTML = '<h2 class="menu-cat-title" id="h-' + esc(cat.id) + '">' + esc(cat.name) + "</h2>" +
+        '<span class="cat-count" data-cat-count>' + cat.items.length + " items</span>";
+      var head = cat.image
+        ? '<div class="cat-banner"><img src="' + esc(cat.image) + '" alt="" width="960" height="640" ' +
+          (ci === 0 ? 'fetchpriority="high"' : 'loading="lazy"') + ' decoding="async">' +
+          '<div class="cat-banner-text">' + titleHTML + "</div></div>"
+        : '<div class="cat-heading">' + titleHTML + "</div>";
       return '<section class="menu-cat" id="' + esc(cat.id) + '" aria-labelledby="h-' + esc(cat.id) + '">' +
         head +
         '<ul class="menu-list" role="list">' + items + "</ul></section>";
