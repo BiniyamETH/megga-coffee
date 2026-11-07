@@ -3,7 +3,7 @@
 A plain HTML/CSS/JavaScript site with no build step. It works on GitHub Pages or any static host.
 
 ```
-index.html      Home: hero, menu cards, our story, photo strip, reviews
+index.html      Home: hero, menu cards, why Megga, our story, photo strip, reviews
 menu.html       Menu (built from menu-data.js)
 about.html      Our Story + Ethiopian coffee roots
 gallery.html    Photo gallery (tap a photo to view it full-size)
@@ -14,6 +14,19 @@ script.js       Shared logic (you should not need to edit this)
 menu-data.js    <- EDIT THIS: business info, hours, photos and the menu
 assets/         Photos, favicon, social-share image
 ```
+
+## The menu is the most important page
+
+Customers scan a QR code in the café and land on **`menu.html`** on their phone. Every change to the site should keep that page fast, easy to read and working.
+
+- **QR code: not made yet.** Wait until the custom domain is bought (see "When a custom domain is bought" below). Then make the QR code for the new domain's menu page, e.g. `https://meggacoffee.ca/menu.html`, so printed codes never depend on the `github.io` address. Point it at the menu page, not the homepage.
+- **Food comes first:** on a phone, the first screen shows the section buttons and the first items with prices. Don't add banners, long text or pop-ups above the menu. The "About our menu" text for Google sits at the bottom of the page on purpose.
+- **What customers can do:** tap a section name, or the grid button, to jump to it. Tap the search button to search ("benny", "latte") or to show only vegetarian, spicy or gluten-free items. Tap a dish photo to see it larger.
+- **After every menu edit**, open the menu on your phone and check that:
+  1. the page isn't blank (a blank page means a missing quote or comma in `menu-data.js`),
+  2. new prices show correctly,
+  3. a search such as "latte" finds items.
+- **Keep photos small** (about 20 KB for item photos, under 300 KB for section banners) so the menu loads quickly on mobile data.
 
 ## Editing info, hours and prices
 
@@ -95,6 +108,7 @@ The site lives at `https://biniyameth.github.io/megga-coffee/`. The café doesn'
 3. Replace `https://biniyameth.github.io/megga-coffee/` with the new domain in every page's canonical, `og:url` and `og:image` tags, and in `sitemap.xml`.
 4. Add a `robots.txt` that points to the sitemap. Search engines only read it at the root of a domain, so it is useless on the `github.io` address.
 5. Update the website link in Search Console (add the new domain as a property), the Google Business Profile, Instagram and Uber Eats.
+6. Make the menu QR code for `https://<new-domain>/menu.html`. Scan it with a phone to test it before printing.
 
 GitHub redirects the old `github.io` address to the new domain automatically, so old links keep working.
 
