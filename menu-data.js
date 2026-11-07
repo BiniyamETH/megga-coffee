@@ -1,9 +1,8 @@
 /* =====================================================================
    MEGGA COFFEE — SITE CONFIG + MENU
    ---------------------------------------------------------------------
-   This is the ONLY file you need to edit to change business info,
-   hours, prices or menu items. Both index.html and menu.html read
-   from it. See README.md for step-by-step instructions.
+   Edit this file to change business info, hours, prices or menu items.
+   See README.md for the plain HTML business details to update as well.
 
    Rules for editing:
    - Keep the quotes "" around text.

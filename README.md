@@ -68,11 +68,9 @@ The top menu bar, the "Visit Megga Coffee" band and the footer are repeated in a
 
 The colours are set once at the top of `styles.css` (`--page`, `--band`, `--caramel`, and so on). Change them there to adjust the whole site.
 
-The meta description on `reviews.html` mentions "25 Google reviews". Update it when the count changes. (The number shown on the page comes from `rating` in `menu-data.js`.)
+When the café's address, phone or hours change, update the plain HTML in the Visit bands and Contact page along with `menu-data.js`. Check the Contact metadata for address or hours references.
 
-The page `<title>`, the meta description and the Open Graph tags sit at the top of `index.html` and `menu.html`. Link-preview bots don't run JavaScript, so these have to be written directly in the HTML. If the business name changes, update them there too.
-
-After the site is live, change `og:image` in both files to the full URL, e.g. `https://yourname.github.io/megga-coffee/assets/og-image.jpg`. Facebook and WhatsApp need an absolute URL.
+Each page has a title, meta description, canonical URL and Open Graph tags in its HTML head. If the public URL changes, update the canonical and Open Graph URLs and `sitemap.xml` together.
 
 ## Publishing on GitHub Pages
 

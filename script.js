@@ -293,10 +293,12 @@
         closes: g.range[1]
       };
     });
-    var base = location.href.split("#")[0].replace(/[^/]*$/, "");
+    var canonical = $('link[rel="canonical"]');
+    var base = new URL("./", canonical ? canonical.href : location.href).href;
     var data = {
       "@context": "https://schema.org",
       "@type": "CafeOrCoffeeShop",
+      "@id": base + "#cafe",
       name: SITE.name,
       alternateName: SITE.fullName,
       url: base,
@@ -314,12 +316,6 @@
       geo: { "@type": "GeoCoordinates", latitude: SITE.geo.lat, longitude: SITE.geo.lng },
       hasMap: SITE.reviewsUrl,
       openingHoursSpecification: spec,
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: SITE.rating.value,
-        reviewCount: SITE.rating.count,
-        bestRating: 5
-      },
       potentialAction: {
         "@type": "OrderAction",
         target: SITE.orderUrl

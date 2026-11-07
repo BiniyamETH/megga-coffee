@@ -3,15 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gallery | Megga Coffee on the Danforth, Toronto</title>
-  <meta name="description" content="Photos from inside Megga Coffee at 1696 Danforth Ave, Toronto: the café, fresh pastries, coffee and more.">
+  <title>Megga Coffee Gallery | Inside Our Danforth Café</title>
+  <meta name="description" content="Take a look inside Megga Coffee on Toronto’s Danforth and see the café, coffee and pastries.">
+  <link rel="canonical" href="https://biniyameth.github.io/megga-coffee/gallery.html">
   <meta name="theme-color" content="#faf6f0">
 
   <!-- Open Graph (link previews on Facebook, WhatsApp, iMessage, etc.) -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Megga Coffee">
-  <meta property="og:title" content="Gallery | Megga Coffee, Toronto">
-  <meta property="og:description" content="Photos from inside Megga Coffee on the Danforth.">
+  <meta property="og:url" content="https://biniyameth.github.io/megga-coffee/gallery.html">
+  <meta property="og:title" content="Megga Coffee Gallery | Inside Our Danforth Café">
+  <meta property="og:description" content="Take a look inside Megga Coffee on Toronto’s Danforth and see the café, coffee and pastries.">
   <meta property="og:image" content="https://biniyameth.github.io/megga-coffee/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -71,7 +73,7 @@
 
   <header class="site-header" data-header>
     <div class="container header-inner">
-      <a class="brand" href="index.html" aria-label="Megga Coffee, home">
+      <a class="brand" href="./" aria-label="Megga Coffee, home">
         <svg class="brand-mark" aria-hidden="true"><use href="#i-beans"/></svg>
         <span class="brand-name" data-bind="logoTop">MEGGA COFFEE</span>
         <span class="brand-sub" data-bind="logoBottom">Coffee · Community · Toronto</span>
@@ -84,7 +86,7 @@
 
       <nav class="site-nav" id="site-nav" aria-label="Main" data-nav>
         <ul class="nav-list nav-left">
-          <li><a href="index.html">Home</a></li>
+          <li><a href="./">Home</a></li>
           <li><a href="menu.html">Menu</a></li>
           <li><a href="about.html">Our Story</a></li>
         </ul>
@@ -137,20 +139,22 @@
   <section class="visit-band" aria-labelledby="visit-title">
     <div class="container visit-grid">
       <div class="visit-col">
-        <h2 id="visit-title" class="visit-title">Visit <span data-bind="name"></span></h2>
+        <h2 id="visit-title" class="visit-title">Visit <span data-bind="name">Megga Coffee</span></h2>
         <p class="visit-row"><svg class="icon" aria-hidden="true"><use href="#i-pin-solid"/></svg>
-          <span><span data-bind="addressLine1"></span>, <span data-bind="addressLine2"></span></span></p>
+          <span><span data-bind="addressLine1">1696 Danforth Ave</span>, <span data-bind="addressLine2">Toronto, ON M4C 1H8</span></span></p>
         <p class="visit-row" data-requires="phone"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>
-          <a data-href="phoneHref" data-bind="phone"></a></p>
+          <a href="tel:+16475759431" data-href="phoneHref" data-bind="phone">(647) 575-9431</a></p>
         <p class="visit-row" data-requires="payments"><svg class="icon" aria-hidden="true"><use href="#i-card"/></svg>
           <span data-bind="payments"></span></p>
       </div>
       <div class="visit-col">
         <h3 class="visit-sub"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg> Hours <span class="status" data-open-status></span></h3>
-        <dl class="hours-groups" data-hours-groups></dl>
+        <dl class="hours-groups" data-hours-groups>
+          <div><dt>Mon – Sun</dt><dd>8:00 a.m. – 9:00 p.m.</dd></div>
+        </dl>
       </div>
       <div class="visit-col visit-cta">
-        <a class="btn btn-caramel" data-href="directionsUrl" target="_blank" rel="noopener">
+        <a class="btn btn-caramel" href="https://www.google.com/maps/search/?api=1&amp;query=Megga+coffee+1696+Danforth+Ave+Toronto" data-href="directionsUrl" target="_blank" rel="noopener">
           <svg class="icon" aria-hidden="true"><use href="#i-pin-solid"/></svg> Get Directions
           <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <p class="visit-row"><svg class="icon" aria-hidden="true"><use href="#i-train"/></svg>
@@ -163,7 +167,7 @@
     <div class="container footer-inner">
       <nav aria-label="Footer">
         <ul class="footer-links">
-          <li><a href="index.html">Home</a></li>
+          <li><a href="./">Home</a></li>
           <li><a href="menu.html">Menu</a></li>
           <li><a href="about.html">Our Story</a></li>
           <li><a href="gallery.html">Gallery</a></li>
