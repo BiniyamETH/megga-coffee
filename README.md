@@ -80,6 +80,24 @@ Each page has a title, meta description, canonical URL and Open Graph tags in it
 
 To preview on your computer, open `index.html` in a browser. For the map and everything else to behave exactly as it will online, run `python -m http.server` in this folder and visit http://localhost:8000.
 
+## Getting found on Google
+
+The site lives at `https://biniyameth.github.io/megga-coffee/`. The café doesn't have its own domain yet.
+
+1. **Google Search Console:** add the site as a **URL prefix** property and submit `https://biniyameth.github.io/megga-coffee/sitemap.xml`.
+2. **Google Business Profile:** set the website field to the link above.
+3. **Instagram / Uber Eats:** put the same link in the bio or store page.
+
+### When a custom domain is bought (e.g. `meggacoffee.ca`)
+
+1. Add a `CNAME` file to this folder that holds only the domain, e.g. `meggacoffee.ca`.
+2. At the domain seller, point the domain to GitHub Pages ([GitHub's guide](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site)). Then set the domain under **Settings → Pages → Custom domain** and tick **Enforce HTTPS**.
+3. Replace `https://biniyameth.github.io/megga-coffee/` with the new domain in every page's canonical, `og:url` and `og:image` tags, and in `sitemap.xml`.
+4. Add a `robots.txt` that points to the sitemap. Search engines only read it at the root of a domain, so it is useless on the `github.io` address.
+5. Update the website link in Search Console (add the new domain as a property), the Google Business Profile, Instagram and Uber Eats.
+
+GitHub redirects the old `github.io` address to the new domain automatically, so old links keep working.
+
 ## Photo credits
 
 **Every menu item has its own photo** in `assets/menu/items/` (240×240 squares, about 16 KB each). Each item's `image:` line in `menu-data.js` points to its photo. To change one, save a square photo over the same file name. To remove one, delete that item's `image: "..."` part and the row shows text only. `assets/menu/items/CREDITS.txt` lists the Unsplash source for each photo.
