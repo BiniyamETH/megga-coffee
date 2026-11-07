@@ -688,3 +688,30 @@ a:hover { color: var(--caramel-dark); }
   .cat-banner-text { padding: 0 1.4rem 1.1rem 1.6rem; }
   .cat-banner .menu-cat-title { font-size: 2rem; }
 }
+
+/* ---------- Phones: tighter, easier to scan ---------- */
+.strip { scrollbar-width: none; }
+.strip::-webkit-scrollbar { display: none; }
+@media (max-width: 640px) {
+  .section { padding: 3rem 0; }
+  .section-head { margin-bottom: 1.5rem; }
+  /* Side rules squeeze long headings into 3 lines on a phone */
+  .lined { display: block; }
+  .lined::before, .lined::after { content: none; }
+  .section-lead { font-size: .98rem; }
+
+  /* Homepage menu cards: shorter subtitles */
+  .mc-sub { letter-spacing: .08em; font-size: .66rem; }
+  .mc-body { padding: .7rem .35rem .2rem; }
+
+  /* Feature cards (Why Megga, Getting here): icon beside text, not above it */
+  .way { display: grid; grid-template-columns: 44px minmax(0, 1fr); column-gap: 1rem; padding: 1.15rem 1.15rem 1.05rem; }
+  .way > .icon { grid-row: 1 / span 3; width: 44px; height: 44px; padding: 10px; margin: 0; }
+  .way > :not(.icon) { grid-column: 2; }
+  .way h3 { font-size: 1.1rem; margin-bottom: .25rem; }
+  .way p { font-size: .94rem; margin-bottom: .45rem; }
+  .ways { gap: .75rem; }
+
+  .gallery-more { align-items: flex-start; text-align: left; }
+  .gallery-more .icon { flex: none; margin-top: .2em; }
+}
