@@ -1,4 +1,4 @@
-/* Megga Coffee — shared site script.
+/* Megga Morning Grace Coffee — shared site script.
    Reads SITE and MENU from menu-data.js. You should not need to edit this file. */
 (function () {
   "use strict";
@@ -221,7 +221,6 @@
   var a = SITE.address;
   var values = {
     name: SITE.name,
-    fullName: SITE.fullName || SITE.name,
     menuCount: typeof MENU === "undefined" ? "" : MENU.reduce(function (n, c) { return n + c.items.length; }, 0),
     daysOpen: DAY_KEYS.filter(function (k) { return SITE.hours[k]; }).length + " days",
     logoTop: SITE.logoTop || SITE.name,
@@ -300,9 +299,9 @@
       "@type": "CafeOrCoffeeShop",
       "@id": base + "#cafe",
       name: SITE.name,
-      alternateName: SITE.fullName,
+      alternateName: SITE.alternateName,
       url: base,
-      image: base + "assets/og-image.jpg",
+      image: base + "assets/hero.jpg",
       menu: base + "menu.html",
       servesCuisine: ["Coffee", "Ethiopian", "Eritrean", "Breakfast", "Brunch", "Greek", "Vegetarian"],
       address: {

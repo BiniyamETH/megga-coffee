@@ -1,4 +1,4 @@
-# Megga Coffee website
+# Megga Morning Grace Coffee website
 
 A plain HTML/CSS/JavaScript site with no build step. It works on GitHub Pages or any static host.
 
@@ -60,11 +60,11 @@ For the other photos, add the file to `assets/` and put its path in `menu-data.j
 
 Any photo left as `""`, or whose file is missing, shows a warm brown placeholder instead. Keep photos under about 300 KB each (export as JPG at about 80% quality) so the site stays fast.
 
-`assets/og-image.jpg` (1200×630) is the preview image shown when someone shares the link.
+`assets/hero.jpg` (1536×1024) is also the preview image shown when someone shares the link.
 
 ## Text that is not in menu-data.js
 
-The top menu bar, the "Visit Megga Coffee" band and the footer are repeated in all six HTML files. If you rename a page or add one, update the `<nav>` in each file.
+The top menu bar, Visit band and footer are repeated in all six HTML files. If you rename a page or add one, update the `<nav>` in each file.
 
 The colours are set once at the top of `styles.css` (`--page`, `--band`, `--caramel`, and so on). Change them there to adjust the whole site.
 

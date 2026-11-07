@@ -90,7 +90,7 @@ a:hover { color: var(--caramel-dark); }
 .brand { display: inline-flex; flex-direction: column; align-items: center; color: var(--ink); text-decoration: none; line-height: 1; }
 .brand:hover { color: var(--ink); }
 .brand-mark { width: 26px; height: 20px; color: var(--caramel); margin-bottom: 4px; }
-.brand-name { font-family: var(--display); font-size: 1.35rem; font-weight: 600; letter-spacing: .18em; }
+.brand-name { font-family: var(--display); font-size: clamp(.8rem, 3.2vw, 1.2rem); font-weight: 600; letter-spacing: .09em; text-align: center; }
 .brand-sub { margin-top: 6px; font-size: .58rem; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--text); }
 .nav-toggle { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; background: var(--white); border: 1px solid var(--line); border-radius: 12px; color: var(--ink); cursor: pointer; }
 .nav-toggle-bar, .nav-toggle-bar::before, .nav-toggle-bar::after { display: block; width: 20px; height: 2px; background: currentColor; border-radius: 2px; transition: transform .25s var(--ease); }
@@ -110,7 +110,7 @@ a:hover { color: var(--caramel-dark); }
   .header-inner { min-height: 104px; justify-content: center; }
   .brand { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
   .brand-mark { width: 30px; height: 22px; }
-  .brand-name { font-size: 1.75rem; letter-spacing: .2em; }
+  .brand-name { font-size: clamp(1rem, 1.5vw, 1.4rem); }
   .brand-sub { font-size: .64rem; }
   .nav-toggle { display: none; }
   .site-nav { position: static; display: flex; flex: 1; flex-direction: row; justify-content: space-between; padding: 0; background: none; overflow: visible; }
@@ -130,7 +130,7 @@ a:hover { color: var(--caramel-dark); }
 .hero-content { position: relative; z-index: 1; padding-top: 1.5rem; padding-bottom: 3rem; }
 .hero-title { font-size: clamp(2.3rem, 7vw, 3.2rem); letter-spacing: -.02em; line-height: 1.05; margin-bottom: 1rem; }
 .hero-lead { max-width: 30rem; font-size: 1.08rem; color: var(--text); margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; }
-.hero-home .hero-title { font-size: clamp(2.8rem, 9vw, 4.4rem); }
+.hero-home .hero-title { font-size: clamp(2.25rem, 7.5vw, 3.6rem); text-wrap: balance; }
 @media (min-width: 900px) {
   .hero { display: flex; align-items: center; min-height: 320px; }
   .hero-home { min-height: clamp(400px, 30vw, 460px); }
@@ -144,7 +144,7 @@ a:hover { color: var(--caramel-dark); }
   .hero-content { padding-top: 3.5rem; padding-bottom: 3.5rem; }
   .hero-content > * { max-width: 34rem; }
   .hero-title { font-size: clamp(2.6rem, 4vw, 3.4rem); }
-  .hero-home .hero-title { font-size: clamp(3.4rem, 5vw, 4.5rem); }
+  .hero-home .hero-title { font-size: clamp(3rem, 4.5vw, 4rem); }
 }
 
 .status { display: inline-flex; align-items: center; gap: .45rem; padding: .22rem .7rem; border-radius: 999px; font-family: var(--sans); font-size: .78rem; font-weight: 600; line-height: 1.4; letter-spacing: 0; text-transform: none; background: var(--white); border: 1px solid var(--line); white-space: nowrap; vertical-align: middle; }

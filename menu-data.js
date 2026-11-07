@@ -1,5 +1,5 @@
 /* =====================================================================
-   MEGGA COFFEE — SITE CONFIG + MENU
+   MEGGA MORNING GRACE COFFEE — SITE CONFIG + MENU
    ---------------------------------------------------------------------
    Edit this file to change business info, hours, prices or menu items.
    See README.md for the plain HTML business details to update as well.
@@ -11,11 +11,11 @@
    ===================================================================== */
 
 const SITE = {
-  name: "Megga Coffee",
-  fullName: "MEGGA Morning Grace Coffee", // name used on Uber Eats
+  name: "Megga Morning Grace Coffee",
+  alternateName: "Megga Coffee",
 
   // The two lines of the logo in the header and footer.
-  logoTop: "MEGGA COFFEE",
+  logoTop: "MEGGA MORNING GRACE COFFEE",
   logoBottom: "Coffee · Community · Toronto",
 
   // Google Maps lists the business category as "Coffee roastery".
@@ -72,12 +72,12 @@ const SITE = {
     // home: false = keep it off the homepage photo strip (e.g. it looks too much like the hero photo).
     // The homepage strip also skips any photo that is already shown elsewhere on the homepage.
     gallery: [
-      { src: "assets/gallery/cafe-interior.jpg", alt: "Inside Megga Coffee: pendant lights, framed photos and the coffee bar", caption: "Our café", preview: true },
+      { src: "assets/gallery/cafe-interior.jpg", alt: "Inside Megga Morning Grace Coffee: pendant lights, framed photos and the coffee bar", caption: "Our café", preview: true },
       { src: "assets/gallery/pastry-case.jpg", alt: "Croissants, muffins and loaf cakes in the pastry case", caption: "Fresh pastries", preview: true },
       { src: "assets/gallery/megga-cups.jpg", alt: "Megga Morning Grace Coffee takeaway cups on the counter", caption: "Coffee to go" },
       { src: "assets/gallery/dessert-case.jpg", alt: "Colourful frozen desserts in the display freezer", caption: "Frozen treats" },
       { src: "assets/gallery/cappuccino.jpg", alt: "A cappuccino on the counter", caption: "Cappuccino", preview: true },
-      { src: "assets/hero.jpg", alt: "Guests chatting over coffee inside Megga Coffee", caption: "Café life", home: false }
+      { src: "assets/hero.jpg", alt: "Guests chatting over coffee inside Megga Morning Grace Coffee", caption: "Café life", home: false }
     ]
     // Tip: on desktop the first photo is shown large, so 5 or 9 photos fill the grid neatly.
   },
