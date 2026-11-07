@@ -323,7 +323,75 @@
     if (SITE.phone) data.telephone = phoneE164(SITE.phone);
     if (payments.length) data.paymentAccepted = payments.join(", ");
     if (SITE.instagram) data.sameAs = [SITE.instagram];
+    data.hasMenu = { "@id": base + "menu.html#menu" };
+    addJsonLd(data);
 
+    var page = document.body.getAttribute("data-page");
+
+    // Homepage: tell Google the site's name (shown above the link in results).
+    if (page === "home") {
+      addJsonLd({
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": base + "#website",
+        name: SITE.name,
+        alternateName: SITE.alternateName,
+        url: base,
+        inLanguage: "en-CA",
+        publisher: { "@id": base + "#cafe" }
+      });
+      return;
+    }
+
+    // Other pages: breadcrumb trail, e.g. Home > Menu.
+    var here = $('.site-nav a[aria-current="page"]');
+    addJsonLd({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: base },
+        { "@type": "ListItem", position: 2, name: here ? here.textContent.trim() : document.title.split("|")[0].trim(),
+          item: canonical ? canonical.href : location.href.split("#")[0] }
+      ]
+    });
+
+    if (page === "menu") injectMenuSchema(base);
+  }
+
+  // The full menu with prices, built from MENU in menu-data.js.
+  function injectMenuSchema(base) {
+    if (typeof MENU === "undefined") return;
+    var DIETS = { v: "https://schema.org/VegetarianDiet", gf: "https://schema.org/GlutenFreeDiet" };
+    addJsonLd({
+      "@context": "https://schema.org",
+      "@type": "Menu",
+      "@id": base + "menu.html#menu",
+      name: SITE.name + " Menu",
+      url: base + "menu.html",
+      inLanguage: "en-CA",
+      hasMenuSection: MENU.map(function (cat) {
+        return {
+          "@type": "MenuSection",
+          name: cat.name,
+          url: base + "menu.html#" + cat.id,
+          image: cat.image ? base + cat.image : undefined,
+          hasMenuItem: cat.items.map(function (item) {
+            var diets = (item.tags || []).filter(function (t) { return DIETS[t]; }).map(function (t) { return DIETS[t]; });
+            return {
+              "@type": "MenuItem",
+              name: item.name,
+              description: item.desc || undefined,
+              image: item.image ? base + item.image : undefined,
+              suitableForDiet: diets.length ? diets : undefined,
+              offers: { "@type": "Offer", price: Number(item.price).toFixed(2), priceCurrency: "CAD" }
+            };
+          })
+        };
+      })
+    });
+  }
+
+  function addJsonLd(data) {
     var s = document.createElement("script");
     s.type = "application/ld+json";
     s.textContent = JSON.stringify(data);
@@ -345,10 +413,7 @@
         };
       })
     };
-    var s = document.createElement("script");
-    s.type = "application/ld+json";
-    s.textContent = JSON.stringify(data);
-    document.head.appendChild(s);
+    addJsonLd(data);
   }
 
   /* ---------- images & placeholders ---------- */

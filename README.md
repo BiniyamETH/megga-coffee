@@ -27,6 +27,7 @@ Customers scan a QR code in the café and land on **`menu.html`** on their phone
   2. new prices show correctly,
   3. a search such as "latte" finds items.
 - **Keep photos small** (about 20 KB for item photos, under 300 KB for section banners) so the menu loads quickly on mobile data.
+- **Google reads the menu too.** `script.js` turns `menu-data.js` into structured data that search engines read: every item, price and vegetarian or gluten-free tag. Editing a price or item in `menu-data.js` updates it automatically. To check it, paste the menu page link into [Google's Rich Results Test](https://search.google.com/test/rich-results).
 
 ## Editing info, hours and prices
 
