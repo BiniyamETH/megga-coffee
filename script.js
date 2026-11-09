@@ -260,7 +260,8 @@
     $$("[data-href]").forEach(function (el) {
       var v = links[el.getAttribute("data-href")];
       if (v) el.setAttribute("href", v);
-      else el.hidden = true;
+      else el.remove(); // a link with no address hurts the Google SEO score, even hidden
+
     });
     $$("[data-requires]").forEach(function (el) {
       if (!flags[el.getAttribute("data-requires")]) el.hidden = true;
@@ -456,6 +457,10 @@
           if (!en.isIntersecting) return;
           var img = en.target;
           lazyIO.unobserve(img);
+          if (img.hasAttribute("data-srcset")) {
+            img.setAttribute("srcset", img.getAttribute("data-srcset"));
+            img.removeAttribute("data-srcset");
+          }
           img.src = img.getAttribute("data-src");
           img.removeAttribute("data-src");
         });
@@ -464,8 +469,11 @@
     $$("img[data-src]", root).forEach(function (img) { lazyIO.observe(img); });
   }
 
-  function imgHTML(src, alt, w, h, fallbackLabel) {
-    return '<img ' + lazySrc(src) + ' alt="' + esc(alt) + '" width="' + w + '" height="' + h +
+  // small + sizes (optional): a 600px-wide copy of the photo, so phones that show it small skip the big file.
+  function imgHTML(src, alt, w, h, fallbackLabel, small, sizes) {
+    // On older phones the srcset waits in data-srcset too, or it would download straight away.
+    var set = small ? " " + (lazyByScript ? "data-srcset" : "srcset") + '="' + esc(small) + " 600w, " + esc(src) + ' 1200w" sizes="' + sizes + '"' : "";
+    return '<img ' + lazySrc(src) + set + ' alt="' + esc(alt) + '" width="' + w + '" height="' + h +
       '" loading="lazy" decoding="async" data-fallback="' + esc(fallbackLabel || "") + '">';
   }
 
@@ -482,7 +490,7 @@
     if (!list) return;
     list.innerHTML = (SITE.highlights || []).map(function (h) {
       var src = h.image || categoryImage(h.category);
-      var media = src ? imgHTML(src, "", 480, 340, "") : placeholderHTML("");
+      var media = src ? imgHTML(src, "", 480, 340, "", h.small, "(min-width: 1020px) 280px, (min-width: 600px) 30vw, 50vw") : placeholderHTML("");
       return '<li class="reveal"><a class="menu-card" href="menu.html#' + esc(h.category) + '">' +
         '<span class="mc-media">' + media + "</span>" +
         '<span class="mc-body"><span class="mc-text"><span class="mc-title">' + esc(h.label) + "</span>" +
@@ -505,7 +513,7 @@
     strip.innerHTML = galleryItems().filter(function (g) {
       return g.src && g.home !== false && onPage.indexOf(g.src) === -1;
     }).slice(0, 6).map(function (g) {
-      return '<li><a class="strip-photo" href="gallery.html">' + imgHTML(g.src, g.alt || g.caption, 400, 300, g.caption) + "</a></li>";
+      return '<li><a class="strip-photo" href="gallery.html">' + imgHTML(g.src, g.alt || g.caption, 400, 300, g.caption, g.small, "(min-width: 900px) 300px, 60vw") + "</a></li>";
     }).join("");
     watchImages(strip);
   }
@@ -516,7 +524,7 @@
     if (!preview) return;
     var picks = galleryItems().filter(function (g) { return g.preview && g.src; }).slice(0, 3);
     preview.innerHTML = picks.map(function (g) {
-      return '<li><a class="mini-photo" href="gallery.html">' + imgHTML(g.src, g.alt || g.caption, 400, 400, g.caption) + "</a></li>";
+      return '<li><a class="mini-photo" href="gallery.html">' + imgHTML(g.src, g.alt || g.caption, 400, 400, g.caption, g.small, "(min-width: 900px) 300px, 60vw") + "</a></li>";
     }).join("");
     watchImages(preview);
   }
@@ -600,7 +608,7 @@
     function setHeaderVar() {
       document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
     }
-    setHeaderVar();
+    requestAnimationFrame(setHeaderVar);
     window.addEventListener("resize", setHeaderVar);
 
     function onScroll() { header.classList.toggle("is-scrolled", window.scrollY > 8); }
@@ -642,6 +650,12 @@
       els.forEach(function (el) { el.classList.add("is-visible"); });
       return;
     }
+    // Anything already on the first screen shows straight away; only content further down fades in.
+    var below = els.filter(function (el) {
+      if (el.getBoundingClientRect().top < window.innerHeight) { el.classList.add("is-visible"); return false; }
+      return true;
+    });
+    document.documentElement.classList.add("js");
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         if (en.isIntersecting) {
@@ -650,7 +664,7 @@
         }
       });
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
-    els.forEach(function (el) { io.observe(el); });
+    below.forEach(function (el) { io.observe(el); });
     revealReady = true;
   }
   var revealReady = false;
@@ -989,11 +1003,12 @@
   function run(step) {
     try { step(); } catch (err) { if (window.console) console.error(err); }
   }
-  // Turns on the fade-in styles; set here so a crash earlier in this file can't leave content invisible.
-  document.documentElement.classList.add("js");
   [bindConfig, renderOpenStatus, renderHoursTable, renderStars, renderHighlights, renderGallery,
     renderGalleryPreview, renderGalleryStrip, renderHoursGroups, setupLightbox, renderMenu,
     setupHeader, setupReveal, injectSchema, injectFaqSchema].forEach(run);
+  // Marks the page as script-ready (fade-ins, menu buttons). setupReveal normally does this
+  // right after showing the first screen; this is the backup if it failed.
+  document.documentElement.classList.add("js");
   // Keep "Open now" and the hours FAQ sentence right if the page stays open past opening/closing time.
   setInterval(function () {
     renderOpenStatus();

@@ -61,7 +61,7 @@ If the menu page goes blank after an edit, you most likely broke a quote or comm
 
 ## Swapping photos
 
-**Where each photo is used:** `hero.jpg` is the interior photo you supplied; it is the big homepage photo and is also used on the Our Story page and in the gallery. `home-interior.jpg` is the big photo on the Contact page. The four menu-card photos in `assets/cards/` are free Unsplash stock photos; change the card photos and titles in `highlights` in `menu-data.js`. The gallery photos in `assets/gallery/` are the café's own, from its Google Maps listing ("By owner"). The `-900` / `-1000` files are smaller copies that phones download instead; replace them too when you swap a photo.
+**Where each photo is used:** `hero.jpg` is the interior photo you supplied; it is the big homepage photo and is also used on the Our Story page and in the gallery. `home-interior.jpg` is the big photo on the Contact page. The four menu-card photos in `assets/cards/` are free Unsplash stock photos; change the card photos and titles in `highlights` in `menu-data.js`. The gallery photos in `assets/gallery/` are the café's own, from its Google Maps listing ("By owner"). The `-600` / `-800` / `-900` / `-1000` files are smaller copies that phones download instead; replace them too when you swap a photo (for gallery and card photos, the `small:` line in `menu-data.js` points to the 600px copy).
 
 Photos live in `assets/`. To swap the main photo, replace `assets/hero.jpg` with your own file under the same name; no code changes are needed. Landscape works best, at least 1600px wide.
 

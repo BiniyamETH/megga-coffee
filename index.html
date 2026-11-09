@@ -27,7 +27,7 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" as="image" href="assets/hero.jpg" imagesrcset="assets/hero-900.jpg 1000w, assets/hero.jpg 1536w" imagesizes="(min-width: 900px) 64vw, 100vw">
+  <link rel="preload" as="image" href="assets/hero.jpg" imagesrcset="assets/hero-900.jpg 1000w, assets/hero.jpg 1536w" imagesizes="(min-width: 900px) 64vw, 100vw" fetchpriority="high">
   <link rel="stylesheet" href="styles.css">
 
   <script src="menu-data.js" defer></script>
@@ -171,7 +171,7 @@
     <section class="section story" aria-labelledby="story-title">
       <div class="container story-grid">
         <figure class="story-photo reveal">
-          <img src="assets/our-story-cafe.jpg" alt="Illustrated café interior with walnut tables and warm pendant lights above the coffee counter" width="1586" height="992" loading="lazy" decoding="async">
+          <img src="assets/our-story-cafe.jpg" srcset="assets/our-story-cafe-800.jpg 800w, assets/our-story-cafe.jpg 1200w" sizes="(min-width: 900px) 50vw, 100vw" alt="Illustrated café interior with walnut tables and warm pendant lights above the coffee counter" width="1200" height="751" loading="lazy" decoding="async">
         </figure>
         <div class="story-text reveal">
           <p class="eyebrow">Our Story</p>

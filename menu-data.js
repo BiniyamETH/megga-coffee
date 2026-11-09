@@ -67,12 +67,13 @@ const SITE = {
     // preview: true = also shown in the small Gallery box near the top of the homepage (3 photos).
     // home: false = keep it off the homepage photo strip (e.g. it looks too much like the hero photo).
     // The homepage strip also skips any photo that is already shown elsewhere on the homepage.
+    // small: a 600px-wide copy used where the photo is shown small (homepage). Optional.
     gallery: [
-      { src: "assets/gallery/cafe-interior.jpg", alt: "Inside Megga Morning Grace Coffee: pendant lights, framed photos and the coffee bar", caption: "Our café", preview: true },
-      { src: "assets/gallery/pastry-case.jpg", alt: "Croissants, muffins and loaf cakes in the pastry case", caption: "Fresh pastries", preview: true },
-      { src: "assets/gallery/megga-cups.jpg", alt: "Megga Morning Grace Coffee takeaway cups on the counter", caption: "Coffee to go" },
-      { src: "assets/gallery/dessert-case.jpg", alt: "Colourful frozen desserts in the display freezer", caption: "Frozen treats" },
-      { src: "assets/gallery/cappuccino.jpg", alt: "A cappuccino on the counter", caption: "Cappuccino", preview: true },
+      { src: "assets/gallery/cafe-interior.jpg", small: "assets/gallery/cafe-interior-600.jpg", alt: "Inside Megga Morning Grace Coffee: pendant lights, framed photos and the coffee bar", caption: "Our café", preview: true },
+      { src: "assets/gallery/pastry-case.jpg", small: "assets/gallery/pastry-case-600.jpg", alt: "Croissants, muffins and loaf cakes in the pastry case", caption: "Fresh pastries", preview: true },
+      { src: "assets/gallery/megga-cups.jpg", small: "assets/gallery/megga-cups-600.jpg", alt: "Megga Morning Grace Coffee takeaway cups on the counter", caption: "Coffee to go" },
+      { src: "assets/gallery/dessert-case.jpg", small: "assets/gallery/dessert-case-600.jpg", alt: "Colourful frozen desserts in the display freezer", caption: "Frozen treats" },
+      { src: "assets/gallery/cappuccino.jpg", small: "assets/gallery/cappuccino-600.jpg", alt: "A cappuccino on the counter", caption: "Cappuccino", preview: true },
       { src: "assets/hero.jpg", alt: "Guests chatting over coffee inside Megga Morning Grace Coffee", caption: "Café life", home: false }
     ]
     // Tip: on desktop the first photo is shown large, so 5 or 9 photos fill the grid neatly.
@@ -81,10 +82,10 @@ const SITE = {
   // The four menu cards on the homepage (and the About page).
   // "category" must match a category id in MENU below. "image" is the card photo.
   highlights: [
-    { label: "Coffee",               sub: "Espresso, latte, mocha & more",  category: "specialty-coffees",    image: "assets/cards/coffee.jpg" },
-    { label: "Drinks",               sub: "Juice, tea, hot chocolate & more", category: "drinks",               image: "assets/cards/drinks.jpg" },
-    { label: "Breakfast & Brunch",   sub: "Benedicts, omelettes, pancakes", category: "benedicts",            image: "assets/cards/breakfast.jpg" },
-    { label: "Sandwiches & Burgers", sub: "Sandwiches, burgers, salads",    category: "breakfast-sandwiches", image: "assets/cards/sandwiches.jpg" }
+    { label: "Coffee",               sub: "Espresso, latte, mocha & more",  category: "specialty-coffees",    image: "assets/cards/coffee.jpg", small: "assets/cards/coffee-600.jpg" },
+    { label: "Drinks",               sub: "Juice, tea, hot chocolate & more", category: "drinks",               image: "assets/cards/drinks.jpg", small: "assets/cards/drinks-600.jpg" },
+    { label: "Breakfast & Brunch",   sub: "Benedicts, omelettes, pancakes", category: "benedicts",            image: "assets/cards/breakfast.jpg", small: "assets/cards/breakfast-600.jpg" },
+    { label: "Sandwiches & Burgers", sub: "Sandwiches, burgers, salads",    category: "breakfast-sandwiches", image: "assets/cards/sandwiches.jpg", small: "assets/cards/sandwiches-600.jpg" }
   ]
 };
 
