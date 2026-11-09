@@ -240,7 +240,7 @@ a:hover { color: var(--caramel-dark); }
 .star.is-full { fill: var(--star); }
 @media (min-width: 900px) { .review-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; } }
 
-/* Ethiopian roots */
+/* Habesha roots (About page) */
 .ethiopia { background: radial-gradient(70% 90% at 85% 15%, rgba(236, 214, 182, .7), transparent 60%), var(--band); }
 .ethiopia-grid { display: grid; gap: 2.5rem; align-items: center; }
 .amharic { font-family: "Noto Sans Ethiopic", "Nyala", var(--sans); font-size: .62em; font-weight: 500; color: var(--caramel); margin-left: .35rem; vertical-align: middle; }
