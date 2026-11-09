@@ -139,8 +139,8 @@ const MENU = [
       { name: "Fruit Smoothie (Large)", price: 10.00 },
       { name: "Bottled Juice", price: 3.50, image: "assets/menu/items/bottled-juice.jpg" },
       { name: "Minute Maid Juice", price: 3.00 },
-      { name: "Coca-Cola", price: 2.50 },
-      { name: "Canada Dry", price: 2.50 },
+      { name: "Coca-Cola", price: 3.00 },
+      { name: "Canada Dry", price: 3.00 },
       { name: "Bottled Water", price: 2.00, image: "assets/menu/items/bottled-water.jpg" }
     ]
   },
