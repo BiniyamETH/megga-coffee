@@ -120,13 +120,12 @@ egg-potato-salad.jpg -> photo-1618666185561-baed3459ff18
 frittata-special.jpg -> photo-1510693206972-df098062cb71
 megga-special-breakfast.jpg -> photo-1712746785320-39b26539c1e2
 
-Habesha dishes: photos from Wikimedia Commons (cropped to squares and resized).
-CC BY-SA photos need credit, so menu-data.js gives these items credit/creditUrl;
-the site shows it under the photo and in the credits line at the bottom of the menu page.
+Habesha dishes
 ful-normal.jpg -> File:ShahanFul.jpg, Temesgen Woldezion (edited by Merhawie Woldezion), CC BY-SA 2.5
-ful-special.jpg -> File:Ful_Medames.JPG, Miansari66, CC0
-fata.jpg -> File:Taita_fit-fit.jpg, Temesgen Woldezion (edited by Merhawie Woldezion), CC BY-SA 2.5
-kicha-fitfit.jpg -> File:Kitcha_fit_fit.png, Rama, CC BY-SA 2.5
-gaat.jpg -> File:Ga'at_food.jpg, Stefan Alfons Tzeggai, CC BY-SA 3.0
-dulot-tbsi.jpg -> File:Siga_Tibs.jpg, Khajitdadddy, CC BY-SA 4.0
-keyih-tbsi.jpg -> File:Tibs_1.jpg, Sofia.jahn, CC BY-SA 4.0
+ful-special.jpg -> ImageGen illustration
+fata.jpg -> ImageGen illustration
+fata-special.jpg -> ImageGen illustration
+kicha-fitfit.jpg -> ImageGen illustration
+gaat.jpg -> ImageGen illustration
+dulot-tbsi.jpg -> ImageGen illustration
+keyih-tbsi.jpg -> ImageGen illustration
