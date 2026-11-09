@@ -18,10 +18,6 @@ const SITE = {
   logoTop: "MEGGA MORNING GRACE COFFEE",
   logoBottom: "Coffee · Community · Toronto",
 
-  // Google Maps lists the business category as "Coffee roastery".
-  // TODO (owner): confirm you roast in-house before advertising it.
-  tagline: "Coffee Roastery",
-
   city: "Toronto",
   address: {
     street: "1696 Danforth Ave",
@@ -86,7 +82,7 @@ const SITE = {
   // "category" must match a category id in MENU below. "image" is the card photo.
   highlights: [
     { label: "Coffee",               sub: "Espresso, latte, mocha & more",  category: "specialty-coffees",    image: "assets/cards/coffee.jpg" },
-    { label: "Drinks",               sub: "Iced coffee, juice, tea & more", category: "drinks",               image: "assets/cards/drinks.jpg" },
+    { label: "Drinks",               sub: "Juice, tea, hot chocolate & more", category: "drinks",               image: "assets/cards/drinks.jpg" },
     { label: "Breakfast & Brunch",   sub: "Benedicts, omelettes, pancakes", category: "benedicts",            image: "assets/cards/breakfast.jpg" },
     { label: "Sandwiches & Burgers", sub: "Sandwiches, burgers, salads",    category: "breakfast-sandwiches", image: "assets/cards/sandwiches.jpg" }
   ]

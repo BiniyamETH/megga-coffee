@@ -38,7 +38,6 @@ Everything you'll normally change is in **`menu-data.js`**. Open it in any text 
 | Phone number | `phone: ""` → `phone: "+1 416-555-0123"`. While it is empty, every phone link and "Call" button stays hidden. |
 | Hours | `hours:` uses a 24-hour clock, e.g. `mon: ["08:00", "21:00"]`. To close on a day, write `sun: null,`. The "Open now / Closed" badge, the hours table and Google's data all update from this. |
 | Instagram | `instagram: "https://www.instagram.com/yourname"`. Leave it `""` to hide it. |
-| "Coffee Roastery" line | `tagline:`. Set it to `""` to hide it. Set `roastsInHouse: false` to hide the "Freshly Roasted" badge. |
 | Google rating | `rating: { value: 5.0, count: 25 }` |
 | Uber Eats link | `orderUrl:` |
 
@@ -62,14 +61,14 @@ If the menu page goes blank after an edit, you most likely broke a quote or comm
 
 ## Swapping photos
 
-**Homepage photos:** `home-hero.jpg` (latte on a window sill) and the four menu-card photos in `assets/cards/` are free Unsplash stock photos. Change the card photos and titles in `highlights` in `menu-data.js`. `hero.jpg` is the interior photo you supplied and is used on the Contact and Our Story pages and in the gallery. The gallery photos in `assets/gallery/` are the café's own, from its Google Maps listing ("By owner").
+**Where each photo is used:** `hero.jpg` is the interior photo you supplied; it is the big homepage photo and is also used on the Our Story page and in the gallery. `home-interior.jpg` is the big photo on the Contact page. The four menu-card photos in `assets/cards/` are free Unsplash stock photos; change the card photos and titles in `highlights` in `menu-data.js`. The gallery photos in `assets/gallery/` are the café's own, from its Google Maps listing ("By owner"). The `-900` / `-1000` files are smaller copies that phones download instead; replace them too when you swap a photo.
 
 Photos live in `assets/`. To swap the main photo, replace `assets/hero.jpg` with your own file under the same name; no code changes are needed. Landscape works best, at least 1600px wide.
 
 For the other photos, add the file to `assets/` and put its path in `menu-data.js`:
 
-- About photo: `images.about.src: "assets/latte.jpg"`
-- Menu category photos (also used on the homepage cards): `image:` on each category in `MENU`, files in `assets/menu/`
+- Menu category photos: `image:` on each category in `MENU`, files in `assets/menu/`
+- Dish photos: `image:` on each item, 240×240 files in `assets/menu/items/` plus a bigger copy with the same name in `assets/menu/items/large/` (shown when someone taps the photo)
 - Gallery: `images.gallery[].src`, with a short `alt` description for screen readers
 
 Any photo left as `""`, or whose file is missing, shows a warm brown placeholder instead. Keep photos under about 300 KB each (export as JPG at about 80% quality) so the site stays fast.

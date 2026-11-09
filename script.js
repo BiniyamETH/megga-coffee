@@ -137,13 +137,6 @@
     }).join(" · ");
   }
 
-  // Two short lines for the info strip: ["Open Daily", "8:00 a.m. – 9:00 p.m."]
-  function hoursLines() {
-    var groups = hoursGroups();
-    if (groups.length === 1 && groups[0].range) return ["Open Daily", formatRange(groups[0].range)];
-    return [hoursSummary(), ""];
-  }
-
   // Short hours list for the Visit band: "Mon – Sun  8:00 a.m. – 9:00 p.m."
   function renderHoursGroups() {
     $$("[data-hours-groups]").forEach(function (dl) {
@@ -225,8 +218,6 @@
     daysOpen: DAY_KEYS.filter(function (k) { return SITE.hours[k]; }).length + " days",
     logoTop: SITE.logoTop || SITE.name,
     logoBottom: SITE.logoBottom || "",
-    city: SITE.city,
-    tagline: SITE.tagline,
     street: a.street,
     addressLine1: a.street,
     addressLine2: a.city + ", " + a.region + " " + a.postalCode,
@@ -234,9 +225,6 @@
     hoursSummary: hoursSummary(),
     ratingValue: Number(SITE.rating.value).toFixed(1),
     ratingCount: SITE.rating.count,
-    addressLine1Comma: a.street + ",",
-    hoursLine1: hoursLines()[0],
-    hoursLine2: hoursLines()[1],
     payments: payments.join(" · "),
     paymentsLower: listJoin(payments.map(function (p) { return p.toLowerCase(); })),
     openNowSentence: openNowSentence(),
@@ -254,7 +242,6 @@
     phoneHref: SITE.phone ? "tel:" + phoneE164(SITE.phone) : ""
   };
   var flags = {
-    tagline: !!SITE.tagline,
     phone: !!SITE.phone,
     instagram: !!SITE.instagram,
     payments: payments.length > 0
@@ -406,10 +393,13 @@
       "@context": "https://schema.org",
       "@type": "FAQPage",
       mainEntity: items.map(function (d) {
+        // Leave out "We're open right now…": it depends on when the page was loaded.
+        var answer = $(".faq-answer", d).cloneNode(true);
+        $$('[data-bind="openNowSentence"]', answer).forEach(function (el) { el.remove(); });
         return {
           "@type": "Question",
           name: $("summary", d).textContent.trim(),
-          acceptedAnswer: { "@type": "Answer", text: $(".faq-answer", d).textContent.replace(/\s+/g, " ").trim() }
+          acceptedAnswer: { "@type": "Answer", text: answer.textContent.replace(/\s+/g, " ").trim() }
         };
       })
     };
@@ -951,5 +941,10 @@
   setupReveal();
   injectSchema();
   injectFaqSchema();
-  setInterval(renderOpenStatus, 60 * 1000);
+  // Keep "Open now" and the hours FAQ sentence right if the page stays open past opening/closing time.
+  setInterval(function () {
+    renderOpenStatus();
+    var sentence = openNowSentence();
+    $$('[data-bind="openNowSentence"]').forEach(function (el) { el.textContent = sentence; });
+  }, 60 * 1000);
 })();
