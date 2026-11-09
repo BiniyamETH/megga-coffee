@@ -303,7 +303,9 @@
       url: base,
       image: base + "assets/hero.jpg",
       menu: base + "menu.html",
-      servesCuisine: ["Coffee", "Ethiopian", "Eritrean", "Breakfast", "Brunch", "Greek", "Vegetarian"],
+      // Not shown on the page. Google matches these words to searches like "Eritrean food near me",
+      // so the two country names stay next to Habesha here.
+      servesCuisine: ["Coffee", "Habesha", "Ethiopian", "Eritrean", "Breakfast", "Brunch", "Greek", "Vegetarian"],
       address: {
         "@type": "PostalAddress",
         streetAddress: a.street,
@@ -752,6 +754,12 @@
       $("[data-dish-name]", box).textContent = item.name;
       $("[data-dish-price]", box).textContent = formatPrice(item.price);
       $("[data-dish-desc]", box).textContent = item.desc || "";
+      var credit = $("[data-dish-credit]", box);
+      if (credit) {
+        credit.innerHTML = item.credit
+          ? 'Photo: <a href="' + esc(item.creditUrl || "#") + '" target="_blank" rel="noopener">' + esc(item.credit) + "</a>"
+          : "";
+      }
       box.showModal();
     });
     $("[data-dish-close]", box).addEventListener("click", function () { box.close(); });

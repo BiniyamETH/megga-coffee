@@ -97,6 +97,9 @@ const SITE = {
    Each item: { name: "...", price: 0.00, desc: "optional", tags: [], image: "assets/menu/items/<file>.jpg" }
    Item photos are small squares (240x240) in assets/menu/items/. Leave image out or "" for no photo.
    Tags you can use:  "v" = Vegetarian, "s" = Spicy, "gf" = Gluten Free
+   Photo from Wikimedia Commons (or anywhere that asks for credit)? Add
+     credit: "Author · licence", creditUrl: "link to the photo's page"
+   It shows under the photo when tapped and in the credits at the bottom of the menu page.
    --------------------------------------------------------------------- */
 
 const MENU = [
@@ -178,14 +181,22 @@ const MENU = [
       { name: "Egg, Potato, Salad, Tomato & Green Pepper", price: 12.00, image: "assets/menu/items/egg-potato-salad.jpg" },
       { name: "Frittata Special", price: 16.00, image: "assets/menu/items/frittata-special.jpg" },
       { name: "Megga Special Breakfast", price: 15.00, image: "assets/menu/items/megga-special-breakfast.jpg" },
-      { name: "Ful Normal", price: 12.00 },
-      { name: "Ful Special", price: 15.00, desc: "ፉል" },
-      { name: "Fata Normal (with 2)", price: 12.00 },
-      { name: "Fata Special (with 2)", price: 15.00, desc: "ፋታ" },
-      { name: "Kicha Fitfit", price: 15.00 },
-      { name: "Ga’at", price: 15.00 },
-      { name: "Dulot Tbsi", price: 20.00 },
-      { name: "Keyih Tbsi", price: 20.00 },
+      { name: "Ful Normal", price: 12.00, image: "assets/menu/items/ful-normal.jpg",
+        credit: "Temesgen Woldezion · CC BY-SA 2.5", creditUrl: "https://commons.wikimedia.org/wiki/File:ShahanFul.jpg" },
+      { name: "Ful Special", price: 15.00, desc: "ፉል", image: "assets/menu/items/ful-special.jpg",
+        credit: "Miansari66 · CC0", creditUrl: "https://commons.wikimedia.org/wiki/File:Ful_Medames.JPG" },
+      { name: "Fata Normal (with 2)", price: 12.00, image: "assets/menu/items/fata.jpg",
+        credit: "Temesgen Woldezion · CC BY-SA 2.5", creditUrl: "https://commons.wikimedia.org/wiki/File:Taita_fit-fit.jpg" },
+      { name: "Fata Special (with 2)", price: 15.00, desc: "ፋታ", image: "assets/menu/items/fata.jpg",
+        credit: "Temesgen Woldezion · CC BY-SA 2.5", creditUrl: "https://commons.wikimedia.org/wiki/File:Taita_fit-fit.jpg" },
+      { name: "Kicha Fitfit", price: 15.00, image: "assets/menu/items/kicha-fitfit.jpg",
+        credit: "Rama · CC BY-SA 2.5", creditUrl: "https://commons.wikimedia.org/wiki/File:Kitcha_fit_fit.png" },
+      { name: "Ga’at", price: 15.00, image: "assets/menu/items/gaat.jpg",
+        credit: "Stefan Alfons Tzeggai · CC BY-SA 3.0", creditUrl: "https://commons.wikimedia.org/wiki/File:Ga'at_food.jpg" },
+      { name: "Dulot Tbsi", price: 20.00, image: "assets/menu/items/dulot-tbsi.jpg",
+        credit: "Khajitdadddy · CC BY-SA 4.0", creditUrl: "https://commons.wikimedia.org/wiki/File:Siga_Tibs.jpg" },
+      { name: "Keyih Tbsi", price: 20.00, image: "assets/menu/items/keyih-tbsi.jpg",
+        credit: "Sofia.jahn · CC BY-SA 4.0", creditUrl: "https://commons.wikimedia.org/wiki/File:Tibs_1.jpg" },
       { name: "Standard Breakfast", price: 9.95, image: "assets/menu/items/standard-breakfast.jpg" },
       { name: "Eggs and Beans", price: 10.75, image: "assets/menu/items/eggs-beans.jpg" },
       { name: "The Greek", price: 11.75, image: "assets/menu/items/the-greek-breakfast.jpg" },

@@ -503,6 +503,11 @@ a:hover { color: var(--caramel-dark); }
 .dish-price { font-family: var(--display); font-size: 1.2rem; font-weight: 600; color: #f0b07a; }
 .dish-desc { grid-column: 1 / -1; color: rgba(255, 255, 255, .75); font-family: var(--sans); font-size: .95rem; }
 .dish-desc:empty { display: none; }
+.dish-credit { grid-column: 1 / -1; color: rgba(255, 255, 255, .6); font-family: var(--sans); font-size: .75rem; }
+.dish-credit:empty { display: none; }
+.dish-credit a { color: inherit; }
+.photo-credits { margin: .4rem 0 0; font-size: .75rem; opacity: .8; }
+.photo-credits a { color: inherit; }
 
 /* Back to top */
 .to-top {

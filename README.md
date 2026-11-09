@@ -118,7 +118,7 @@ GitHub redirects the old `github.io` address to the new domain automatically, so
 
 ## Photo credits
 
-**Every menu item has its own photo** in `assets/menu/items/` (240×240 squares, about 16 KB each). Each item's `image:` line in `menu-data.js` points to its photo. To change one, save a square photo over the same file name. To remove one, delete that item's `image: "..."` part and the row shows text only. `assets/menu/items/CREDITS.txt` lists the Unsplash source for each photo.
+**Every menu item has its own photo** in `assets/menu/items/` (200×200 squares). Each item's `image:` line in `menu-data.js` points to its photo. To change one, save a square photo over the same file name. To remove one, delete that item's `image: "..."` part and the row shows text only. `assets/menu/items/CREDITS.txt` lists the source for each photo (Unsplash, or Wikimedia Commons for the Habesha dishes). **Every menu item must have a photo**: publishing stops with a message if an item has no `image:` or its file is missing. A photo whose licence asks for credit (Wikimedia Commons CC BY-SA) also needs `credit:` and `creditUrl:` on the item; the site then shows the credit under the photo and at the bottom of the menu page.
 
 The category photos in `assets/menu/` are free stock photos from [Unsplash](https://unsplash.com/license). They are free for commercial use and no credit is required. They show typical versions of each dish, not Megga's own plates, which is why the menu footer says "Food photos are for illustration only." Replace them with photos of your own food when you can, keeping the same file names. To remove a category photo, set its `image: ""` in `menu-data.js`.
 

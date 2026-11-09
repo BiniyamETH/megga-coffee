@@ -18,6 +18,8 @@ var dataFile = path.join(root, "menu-data.js");
 var pageFile = path.join(root, "menu.html");
 var START = "<!-- MENU:START (built by tools/build-menu.js from menu-data.js; do not edit by hand) -->";
 var END = "<!-- MENU:END -->";
+var CREDITS_START = "<!-- CREDITS:START (built by tools/build-menu.js from menu-data.js; do not edit by hand) -->";
+var CREDITS_END = "<!-- CREDITS:END -->";
 
 var TAGS = {
   v: { label: "Vegetarian", icon: "i-leaf" },
@@ -56,6 +58,11 @@ MENU.forEach(function (cat, ci) {
     if (!item.name) fail(where + " has no name.");
     if (typeof item.price !== "number" || !isFinite(item.price)) fail(where + ' ("' + item.name + '") needs a plain number price, like 3.95.');
     (item.tags || []).forEach(function (t) { if (!TAGS[t]) fail(where + ' ("' + item.name + '") has an unknown tag "' + t + '".'); });
+    // Every dish needs a photo: a 200x200 thumbnail and a 600x600 copy in items/large/.
+    if (!item.image) fail(where + ' ("' + item.name + '") has no image. Every menu item needs a photo.');
+    [item.image, item.image.replace("/items/", "/items/large/")].forEach(function (p) {
+      if (!fs.existsSync(path.join(root, p))) fail(where + ' ("' + item.name + '"): photo file ' + p + " is missing.");
+    });
   });
 });
 
@@ -76,11 +83,32 @@ var html = MENU.map(function (cat) {
     '        <ul class="menu-list" role="list">\n' + items + "\n        </ul>\n      </section>";
 }).join("\n");
 
+// Photo credits for pictures whose licence asks for them (one line per photo).
+var seenCredit = {};
+var credits = [];
+MENU.forEach(function (cat) {
+  cat.items.forEach(function (item) {
+    if (!item.credit || seenCredit[item.image]) return;
+    seenCredit[item.image] = true;
+    credits.push(esc(item.name) + ": " + (item.creditUrl
+      ? '<a href="' + esc(item.creditUrl) + '" target="_blank" rel="noopener">' + esc(item.credit) + "</a>"
+      : esc(item.credit)));
+  });
+});
+var creditsHTML = credits.length
+  ? '      <p class="photo-credits">Photo credits (Wikimedia Commons, cropped and resized): ' + credits.join("; ") + ".</p>"
+  : "";
+
+// Replace whatever is between a pair of markers.
+function between(text, start, end, inner, what) {
+  var a = text.indexOf(start), b = text.indexOf(end);
+  if (a === -1 || b === -1 || b < a) fail("menu.html is missing the " + what + " markers.");
+  return text.slice(0, a + start.length) + "\n" + (inner ? inner + "\n" : "") + "      " + text.slice(b);
+}
 var page = fs.readFileSync(pageFile, "utf8");
-var a = page.indexOf(START), b = page.indexOf(END);
-if (a === -1 || b === -1 || b < a) fail("menu.html is missing the MENU:START / MENU:END markers.");
-var out = page.slice(0, a + START.length) + "\n" + html + "\n      " + page.slice(b);
-fs.writeFileSync(pageFile, out);
+page = between(page, START, END, html, "MENU:START / MENU:END");
+page = between(page, CREDITS_START, CREDITS_END, creditsHTML, "CREDITS:START / CREDITS:END");
+fs.writeFileSync(pageFile, page);
 
 var count = MENU.reduce(function (n, c) { return n + c.items.length; }, 0);
 console.log("build-menu: wrote " + count + " items in " + MENU.length + " sections to menu.html");
