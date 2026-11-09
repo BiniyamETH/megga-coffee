@@ -721,3 +721,7 @@ a:hover { color: var(--caramel-dark); }
   .gallery-more { align-items: flex-start; text-align: left; }
   .gallery-more .icon { flex: none; margin-top: .2em; }
 }
+
+/* Without JavaScript (or before it runs) the menu is a plain list, so hide the buttons that need it. */
+html:not(.js) [data-sections-toggle],
+html:not(.js) [data-search-toggle] { visibility: hidden; }

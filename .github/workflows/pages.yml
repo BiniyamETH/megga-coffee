@@ -1,0 +1,43 @@
+# Publishes the website on every push to main.
+# Before publishing it writes the plain-text menu into menu.html from menu-data.js
+# (tools/build-menu.js). If menu-data.js has a mistake, this stops and the live site stays as it was;
+# GitHub emails you, and the run's log on the Actions tab says which line to fix.
+name: Publish site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the plain-text menu into menu.html
+        run: node tools/build-menu.js
+
+      - name: Collect the website files (not README, tools or workflow)
+        run: |
+          mkdir _site
+          cp -r *.html *.js *.css sitemap.xml assets _site/
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deploy
+        uses: actions/deploy-pages@v4

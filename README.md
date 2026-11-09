@@ -87,9 +87,13 @@ Each page has a title, meta description, canonical URL and Open Graph tags in it
 
 ## Publishing on GitHub Pages
 
-1. Create a repository and upload all the files, keeping the `assets` folder.
-2. Go to **Settings → Pages → Build and deployment**, choose **Deploy from a branch**, select `main` and `/ (root)`, then click Save.
-3. After a minute the site is live at `https://<username>.github.io/<repo>/`.
+1. Create a repository and upload all the files, keeping the `assets` and `.github` folders.
+2. Go to **Settings → Pages → Build and deployment** and set **Source** to **GitHub Actions**.
+3. Push to `main`. About a minute later the site is live at `https://<username>.github.io/<repo>/`.
+
+Every push runs `.github/workflows/pages.yml`. It writes a plain-text copy of the menu into `menu.html` from `menu-data.js` (`tools/build-menu.js`), then publishes the site. That copy shows right away on slow connections, on very old phones and with JavaScript off, and the full photo menu replaces it once the page's script runs. You only ever edit `menu-data.js`. Leave the `MENU:START` / `MENU:END` markers in `menu.html` alone.
+
+**If an update doesn't appear:** open the repo's **Actions** tab. A red ❌ means `menu-data.js` has a mistake (for example a missing comma or a price written as `"3.95"`), and the log names the item or line. The live site stays as it was until you fix it and push again. To check before pushing, run `node tools/build-menu.js` (then `git checkout menu.html` to undo the generated copy; committing it is harmless too).
 
 To preview on your computer, open `index.html` in a browser. For the map and everything else to behave exactly as it will online, run `python -m http.server` in this folder and visit http://localhost:8000.
 
