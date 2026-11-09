@@ -91,7 +91,8 @@ const SITE = {
 /* ---------------------------------------------------------------------
    MENU
    Each category can have an image: "assets/menu/<file>.jpg" (or "" for none).
-   It is shown at the top of that section on the menu page.
+   It is shown at the top of that section on the menu page, cropped to a wide 3:1 strip (960x320 works well).
+   Also put a small 96x96 square copy with the same name in assets/menu/small/ for the Sections list.
    Each item: { name: "...", price: 0.00, desc: "optional", tags: [], image: "assets/menu/items/<file>.jpg" }
    Item photos are small squares (240x240) in assets/menu/items/. Leave image out or "" for no photo.
    Tags you can use:  "v" = Vegetarian, "s" = Spicy, "gf" = Gluten Free

@@ -15,8 +15,6 @@
   };
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  document.documentElement.classList.add("js");
-
   /* ---------- helpers ---------- */
 
   function $(sel, root) { return (root || document).querySelector(sel); }
@@ -58,11 +56,18 @@
 
   /* ---------- hours & open status (Toronto time) ---------- */
 
+  // dayIndex is -1 on very old browsers that can't tell Toronto time; the "Open now" badge then stays hidden.
   function torontoNow() {
-    var parts = new Intl.DateTimeFormat("en-US", {
-      timeZone: SITE.timezone || "America/Toronto",
-      weekday: "short", hour: "2-digit", minute: "2-digit", hourCycle: "h23"
-    }).formatToParts(new Date());
+    var parts;
+    try {
+      // hour12: false (not hourCycle) so older browsers also give a 24-hour clock.
+      parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: SITE.timezone || "America/Toronto",
+        weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false
+      }).formatToParts(new Date());
+    } catch (err) {
+      return { dayIndex: -1, minutes: 0 };
+    }
     var out = {};
     parts.forEach(function (p) { out[p.type] = p.value; });
     var key = out.weekday.slice(0, 3).toLowerCase();
@@ -262,7 +267,14 @@
     });
     $$("[data-src-config]").forEach(function (el) {
       var v = SITE[el.getAttribute("data-src-config")];
-      if (v) el.src = v;
+      if (!v) return;
+      // The Google map is heavy. Older Safari ignores loading="lazy" on it, so wait until it is near the screen.
+      var nativeLazy = "loading" in (el.tagName === "IFRAME" ? HTMLIFrameElement : HTMLImageElement).prototype;
+      if (nativeLazy || !("IntersectionObserver" in window)) { el.src = v; return; }
+      var io = new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) { io.disconnect(); el.src = v; }
+      }, { rootMargin: "300px 0px" });
+      io.observe(el);
     });
     $$("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
   }
@@ -423,10 +435,37 @@
         img.remove();
       }, { once: true });
     });
+    startLazy(root);
+  }
+
+  /* Lazy photos. Newer browsers use loading="lazy". Older phones ignore it and would download
+     every photo on the page at once, so for them the photo waits in data-src until it is close to the screen. */
+  var lazyByScript = !("loading" in HTMLImageElement.prototype) && "IntersectionObserver" in window;
+  var lazyIO = null;
+
+  // The src attribute for a lazy photo: src="..." or, on older phones, data-src="...".
+  function lazySrc(src) {
+    return (lazyByScript ? 'data-src="' : 'src="') + esc(src) + '"';
+  }
+
+  function startLazy(root) {
+    if (!lazyByScript) return;
+    if (!lazyIO) {
+      lazyIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          var img = en.target;
+          lazyIO.unobserve(img);
+          img.src = img.getAttribute("data-src");
+          img.removeAttribute("data-src");
+        });
+      }, { rootMargin: "400px 0px" });
+    }
+    $$("img[data-src]", root).forEach(function (img) { lazyIO.observe(img); });
   }
 
   function imgHTML(src, alt, w, h, fallbackLabel) {
-    return '<img src="' + esc(src) + '" alt="' + esc(alt) + '" width="' + w + '" height="' + h +
+    return '<img ' + lazySrc(src) + ' alt="' + esc(alt) + '" width="' + w + '" height="' + h +
       '" loading="lazy" decoding="async" data-fallback="' + esc(fallbackLabel || "") + '">';
   }
 
@@ -462,7 +501,7 @@
     var strip = $("[data-gallery-strip]");
     if (!strip) return;
     // Skip photos already shown elsewhere on the page, and ones marked home: false.
-    var onPage = $$("img").map(function (img) { return img.getAttribute("src"); });
+    var onPage = $$("img").map(function (img) { return img.getAttribute("src") || img.getAttribute("data-src"); });
     strip.innerHTML = galleryItems().filter(function (g) {
       return g.src && g.home !== false && onPage.indexOf(g.src) === -1;
     }).slice(0, 6).map(function (g) {
@@ -586,15 +625,19 @@
         toggle.focus();
       }
     });
-    window.matchMedia("(min-width: 1020px)").addEventListener("change", function (mq) {
-      if (mq.matches) setOpen(false);
-    });
+    var wide = window.matchMedia("(min-width: 1020px)");
+    var onWide = function (mq) { if (mq.matches) setOpen(false); };
+    // iPhones before iOS 14 only have the older addListener.
+    if (wide.addEventListener) wide.addEventListener("change", onWide);
+    else if (wide.addListener) wide.addListener(onWide);
   }
 
   /* ---------- reveal on scroll ---------- */
 
   function setupReveal() {
     var els = $$(".reveal");
+    // If anything goes wrong below, show everything rather than leave it faded out.
+    setTimeout(function () { if (!revealReady) els.forEach(function (el) { el.classList.add("is-visible"); }); }, 0);
     if (reduceMotion || !("IntersectionObserver" in window)) {
       els.forEach(function (el) { el.classList.add("is-visible"); });
       return;
@@ -608,6 +651,21 @@
       });
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
     els.forEach(function (el) { io.observe(el); });
+    revealReady = true;
+  }
+  var revealReady = false;
+
+  // Scroll the page to y. Avoids behavior: "instant", which older Android Chrome rejects with an error.
+  function scrollToY(y, smooth) {
+    var root = document.documentElement;
+    if (smooth) {
+      try { window.scrollTo({ top: y, behavior: "smooth" }); return; } catch (err) { /* fall through */ }
+    }
+    // The page has scroll-behavior: smooth in CSS, so switch it off for a straight jump.
+    var before = root.style.scrollBehavior;
+    root.style.scrollBehavior = "auto";
+    window.scrollTo(0, y);
+    root.style.scrollBehavior = before;
   }
 
   // How much of the top of the screen is covered by sticky bars on the menu page,
@@ -722,10 +780,11 @@
     if (sectionsGrid) {
       sectionsGrid.innerHTML = MENU.map(function (cat) {
         return '<li><a class="section-link" href="#' + esc(cat.id) + '" data-section="' + esc(cat.id) + '">' +
-          (cat.image ? '<img src="' + esc(cat.image) + '" alt="" width="96" height="64" loading="lazy" decoding="async">' : "") +
+          (cat.image ? '<img ' + lazySrc(cat.image.replace("assets/menu/", "assets/menu/small/")) + ' alt="" width="96" height="96" loading="lazy" decoding="async">' : "") +
           '<span class="section-name">' + esc(cat.name) + '</span><span class="section-count" data-section-count>' +
           cat.items.length + "</span></a></li>";
       }).join("");
+      startLazy(sectionsGrid);
     }
 
     root.innerHTML = MENU.map(function (cat, ci) {
@@ -739,7 +798,7 @@
         var haystack = (item.name + " " + (item.desc || "") + " " + cat.name).toLowerCase();
         var thumb = item.image
           ? '<button class="thumb-btn" type="button" data-dish="' + ci + "-" + ii + '" aria-label="View photo: ' + esc(item.name) + '">' +
-            '<img class="item-thumb" src="' + esc(item.image) + '" alt="" width="240" height="240" loading="lazy" decoding="async"></button>'
+            '<img class="item-thumb" ' + lazySrc(item.image) + ' alt="" width="200" height="200" loading="lazy" decoding="async"></button>'
           : "";
         return '<li class="menu-item' + (thumb ? " has-photo" : "") + '" data-tags="' + esc(tags.join(" ")) + '" data-search="' + esc(haystack) + '">' +
           thumb +
@@ -757,8 +816,8 @@
       var titleHTML = '<h2 class="menu-cat-title" id="h-' + esc(cat.id) + '">' + esc(cat.name) + "</h2>" +
         '<span class="cat-count" data-cat-count>' + cat.items.length + " items</span>";
       var head = cat.image
-        ? '<div class="cat-banner"><img src="' + esc(cat.image) + '" alt="" width="960" height="640" ' +
-          (ci === 0 ? 'fetchpriority="high"' : 'loading="lazy"') + ' decoding="async">' +
+        ? '<div class="cat-banner"><img ' + (ci === 0 ? 'src="' + esc(cat.image) + '" fetchpriority="high"' : lazySrc(cat.image) + ' loading="lazy"') +
+          ' alt="" width="960" height="320" decoding="async">' +
           '<div class="cat-banner-text">' + titleHTML + "</div></div>"
         : '<div class="cat-heading">' + titleHTML + "</div>";
       return '<section class="menu-cat" id="' + esc(cat.id) + '" aria-labelledby="h-' + esc(cat.id) + '">' +
@@ -881,7 +940,7 @@
       var glide = smooth && !reduceMotion && Math.abs(y - window.scrollY) < 1400;
       jumping = true;
       setActive(id);
-      window.scrollTo({ top: y, behavior: glide ? "smooth" : "instant" });
+      scrollToY(y, glide);
       clearTimeout(jumpTimer);
       jumpTimer = setTimeout(function () { jumping = false; setActive(sectionOnScreen()); }, glide ? 700 : 80);
       if (history.replaceState) history.replaceState(null, "", "#" + id);
@@ -926,21 +985,15 @@
 
   /* ---------- init ---------- */
 
-  bindConfig();
-  renderOpenStatus();
-  renderHoursTable();
-  renderStars();
-  renderHighlights();
-  renderGallery();
-  renderGalleryPreview();
-  renderGalleryStrip();
-  renderHoursGroups();
-  setupLightbox();
-  renderMenu();
-  setupHeader();
-  setupReveal();
-  injectSchema();
-  injectFaqSchema();
+  // Each step runs on its own, so one problem (say, on a very old phone) can't stop the menu or the rest of the page.
+  function run(step) {
+    try { step(); } catch (err) { if (window.console) console.error(err); }
+  }
+  // Turns on the fade-in styles; set here so a crash earlier in this file can't leave content invisible.
+  document.documentElement.classList.add("js");
+  [bindConfig, renderOpenStatus, renderHoursTable, renderStars, renderHighlights, renderGallery,
+    renderGalleryPreview, renderGalleryStrip, renderHoursGroups, setupLightbox, renderMenu,
+    setupHeader, setupReveal, injectSchema, injectFaqSchema].forEach(run);
   // Keep "Open now" and the hours FAQ sentence right if the page stays open past opening/closing time.
   setInterval(function () {
     renderOpenStatus();

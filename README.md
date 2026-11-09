@@ -67,7 +67,7 @@ Photos live in `assets/`. To swap the main photo, replace `assets/hero.jpg` with
 
 For the other photos, add the file to `assets/` and put its path in `menu-data.js`:
 
-- Menu category photos: `image:` on each category in `MENU`, files in `assets/menu/`
+- Menu category photos: `image:` on each category in `MENU`, files in `assets/menu/` (960×320, a wide strip), plus a 96×96 square copy with the same name in `assets/menu/small/`
 - Dish photos: `image:` on each item, 240×240 files in `assets/menu/items/` plus a bigger copy with the same name in `assets/menu/items/large/` (shown when someone taps the photo)
 - Gallery: `images.gallery[].src`, with a short `alt` description for screen readers
 
