@@ -9,13 +9,10 @@ americano.jpg -> photo-1771736385651-c071580a9d78
 red-eye.jpg -> photo-1671187013461-5712c498d808
 cafe-latte.jpg -> photo-1512568400610-62da28bc8a13
 cafe-mocha.jpg -> photo-1648145800880-0dcec0f85848
-flavoured-latte.jpg -> photo-1772519597624-cd5284f318c4
 coffee.jpg -> photo-1582768772255-7fb8066357ce
 orange-juice.jpg -> photo-1600271886742-f049cd451bba
 tea.jpg -> photo-1544787219-7f47ccb76574
 hot-chocolate.jpg -> photo-1637572815755-c4b80092dce1
-bottled-juice.jpg -> photo-1650547002496-e7ed9df4bf3c
-soft-drink.jpg -> photo-1581636625402-29b2a704ef13
 bottled-water.jpg -> photo-1616118132534-381148898bb4
 egg-sandwich.jpg -> photo-1525351484163-7529414344d8
 blt.jpg -> photo-1722041220514-f6a26e286f2e
@@ -114,8 +111,7 @@ coca-cola.jpg -> photo-1554866585-cd94860890b7
 canada-dry.jpg -> photo-1732247610040-c6a2193092ca
 egg-sandwich-special.jpg -> photo-1528735602780-2552fd46c7af
 chicken-breast-sandwich.jpg -> photo-1700937244987-92488ab2ada5
-chicken-breast-special.jpg -> photo-1676300184084-de35d56a9a70
-chicken-breast-special-10.jpg -> photo-1615653633266-1ee0c84500b2
+chicken-breast-special.jpg -> photo-1615653633266-1ee0c84500b2
 turkey-breast-sandwich.jpg -> photo-1705537459006-f4acbd93c5a3
 ham-sandwich.jpg -> photo-1619096534329-564c333a95b3
 turkey-breast-special.jpg -> photo-1712746784291-e29d5d2694d4
