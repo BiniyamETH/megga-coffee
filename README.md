@@ -54,6 +54,7 @@ Scroll down to `const MENU = [`. Each item looks like this:
 - **Change a price:** edit the number. Don't add a `$`; the site formats it as `$0.00`.
 - **Add an item:** copy a line, paste it below, and edit it. Keep the comma at the end.
 - **Remove an item:** delete its whole line.
+- **Search words:** `keywords: "benny eggs benedict"` on an item or a whole category lets the menu search find it by words that aren't in its name. They never show on the menu.
 - **Tags:** `"v"` = vegetarian, `"s"` = spicy, `"gf"` = gluten free. These drive the filter chips and icons.
 - **Add a category:** copy a whole `{ id: ..., name: ..., items: [ ... ] },` block. The `id` must be lowercase-with-dashes. It is used in links like `menu.html#benedicts`.
 

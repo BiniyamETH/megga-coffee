@@ -149,20 +149,22 @@ const MENU = [
   {
     id: "drinks",
     name: "Juices & Soft Drinks",
+    keywords: "cold drink",
     image: "assets/menu/drinks.jpg",
     items: [
       { name: "Fresh Orange Juice", price: 5.25, image: "assets/menu/items/orange-juice.jpg" },
       { name: "Fruit Smoothie (Small)", price: 8.00, image: "assets/menu/items/fruit-smoothie.jpg" },
       { name: "Fruit Smoothie (Large)", price: 10.00, image: "assets/menu/items/fruit-smoothie.jpg" },
       { name: "Minute Maid Juice", price: 3.00, image: "assets/menu/items/minute-maid-juice.jpg" },
-      { name: "Coca-Cola", price: 3.00, image: "assets/menu/items/coca-cola.jpg" },
-      { name: "Canada Dry", price: 3.00, image: "assets/menu/items/canada-dry.jpg" },
+      { name: "Coca-Cola", price: 3.00, keywords: "coke pop soda", image: "assets/menu/items/coca-cola.jpg" },
+      { name: "Canada Dry", price: 3.00, keywords: "ginger ale pop soda", image: "assets/menu/items/canada-dry.jpg" },
       { name: "Bottled Water", price: 2.00, image: "assets/menu/items/bottled-water.jpg" }
     ]
   },
   {
     id: "habesha-dishes",
     name: "Habesha Dishes",
+    keywords: "ethiopian eritrean",
     image: "assets/menu/habesha-dishes.jpg",
     items: [
       { name: "Ful Normal", price: 12.00, desc: "Mashed fava beans with onion, tomato and chili, served with bread", image: "assets/menu/items/ful-normal.jpg",
@@ -172,7 +174,7 @@ const MENU = [
       { name: "Fata Special (with 2)", price: 15.00, desc: "ፋታ · Our fata with extra toppings", image: "assets/menu/items/fata-special.jpg" },
       { name: "Kicha Fitfit", price: 15.00, desc: "Torn kicha flatbread tossed in spiced butter and berbere", image: "assets/menu/items/kicha-fitfit.jpg" },
       { name: "Ga’at", price: 15.00, desc: "Thick porridge with spiced butter and berbere, served with yogurt", image: "assets/menu/items/gaat.jpg" },
-      { name: "Dulot Tbsi", price: 20.00, desc: "Finely chopped meat sautéed with onion, chili and spiced butter", image: "assets/menu/items/dulot-tbsi.jpg" },
+      { name: "Dulot Tbsi", price: 20.00, keywords: "tibs", desc: "Finely chopped meat sautéed with onion, chili and spiced butter", image: "assets/menu/items/dulot-tbsi.jpg" },
       { name: "Keyih Tbsi", price: 20.00, desc: "Tibs: meat sautéed in a red berbere sauce with onion", image: "assets/menu/items/keyih-tbsi.jpg" }
     ]
   },
@@ -222,6 +224,7 @@ const MENU = [
   {
     id: "benedicts",
     name: "Benedicts",
+    keywords: "benny bennies eggs benedict",
     image: "assets/menu/benedicts.jpg",
     items: [
       { name: "Canadian", price: 14.95, image: "assets/menu/items/benny-canadian.jpg" },

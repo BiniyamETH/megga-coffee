@@ -809,6 +809,11 @@
       startLazy(sectionsGrid);
     }
 
+    // Lowercase, no accents or apostrophes, so "cafe" finds "Café" and "gaat" finds "Ga’at".
+    function searchText(str) {
+      return String(str).normalize("NFD").replace(/[̀-ͯ'’‘`]/g, "").toLowerCase();
+    }
+
     root.innerHTML = MENU.map(function (cat, ci) {
       var items = cat.items.map(function (item, ii) {
         var tags = item.tags || [];
@@ -817,7 +822,8 @@
           return '<li class="tag-pill tag-pill-' + t + '"><svg class="tag-icon" aria-hidden="true"><use href="#' + TAGS[t].icon + '"/></svg>' +
             TAGS[t].label + "</li>";
         }).join("");
-        var haystack = (item.name + " " + (item.desc || "") + " " + cat.name).toLowerCase();
+        // keywords: extra words the search finds but the menu never shows (e.g. "benny" for every Benedict).
+        var haystack = searchText([item.name, item.desc, item.keywords, cat.name, cat.keywords].join(" "));
         var thumb = item.image
           ? '<button class="thumb-btn" type="button" data-dish="' + ci + "-" + ii + '" aria-label="View photo: ' + esc(item.name) + '">' +
             '<img class="item-thumb" ' + lazySrc(item.image) + ' alt="" width="200" height="200" loading="lazy" decoding="async"></button>'
@@ -859,7 +865,7 @@
     var total = $$(".menu-item", root).length;
 
     function applyFilters() {
-      var q = search.value.trim().toLowerCase();
+      var q = searchText(search.value.trim());
       var filters = Object.keys(activeFilters).filter(function (k) { return activeFilters[k]; });
       var shown = 0;
       $$(".menu-cat", root).forEach(function (sec) {
