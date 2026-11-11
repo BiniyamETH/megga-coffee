@@ -35,6 +35,20 @@ jobs:
           mkdir _site
           cp -r *.html *.js *.css sitemap.xml assets _site/
 
+      # Browsers keep a saved copy of each file for up to 10 minutes (GitHub's setting).
+      # Giving menu-data.js, script.js and styles.css a new address on every publish
+      # (e.g. menu-data.js?v=0be6400a) means a freshly loaded page never runs an old copy
+      # of the menu. Only the published copy changes; the files in the repo stay as they are.
+      - name: Give the scripts and styles a new address on every publish
+        run: |
+          v="${GITHUB_SHA::8}"
+          sed -i -E "s/(src|href)=\"(menu-data\.js|script\.js|styles\.css)\"/\1=\"\2?v=$v\"/g" _site/*.html
+          for f in _site/*.html; do
+            n=$(grep -o -E "(menu-data\.js|script\.js|styles\.css)\?v=$v" "$f" | wc -l)
+            echo "$f: $n of 3 links versioned"
+            [ "$n" -eq 3 ] || { echo "Expected 3 in $f. Check its <head> still loads styles.css, menu-data.js and script.js."; exit 1; }
+          done
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
