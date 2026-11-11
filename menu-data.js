@@ -83,7 +83,7 @@ const SITE = {
   // "category" must match a category id in MENU below. "image" is the card photo.
   highlights: [
     { label: "Coffee",               sub: "Espresso, latte, mocha & more",  category: "specialty-coffees",    image: "assets/cards/coffee.jpg", small: "assets/cards/coffee-600.jpg" },
-    { label: "Drinks",               sub: "Juice, tea, hot chocolate & more", category: "drinks",               image: "assets/cards/drinks.jpg", small: "assets/cards/drinks-600.jpg" },
+    { label: "Drinks",               sub: "Juice, smoothies & soft drinks",   category: "drinks",               image: "assets/cards/drinks.jpg", small: "assets/cards/drinks-600.jpg" },
     { label: "Breakfast & Brunch",   sub: "Benedicts, omelettes, pancakes", category: "benedicts",            image: "assets/cards/breakfast.jpg", small: "assets/cards/breakfast-600.jpg" },
     { label: "Sandwiches & Burgers", sub: "Sandwiches, burgers, salads",    category: "breakfast-sandwiches", image: "assets/cards/sandwiches.jpg", small: "assets/cards/sandwiches-600.jpg" }
   ]
@@ -124,20 +124,34 @@ const MENU = [
     ]
   },
   {
-    id: "drinks",
-    name: "Drinks",
-    image: "assets/menu/drinks.jpg",
+    id: "iced-coffee",
+    name: "Iced Coffee",
+    image: "assets/menu/iced-coffee.jpg",
     items: [
-      { name: "Fresh Orange Juice", price: 5.25, image: "assets/menu/items/orange-juice.jpg" },
+      { name: "Iced Coffee", price: 5.00, image: "assets/menu/items/iced-coffee.jpg" },
+      { name: "Iced Latte", price: 5.00, image: "assets/menu/items/iced-latte.jpg" },
+      { name: "Iced Espresso", price: 5.00, image: "assets/menu/items/iced-espresso.jpg" },
+      { name: "Iced Americano", price: 5.00, image: "assets/menu/items/iced-americano.jpg" }
+    ]
+  },
+  {
+    id: "tea-and-hot-drinks",
+    name: "Tea & Hot Drinks",
+    image: "assets/menu/tea-and-hot-drinks.jpg",
+    items: [
       { name: "Black Tea", price: 3.00, image: "assets/menu/items/tea.jpg" },
       { name: "Green Tea", price: 3.00, image: "assets/menu/items/green-tea.jpg" },
       { name: "Chai Tea", price: 3.00, image: "assets/menu/items/chai-tea.jpg" },
       { name: "Hot Chocolate", price: 4.50, image: "assets/menu/items/hot-chocolate.jpg" },
-      { name: "Hot Chocolate with Espresso", price: 5.00, image: "assets/menu/items/hot-chocolate-espresso.jpg" },
-      { name: "Iced Coffee", price: 5.00, image: "assets/menu/items/iced-coffee.jpg" },
-      { name: "Iced Latte", price: 5.00, image: "assets/menu/items/iced-latte.jpg" },
-      { name: "Iced Espresso", price: 5.00, image: "assets/menu/items/iced-espresso.jpg" },
-      { name: "Iced Americano", price: 5.00, image: "assets/menu/items/iced-americano.jpg" },
+      { name: "Hot Chocolate with Espresso", price: 5.00, image: "assets/menu/items/hot-chocolate-espresso.jpg" }
+    ]
+  },
+  {
+    id: "drinks",
+    name: "Juices & Soft Drinks",
+    image: "assets/menu/drinks.jpg",
+    items: [
+      { name: "Fresh Orange Juice", price: 5.25, image: "assets/menu/items/orange-juice.jpg" },
       { name: "Fruit Smoothie (Small)", price: 8.00, image: "assets/menu/items/fruit-smoothie.jpg" },
       { name: "Fruit Smoothie (Large)", price: 10.00, image: "assets/menu/items/fruit-smoothie.jpg" },
       { name: "Minute Maid Juice", price: 3.00, image: "assets/menu/items/minute-maid-juice.jpg" },

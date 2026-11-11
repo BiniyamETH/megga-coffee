@@ -126,6 +126,8 @@ The category photos in `assets/menu/` are free stock photos from [Unsplash](http
 |---|---|
 | specialty-coffees.jpg | photo-1760163178873-7644a924519e |
 | drinks.jpg | photo-1600271886742-f049cd451bba |
+| iced-coffee.jpg | Not Unsplash: made from the iced latte, iced coffee and iced americano dish photos |
+| tea-and-hot-drinks.jpg | Not Unsplash: made from the chai tea, hot chocolate and green tea dish photos |
 | habesha-dishes.jpg | Not Unsplash: made from the fata, kicha fitfit and keyih tbsi dish photos |
 | breakfast-sandwiches.jpg | photo-1786490034626-1b8482bdf211 |
 | breakfast-dishes.jpg | photo-1768634003098-9d5848d3b93f |
