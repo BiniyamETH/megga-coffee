@@ -39,7 +39,7 @@ Everything you'll normally change is in **`menu-data.js`**. Open it in any text 
 | Hours | `hours:` uses a 24-hour clock, e.g. `mon: ["08:00", "21:00"]`. To close on a day, write `sun: null,`. The "Open now / Closed" badge, the hours table and Google's data all update from this. |
 | Instagram | `instagram: "https://www.instagram.com/yourname"`. Leave it `""` to hide it. |
 | Google rating | `rating: { value: 5.0, count: 25 }` |
-| Uber Eats link | `orderUrl:` |
+| Uber Eats link | `orderUrl:`. The link is also written in the six HTML files (Visit band, footer, and under the menu), so replace it there too. |
 
 ### Prices and menu items
 
