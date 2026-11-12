@@ -43,6 +43,9 @@ const SITE = {
   reviewsUrl: "https://www.google.com/maps/place/Megga+coffee/@43.6842185,-79.3206684,17z/data=!4m6!3m5!1s0x89d4cd0e040bd121:0x5b02da0321c5b6d7!8m2!3d43.6842185!4d-79.3206684!16s%2Fg%2F11z4dqq0qw",
   mapEmbedUrl: "https://maps.google.com/maps?q=Megga%20Coffee%2C%201696%20Danforth%20Ave%2C%20Toronto%2C%20ON%20M4C%201H8&z=16&output=embed",
 
+  // Price range Google shows next to the café: "$" (under $10), "$$" ($10–20), "$$$" ($20–30).
+  priceRange: "$$",
+
   // Google rating — update these numbers when your reviews change.
   rating: { value: 5.0, count: 25 },
 

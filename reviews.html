@@ -7,6 +7,8 @@
   <meta name="description" content="See what guests say about the coffee, breakfast and atmosphere at Megga Morning Grace Coffee on the Danforth.">
   <link rel="canonical" href="https://biniyameth.github.io/megga-coffee/reviews.html">
   <meta name="theme-color" content="#faf6f0">
+  <!-- Lets Google show a large photo next to the result instead of a tiny thumbnail. -->
+  <meta name="robots" content="max-image-preview:large">
 
   <!-- Open Graph (link previews on Facebook, WhatsApp, iMessage, etc.) -->
   <meta property="og:type" content="website">
@@ -21,7 +23,10 @@
   <meta property="og:locale" content="en_CA">
   <meta name="twitter:card" content="summary_large_image">
 
+  <!-- PNG icons for phones and browsers that can't show the SVG one; apple-touch-icon is the home-screen icon. -->
+  <link rel="icon" href="assets/icon-192.png" type="image/png" sizes="192x192">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="preload" href="assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
@@ -122,8 +127,8 @@
           </div>
           <p class="rating-count">From <span data-bind="ratingCount"></span> reviews on Google</p>
           <div class="btn-row center">
-            <a class="btn btn-caramel" data-href="reviewsUrl" target="_blank" rel="noopener">Read our Google reviews</a>
-            <a class="btn btn-outline" data-href="reviewsUrl" target="_blank" rel="noopener">Leave a review</a>
+            <a class="btn btn-caramel" href="https://www.google.com/maps/place/Megga+coffee/@43.6842185,-79.3206684,17z/data=!4m6!3m5!1s0x89d4cd0e040bd121:0x5b02da0321c5b6d7!8m2!3d43.6842185!4d-79.3206684!16s%2Fg%2F11z4dqq0qw" data-href="reviewsUrl" target="_blank" rel="noopener">Read our Google reviews</a>
+            <a class="btn btn-outline" href="https://www.google.com/maps/place/Megga+coffee/@43.6842185,-79.3206684,17z/data=!4m6!3m5!1s0x89d4cd0e040bd121:0x5b02da0321c5b6d7!8m2!3d43.6842185!4d-79.3206684!16s%2Fg%2F11z4dqq0qw" data-href="reviewsUrl" target="_blank" rel="noopener">Leave a review</a>
           </div>
         </div>
       </div>
@@ -152,7 +157,7 @@
             <li><span>2</span>Tap <strong>Write a review</strong></li>
             <li><span>3</span>Choose your stars and say what you loved</li>
           </ol>
-          <a class="btn btn-caramel" data-href="reviewsUrl" target="_blank" rel="noopener">
+          <a class="btn btn-caramel" href="https://www.google.com/maps/place/Megga+coffee/@43.6842185,-79.3206684,17z/data=!4m6!3m5!1s0x89d4cd0e040bd121:0x5b02da0321c5b6d7!8m2!3d43.6842185!4d-79.3206684!16s%2Fg%2F11z4dqq0qw" data-href="reviewsUrl" target="_blank" rel="noopener">
             <svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg> Write a Google review</a>
         </div>
       </div>

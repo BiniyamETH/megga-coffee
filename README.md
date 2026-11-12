@@ -9,6 +9,7 @@ about.html      Our Story + Ethiopian coffee roots
 gallery.html    Photo gallery (tap a photo to view it full-size)
 reviews.html    Google rating, review topics, "write a review"
 contact.html    Contact: address, hours, map, getting here
+404.html        "Page not found": shown for any address on the site that doesn't exist
 styles.css      All styling (colours are at the top, under :root)
 script.js       Shared logic (you should not need to edit this)
 menu-data.js    <- EDIT THIS: business info, hours, photos and the menu
@@ -38,8 +39,10 @@ Everything you'll normally change is in **`menu-data.js`**. Open it in any text 
 | Phone number | `phone: ""` → `phone: "+1 416-555-0123"`. While it is empty, every phone link and "Call" button stays hidden. |
 | Hours | `hours:` uses a 24-hour clock, e.g. `mon: ["08:00", "21:00"]`. To close on a day, write `sun: null,`. The "Open now / Closed" badge, the hours table and Google's data all update from this. |
 | Instagram | `instagram: "https://www.instagram.com/yourname"`. Leave it `""` to hide it. |
+| Price range (for Google) | `priceRange: "$$"`. Use `"$"` for under $10 a person or `"$$$"` for $20–30. |
 | Google rating | `rating: { value: 5.0, count: 25 }` |
-| Uber Eats link | `orderUrl:`. The link is also written in the six HTML files (Visit band, footer, and under the menu), so replace it there too. |
+| Uber Eats link | `orderUrl:`. The link is also written in the HTML files (Visit band, footer, and under the menu), so replace it there too. |
+| Google Maps listing link | `reviewsUrl:`. It is also written in the HTML files ("Write a review" links), so replace it there too. |
 
 ### Prices and menu items
 
@@ -72,6 +75,8 @@ For the other photos, add the file to `assets/` and put its path in `menu-data.j
 - Dish photos: `image:` on each item, 240×240 files in `assets/menu/items/` plus a bigger copy with the same name in `assets/menu/items/large/` (shown when someone taps the photo)
 - Gallery: `images.gallery[].src`, with a short `alt` description for screen readers
 
+**When you replace a photo, give the new file a new name** (e.g. `fata-2.jpg`) and update its `image:` line. Browsers keep photos for up to 10 minutes, so a new photo saved under the old name can take that long to appear; a new name shows straight away.
+
 Any photo left as `""`, or whose file is missing, shows a warm brown placeholder instead. Keep photos under about 300 KB each (export as JPG at about 80% quality) so the site stays fast.
 
 `assets/hero.jpg` (1536×1024) is also the preview image shown when someone shares the link.
@@ -86,13 +91,22 @@ When the café's address, phone or hours change, update the plain HTML in the Vi
 
 Each page has a title, meta description, canonical URL and Open Graph tags in its HTML head. If the public URL changes, update the canonical and Open Graph URLs and `sitemap.xml` together.
 
+## Older phones and animation
+
+The site is built to work on old and new phones alike. Keep these rules when changing it:
+
+- **Animation stays light.** Everything that moves is at the bottom of `styles.css` under "Light motion", and only changes `opacity` and `transform`, which stay smooth on slow phones. Very old phones, and anyone with "reduce motion" switched on, get no animation at all. The menu list itself is not animated, so the QR-code page opens instantly.
+- **Older phones get a simpler version, not a broken one.** `styles.css` has an "Older phones" section, and `script.js` has one too: spacing for phones that ignore `gap`, a photo viewer for iPhones that have no `<dialog>` (before iOS 15.4), and icons for iPhones before iOS 12.2.
+- **When you use a newer CSS feature, write a plain value first**, e.g. `font-size: 1.8rem; font-size: clamp(1.8rem, 3.6vw, 2.4rem);`. Old phones use the first one and ignore the second.
+- **Icons:** `assets/favicon.svg` is the browser-tab icon. `assets/icon-192.png`, `assets/icon-512.png` and `assets/apple-touch-icon.png` (180×180, the iPhone home-screen icon) are PNG copies of it for phones that can't show SVG icons. If the logo changes, replace all four.
+
 ## Publishing on GitHub Pages
 
 1. Create a repository and upload all the files, keeping the `assets` and `.github` folders.
 2. Go to **Settings → Pages → Build and deployment** and set **Source** to **GitHub Actions**.
 3. Push to `main`. About a minute later the site is live at `https://<username>.github.io/<repo>/`.
 
-Every push runs `.github/workflows/pages.yml`. It writes a plain-text copy of the menu into `menu.html` from `menu-data.js` (`tools/build-menu.js`), then publishes the site. That copy shows right away on slow connections, on very old phones and with JavaScript off, and the full photo menu replaces it once the page's script runs. You only ever edit `menu-data.js`. Leave the `MENU:START` / `MENU:END` markers in `menu.html` alone. It also gives `menu-data.js`, `script.js` and `styles.css` a new address on each publish (for example `menu-data.js?v=0be6400a`), so browsers never pair a new page with an old saved copy of the menu. That happens only in the published copy, so keep the plain `src="menu-data.js"` in the HTML files.
+Every push runs `.github/workflows/pages.yml`. It writes a plain-text copy of the menu into `menu.html` from `menu-data.js` (`tools/build-menu.js`), then publishes the site. That copy shows right away on slow connections, on very old phones and with JavaScript off, and the full photo menu replaces it once the page's script runs. You only ever edit `menu-data.js`. Leave the `MENU:START` / `MENU:END` markers in `menu.html` alone. It also adds each page's last-changed date to the published `sitemap.xml`, so Google rechecks the menu soon after a price edit. It also gives `menu-data.js`, `script.js` and `styles.css` a new address on each publish (for example `menu-data.js?v=0be6400a`), so browsers never pair a new page with an old saved copy of the menu. That happens only in the published copy, so keep the plain `src="menu-data.js"` in the HTML files.
 
 **If an update doesn't appear:** open the repo's **Actions** tab. A red ❌ means `menu-data.js` has a mistake (for example a missing comma or a price written as `"3.95"`), and the log names the item or line. The live site stays as it was until you fix it and push again. To check before pushing, run `node tools/build-menu.js` (then `git checkout menu.html` to undo the generated copy; committing it is harmless too).
 
@@ -110,12 +124,42 @@ The site lives at `https://biniyameth.github.io/megga-coffee/`. The café doesn'
 
 1. Add a `CNAME` file to this folder that holds only the domain, e.g. `meggacoffee.ca`.
 2. At the domain seller, point the domain to GitHub Pages ([GitHub's guide](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site)). Then set the domain under **Settings → Pages → Custom domain** and tick **Enforce HTTPS**.
-3. Replace `https://biniyameth.github.io/megga-coffee/` with the new domain in every page's canonical, `og:url` and `og:image` tags, and in `sitemap.xml`.
+3. Replace `https://biniyameth.github.io/megga-coffee/` with the new domain in every page's canonical, `og:url` and `og:image` tags, and in `sitemap.xml`. In `404.html`, replace every `/megga-coffee/` with `/` (its links are written in full so the page works from any broken address).
 4. Add a `robots.txt` that points to the sitemap. Search engines only read it at the root of a domain, so it is useless on the `github.io` address.
 5. Update the website link in Search Console (add the new domain as a property), the Google Business Profile, Instagram and Uber Eats.
 6. Make the menu QR code for `https://<new-domain>/menu.html`. Scan it with a phone to test it before printing.
+7. **Optional: remove the 10-minute delay after updates.** GitHub tells browsers to keep each page for 10 minutes, so someone who opened the menu just before an update can see the old menu for up to 10 minutes. GitHub doesn't let you change that. With your own domain you can:
+   - Add the domain to [Cloudflare](https://www.cloudflare.com/) (free plan) and use Cloudflare's nameservers at the domain seller.
+   - In Cloudflare, set **SSL/TLS** to **Full**.
+   - Add a **Rules → Transform Rules → Modify Response Header** rule: when the URL path ends in `.html` or is `/`, **set** `Cache-Control` to `no-cache`. Pages are then checked for updates on every visit. Photos and scripts are still cached, so the site stays fast.
+   - Test: change a price, push, wait for the Actions run to finish, then reopen the menu on your phone. The new price should show right away.
 
-GitHub redirects the old `github.io` address to the new domain automatically, so old links keep working.
+GitHub redirects the old `github.io` address to the new domain automatically, so old links keep working. Things that update themselves and need no change: the sitemap dates, the `?v=` addresses for scripts, and the café details Google reads (they follow the canonical link).
+
+## To-do list (not done yet)
+
+Things decided or suggested but not finished. Tick them off here as you go.
+
+**Ask the owner** (then fix the descriptions in `menu-data.js`, Habesha Dishes section):
+- [ ] What is on **Ful Special** and **Fata Special**? (They say "extra toppings" for now.)
+- [ ] What does **"(with 2)"** mean on Fata?
+- [ ] Which meat is in **Dulot Tbsi** and **Keyih Tbsi**? (They say "meat" for now.)
+- [ ] Is **ga'at** served with yogurt? (The menu says it is.)
+- [ ] Which dishes are **spicy** (`tags: ["s"]`) or **vegetarian** (`tags: ["v"]`)?
+
+**Google and other listings** (no code, but the biggest help for being found):
+- [ ] Google Business Profile: use the same name as the website ("Megga Morning Grace Coffee"; Google Maps says "Megga coffee").
+- [ ] Google Business Profile categories: **Coffee shop** (main), plus **Ethiopian restaurant**, **Eritrean restaurant**, **Breakfast restaurant**.
+- [ ] Google Business Profile: **Menu link** = the website's `menu.html`, **Order link** = Uber Eats, and add real photos of the Habesha dishes.
+- [ ] Ask happy customers for Google reviews. Then update `rating:` in `menu-data.js`.
+- [ ] Same name, address and phone on Yelp, TripAdvisor, Apple Maps ([Apple Business Connect](https://businessconnect.apple.com/)) and [Bing Places](https://www.bingplaces.com/) (it can import from Google).
+- [ ] Search Console: submit the sitemap, and use **URL Inspection → Request indexing** on `menu.html` after big menu changes.
+
+**Website ideas, not built yet:**
+- [ ] Replace stock and illustrated dish photos with photos of Megga's own plates, starting with the Habesha dishes (new file names, see "Swapping photos").
+- [ ] Old pages refresh themselves: the publish step writes a small `version.txt`, and a page that is older than it reloads once. This fixes the 10-minute delay without a domain or Cloudflare.
+- [ ] Use a Habesha dish photo as the menu page's share picture (`og:image` in `menu.html`), for links shared on WhatsApp and Facebook.
+- [ ] Buy the domain, then follow "When a custom domain is bought" above, including the QR code.
 
 ## Photo credits
 

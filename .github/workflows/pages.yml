@@ -26,6 +26,8 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history, so the sitemap can show when each page last changed
 
       - name: Build the plain-text menu into menu.html
         run: node tools/build-menu.js
@@ -42,12 +44,27 @@ jobs:
       - name: Give the scripts and styles a new address on every publish
         run: |
           v="${GITHUB_SHA::8}"
-          sed -i -E "s/(src|href)=\"(menu-data\.js|script\.js|styles\.css)\"/\1=\"\2?v=$v\"/g" _site/*.html
+          # ([^\"]*\/)? also matches 404.html, which writes these files with the site folder in front.
+          sed -i -E "s/(src|href)=\"([^\"]*\/)?(menu-data\.js|script\.js|styles\.css)\"/\1=\"\2\3?v=$v\"/g" _site/*.html
           for f in _site/*.html; do
             n=$(grep -o -E "(menu-data\.js|script\.js|styles\.css)\?v=$v" "$f" | wc -l)
             echo "$f: $n of 3 links versioned"
             [ "$n" -eq 3 ] || { echo "Expected 3 in $f. Check its <head> still loads styles.css, menu-data.js and script.js."; exit 1; }
           done
+
+      # Tells Google when each page last changed, so it rechecks the menu soon after a price edit.
+      # The date comes from git; the menu page counts menu-data.js changes too.
+      - name: Add last-updated dates to the sitemap
+        run: |
+          for page in index about menu gallery reviews contact; do
+            files="$page.html"
+            [ "$page" = menu ] && files="menu.html menu-data.js"
+            d=$(git log -1 --format=%cs -- $files)
+            if [ "$page" = index ]; then end='/'; else end="/$page.html"; fi
+            sed -i -E "s#<loc>[^<]*${end}</loc>#&<lastmod>$d</lastmod>#" _site/sitemap.xml
+          done
+          cat _site/sitemap.xml
+          [ "$(grep -o '<lastmod>[0-9-]*</lastmod>' _site/sitemap.xml | wc -l)" -eq 6 ] || { echo "Expected 6 dates in sitemap.xml"; exit 1; }
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

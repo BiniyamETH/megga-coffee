@@ -7,6 +7,8 @@
   <meta name="description" content="Take a look inside Megga Morning Grace Coffee on Toronto’s Danforth and see the café, coffee and pastries.">
   <link rel="canonical" href="https://biniyameth.github.io/megga-coffee/gallery.html">
   <meta name="theme-color" content="#faf6f0">
+  <!-- Lets Google show a large photo next to the result instead of a tiny thumbnail. -->
+  <meta name="robots" content="max-image-preview:large">
 
   <!-- Open Graph (link previews on Facebook, WhatsApp, iMessage, etc.) -->
   <meta property="og:type" content="website">
@@ -21,7 +23,10 @@
   <meta property="og:locale" content="en_CA">
   <meta name="twitter:card" content="summary_large_image">
 
+  <!-- PNG icons for phones and browsers that can't show the SVG one; apple-touch-icon is the home-screen icon. -->
+  <link rel="icon" href="assets/icon-192.png" type="image/png" sizes="192x192">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="preload" href="assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
@@ -116,7 +121,7 @@
         <ul class="gallery-grid" role="list" data-gallery></ul>
         <p class="gallery-more reveal">
           <svg class="icon" aria-hidden="true"><use href="#i-camera"/></svg>
-          <span>More photos from guests on <a data-href="reviewsUrl" target="_blank" rel="noopener">our Google Maps listing</a>.</span>
+          <span>More photos from guests on <a href="https://www.google.com/maps/place/Megga+coffee/@43.6842185,-79.3206684,17z/data=!4m6!3m5!1s0x89d4cd0e040bd121:0x5b02da0321c5b6d7!8m2!3d43.6842185!4d-79.3206684!16s%2Fg%2F11z4dqq0qw" data-href="reviewsUrl" target="_blank" rel="noopener">our Google Maps listing</a>.</span>
         </p>
       </div>
     </section>

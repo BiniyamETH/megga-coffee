@@ -283,6 +283,7 @@
   /* ---------- JSON-LD (LocalBusiness) ---------- */
 
   function injectSchema() {
+    if (document.body.getAttribute("data-page") === "404") return; // "page not found" is not a page for Google
     var spec = hoursGroups().filter(function (g) { return g.range; }).map(function (g) {
       var days = DAY_KEYS.slice(DAY_KEYS.indexOf(g.start), DAY_KEYS.indexOf(g.end) + 1);
       return {
@@ -301,8 +302,12 @@
       name: SITE.name,
       alternateName: SITE.alternateName,
       url: base,
-      image: base + "assets/hero.jpg",
+      image: [base + "assets/hero.jpg"].concat(galleryItems().filter(function (g) {
+        return g.src && g.src !== "assets/hero.jpg";
+      }).slice(0, 4).map(function (g) { return base + g.src; })),
+      logo: base + "assets/icon-512.png",
       menu: base + "menu.html",
+      currenciesAccepted: "CAD",
       // Not shown on the page. Google matches these words to searches like "Eritrean food near me",
       // so the two country names stay next to Habesha here.
       servesCuisine: ["Coffee", "Habesha", "Ethiopian", "Eritrean", "Breakfast", "Brunch", "Greek", "Vegetarian"],
@@ -324,7 +329,11 @@
     };
     if (SITE.phone) data.telephone = phoneE164(SITE.phone);
     if (payments.length) data.paymentAccepted = payments.join(", ");
-    if (SITE.instagram) data.sameAs = [SITE.instagram];
+    if (SITE.priceRange) data.priceRange = SITE.priceRange;
+    // The café's other pages on the web (Google Maps, Uber Eats, Instagram), so Google
+    // knows they are all the same business as this website.
+    var sameAs = [SITE.reviewsUrl, SITE.orderUrl, SITE.instagram].filter(Boolean);
+    if (sameAs.length) data.sameAs = sameAs;
     data.hasMenu = { "@id": base + "menu.html#menu" };
     addJsonLd(data);
 
@@ -550,11 +559,48 @@
     watchImages(list);
   }
 
-  /* Full-size photo viewer on the Gallery page (native <dialog>, arrow keys, Esc to close). */
+  /* Photo viewers open as a native <dialog>. Phones without it (iPhones before iOS 15.4) get the
+     same box as a plain fixed panel (.is-fallback in styles.css). */
+  var openFallback = null, openedAt = 0;
+  function openBox(box) {
+    if (typeof box.showModal === "function") { if (!box.open) box.showModal(); return; }
+    box.setAttribute("open", "");
+    box.classList.add("is-fallback");
+    openFallback = box;
+    openedAt = Date.now();
+  }
+  function closeBox(box) {
+    if (!box.classList.contains("is-fallback")) { if (box.open) box.close(); return; }
+    box.removeAttribute("open");
+    box.classList.remove("is-fallback");
+    openFallback = null;
+  }
+  // Fallback panel only: a tap outside it, or Esc, closes it (the native dialog does this itself).
+  document.addEventListener("click", function (e) {
+    if (!openFallback || Date.now() - openedAt < 300) return;
+    if (!openFallback.contains(e.target)) closeBox(openFallback);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (openFallback && (e.key === "Escape" || e.key === "Esc")) closeBox(openFallback);
+  });
+
+  // Show the small copy straight away, then swap in the big one once it has downloaded,
+  // so a slow connection never shows the previous photo (or nothing) while waiting.
+  var photoTicket = 0;
+  function showPhoto(img, small, big) {
+    var ticket = ++photoTicket;
+    img.src = small || big;
+    if (!small || small === big) return;
+    var loader = new Image();
+    loader.onload = function () { if (ticket === photoTicket) img.src = big; };
+    loader.src = big;
+  }
+
+  /* Full-size photo viewer on the Gallery page (arrow keys, Esc to close). */
   function setupLightbox() {
     var box = $("[data-lightbox]");
     var list = $("[data-gallery]");
-    if (!box || !list || typeof box.showModal !== "function") return;
+    if (!box || !list) return;
     var photos = galleryItems().filter(function (g) { return g.src; });
     var img = $("[data-lightbox-img]", box);
     var cap = $("[data-lightbox-caption]", box);
@@ -563,7 +609,7 @@
     function show(i) {
       current = (i + photos.length) % photos.length;
       var g = photos[current];
-      img.src = g.src;
+      showPhoto(img, g.small, g.src);
       img.alt = g.alt || g.caption || "";
       cap.textContent = g.caption || "";
     }
@@ -571,11 +617,11 @@
     list.addEventListener("click", function (e) {
       var btn = e.target.closest(".gallery-open");
       if (!btn) return;
-      var src = galleryItems()[+btn.getAttribute("data-index")].src;
-      show(photos.findIndex(function (g) { return g.src === src; }));
-      box.showModal();
+      var picked = galleryItems()[+btn.getAttribute("data-index")];
+      show(Math.max(0, photos.indexOf(picked)));
+      openBox(box);
     });
-    $("[data-lightbox-close]", box).addEventListener("click", function () { box.close(); });
+    $("[data-lightbox-close]", box).addEventListener("click", function () { closeBox(box); });
     $("[data-lightbox-prev]", box).addEventListener("click", function () { show(current - 1); });
     $("[data-lightbox-next]", box).addEventListener("click", function () { show(current + 1); });
     box.addEventListener("keydown", function (e) {
@@ -583,7 +629,7 @@
       if (e.key === "ArrowRight") show(current + 1);
     });
     // Click on the dark backdrop closes the viewer.
-    box.addEventListener("click", function (e) { if (e.target === box) box.close(); });
+    box.addEventListener("click", function (e) { if (e.target === box) closeBox(box); });
   }
 
   function renderStars() {
@@ -619,6 +665,8 @@
 
     if (!toggle || !nav) return;
     function setOpen(open) {
+      // On the menu page the header scrolls with the page, so it may be partly off screen.
+      nav.style.top = open ? Math.max(0, Math.round(header.getBoundingClientRect().bottom)) + "px" : "";
       toggle.setAttribute("aria-expanded", String(open));
       nav.classList.toggle("is-open", open);
       document.body.classList.toggle("nav-open", open);
@@ -674,7 +722,9 @@
   // Scroll the page to y. Avoids behavior: "instant", which older Android Chrome rejects with an error.
   function scrollToY(y, smooth) {
     var root = document.documentElement;
-    if (smooth) {
+    // Only browsers that know smooth scrolling get the options form; very old phones read
+    // scrollTo({...}) as "go to the top".
+    if (smooth && "scrollBehavior" in root.style) {
       try { window.scrollTo({ top: y, behavior: "smooth" }); return; } catch (err) { /* fall through */ }
     }
     // The page has scroll-behavior: smooth in CSS, so switch it off for a straight jump.
@@ -691,7 +741,8 @@
     var header = $("[data-header]");
     var tools = $("[data-menu-tools]");
     if (!tools) return;
-    var headerSticky = header && getComputedStyle(header).position === "sticky";
+    // indexOf: iPhones before iOS 13 report "-webkit-sticky".
+    var headerSticky = header && getComputedStyle(header).position.indexOf("sticky") !== -1;
     var offset = (headerSticky ? header.offsetHeight : 0) + tools.offsetHeight;
     menuOffsetPx = offset;
     document.documentElement.style.setProperty("--menu-offset", offset + "px");
@@ -740,16 +791,14 @@
   // Tap a dish photo to see it large, with its name and price.
   function setupDishViewer(root) {
     var box = $("[data-dish-viewer]");
-    if (!box || typeof box.showModal !== "function") return;
+    if (!box) return;
     var img = $("[data-dish-img]", box);
     root.addEventListener("click", function (e) {
       var btn = e.target.closest("[data-dish]");
       if (!btn) return;
       var idx = btn.getAttribute("data-dish").split("-");
       var item = MENU[+idx[0]].items[+idx[1]];
-      var thumb = item.image;
-      img.onerror = function () { img.onerror = null; img.src = thumb; };
-      img.src = thumb.replace("/items/", "/items/large/");
+      showPhoto(img, item.image, item.image.replace("/items/", "/items/large/"));
       img.alt = item.name;
       $("[data-dish-name]", box).textContent = item.name;
       $("[data-dish-price]", box).textContent = formatPrice(item.price);
@@ -760,10 +809,10 @@
           ? 'Photo: <a href="' + esc(item.creditUrl || "#") + '" target="_blank" rel="noopener">' + esc(item.credit) + "</a>"
           : "";
       }
-      box.showModal();
+      openBox(box);
     });
-    $("[data-dish-close]", box).addEventListener("click", function () { box.close(); });
-    box.addEventListener("click", function (e) { if (e.target === box) box.close(); });
+    $("[data-dish-close]", box).addEventListener("click", function () { closeBox(box); });
+    box.addEventListener("click", function (e) { if (e.target === box) closeBox(box); });
   }
 
   // Round "back to top" button that appears after scrolling down.
@@ -811,7 +860,11 @@
 
     // Lowercase, no accents or apostrophes, so "cafe" finds "Café" and "gaat" finds "Ga’at".
     function searchText(str) {
-      return String(str).normalize("NFD").replace(/[̀-ͯ'’‘`]/g, "").toLowerCase();
+      str = String(str);
+      if (str.normalize) str = str.normalize("NFD");
+      // Very old phones have no normalize: swap the few accented letters the menu uses by hand.
+      else str = str.replace(/[éèêë]/gi, "e").replace(/[àáâä]/gi, "a").replace(/[ìíîï]/gi, "i").replace(/[òóôö]/gi, "o").replace(/[ùúûü]/gi, "u");
+      return str.replace(/[̀-ͯ'’‘`]/g, "").toLowerCase();
     }
 
     root.innerHTML = MENU.map(function (cat, ci) {
@@ -893,9 +946,18 @@
       var sBtn = $("[data-search-toggle]");
       if (sBtn) sBtn.classList.toggle("is-filtering", !!q || filters.length > 0);
       countEl.textContent = (q || filters.length) ? "Showing " + shown + " of " + total + " items" : "";
+      // The list just got shorter. If the reader was far down the menu, bring the first result
+      // up under the bar instead of leaving them at the bottom of the page.
+      setMenuOffset();
+      var topY = root.getBoundingClientRect().top + window.scrollY - menuOffsetPx - 8;
+      if ((q || filters.length) && window.scrollY > topY) scrollToY(Math.max(0, topY), false);
+      activeId = null;
+      setActive(sectionOnScreen());
     }
 
     search.addEventListener("input", applyFilters);
+    // "Search" / Enter on the phone keyboard hides the keyboard so the results are visible.
+    search.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.keyCode === 13) search.blur(); });
     var resetBtn = $("[data-menu-reset]");
     if (resetBtn) {
       resetBtn.addEventListener("click", function () {
@@ -979,6 +1041,7 @@
       var link = e.target.closest(".tab, .section-link");
       if (!link) return;
       e.preventDefault();
+      startId = ""; // the reader chose a section, so don't jump back to the one in the link they arrived by
       var id = link.getAttribute("href").slice(1);
       var panel = $("[data-sections-panel]");
       if (panel && !panel.hidden) {
@@ -1005,10 +1068,38 @@
       if (startId && document.getElementById(startId)) jumpTo(startId, false);
       else setActive(sectionOnScreen());
     });
-    // Re-check once photos and fonts have settled the layout.
+    // Re-check once photos and fonts have settled the layout, unless the reader has already moved on.
+    function forgetStart() { startId = ""; }
+    ["touchstart", "wheel", "keydown"].forEach(function (type) {
+      window.addEventListener(type, forgetStart, { passive: true });
+    });
     window.addEventListener("load", function () {
       if (startId && document.getElementById(startId)) jumpTo(startId, false);
+      startId = "";
     });
+  }
+
+  /* ---------- older phones ---------- */
+
+  // iPhones before iOS 12.2 only draw an icon when its link is written the old way (xlink:href).
+  function fixIcons() {
+    $$("use").forEach(function (use) {
+      var id = use.getAttribute("href");
+      if (id && !use.getAttribute("xlink:href")) use.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", id);
+    });
+  }
+
+  // Phones before about 2021 ignore "gap" between items in a row, so icons and buttons touch.
+  // Mark them, and styles.css adds the spacing back with margins (.no-flexgap).
+  function detectFlexGap() {
+    var box = document.createElement("div");
+    box.style.cssText = "display:flex;flex-direction:column;row-gap:1px;position:absolute;visibility:hidden";
+    box.appendChild(document.createElement("div"));
+    box.appendChild(document.createElement("div"));
+    document.body.appendChild(box);
+    var works = box.scrollHeight === 1;
+    document.body.removeChild(box);
+    if (!works) document.documentElement.classList.add("no-flexgap");
   }
 
   /* ---------- init ---------- */
@@ -1019,7 +1110,7 @@
   }
   [bindConfig, renderOpenStatus, renderHoursTable, renderStars, renderHighlights, renderGallery,
     renderGalleryPreview, renderGalleryStrip, renderHoursGroups, setupLightbox, renderMenu,
-    setupHeader, setupReveal, injectSchema, injectFaqSchema].forEach(run);
+    detectFlexGap, setupHeader, setupReveal, fixIcons, injectSchema, injectFaqSchema].forEach(run);
   // Marks the page as script-ready (fade-ins, menu buttons). setupReveal normally does this
   // right after showing the first screen; this is the backup if it failed.
   document.documentElement.classList.add("js");
