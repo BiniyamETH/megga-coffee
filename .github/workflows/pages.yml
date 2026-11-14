@@ -52,6 +52,15 @@ jobs:
             [ "$n" -eq 3 ] || { echo "Expected 3 in $f. Check its <head> still loads styles.css, menu-data.js and script.js."; exit 1; }
           done
 
+      # Short links: the published pages link to /menu, /about and so on, without ".html"
+      # (GitHub Pages serves menu.html at /menu). The files in the repo keep "menu.html"
+      # so the site still works when opened straight from the folder on a computer.
+      - name: Take ".html" off the links between pages
+        run: |
+          sed -i -E 's/href="(menu|about|gallery|reviews|contact)\.html/href="\1/g' _site/*.html _site/script.js
+          sed -i -E 's/href="index\.html/href=".\//g' _site/*.html _site/script.js
+          if grep -n -E 'href="[^":]*\.html' _site/*.html _site/script.js; then echo "A link above still ends in .html"; exit 1; fi
+
       # Tells Google when each page last changed, so it rechecks the menu soon after a price edit.
       # The date comes from git; the menu page counts menu-data.js changes too.
       - name: Add last-updated dates to the sitemap
@@ -60,7 +69,7 @@ jobs:
             files="$page.html"
             [ "$page" = menu ] && files="menu.html menu-data.js"
             d=$(git log -1 --format=%cs -- $files)
-            if [ "$page" = index ]; then end='/'; else end="/$page.html"; fi
+            if [ "$page" = index ]; then end='/'; else end="/$page"; fi
             sed -i -E "s#<loc>[^<]*${end}</loc>#&<lastmod>$d</lastmod>#" _site/sitemap.xml
           done
           cat _site/sitemap.xml

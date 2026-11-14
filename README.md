@@ -20,9 +20,9 @@ print/          The menu QR code for printing (not published)
 
 ## The menu is the most important page
 
-Customers scan a QR code in the café and land on **`menu.html`** on their phone. Every change to the site should keep that page fast, easy to read and working.
+Customers scan a QR code in the café and land on the menu page (`menu.html`, at `https://meggacoffee.com/menu`) on their phone. Every change to the site should keep that page fast, easy to read and working.
 
-- **QR code:** `print/menu-qr.png` (for most uses) and `print/menu-qr.svg` (for a print shop; stays sharp at any size). It opens `https://meggacoffee.com/menu.html`. Scan a printed copy with a phone before printing many. Print it at least 3 cm wide and keep the white border around it. The `print` folder is not part of the published site.
+- **QR code:** `print/menu-qr.png` (for most uses) and `print/menu-qr.svg` (for a print shop; stays sharp at any size). It opens `https://meggacoffee.com/menu`. Scan a printed copy with a phone before printing many. Print it at least 3 cm wide and keep the white border around it. The `print` folder is not part of the published site.
 - **Food comes first:** on a phone, the first screen shows the section buttons and the first items with prices. Don't add banners, long text or pop-ups above the menu. The "About our menu" text for Google sits at the bottom of the page on purpose.
 - **What customers can do:** tap a section name, or the grid button, to jump to it. Tap the search button to search ("benny", "latte") or to show only vegetarian, spicy or gluten-free items. Tap a dish photo to see it larger.
 - **After every menu edit**, open the menu on your phone and check that:
@@ -119,13 +119,14 @@ To preview on your computer, open `index.html` in a browser. For the map and eve
 The site lives at **`https://meggacoffee.com/`** (bought November 2026). The old `https://biniyameth.github.io/megga-coffee/` address redirects to it, so old links keep working.
 
 1. **Google Search Console:** add `meggacoffee.com` as a property and submit `https://meggacoffee.com/sitemap.xml`.
-2. **Google Business Profile:** set the website field to `https://meggacoffee.com/` and the menu link to `https://meggacoffee.com/menu.html`.
+2. **Google Business Profile:** set the website field to `https://meggacoffee.com/` and the menu link to `https://meggacoffee.com/menu`.
 3. **Instagram / Uber Eats:** put `https://meggacoffee.com/` in the bio or store page.
 
 ### How the domain is set up
 
 - The domain's DNS (at the domain seller) points to GitHub Pages: four `A` records for `meggacoffee.com` and a `CNAME` for `www`. `www.meggacoffee.com` redirects to `meggacoffee.com`.
 - The domain is set in the repo under **Settings → Pages → Custom domain**, with **Enforce HTTPS** ticked. No `CNAME` file is needed, because the site is published by GitHub Actions.
+- **Short links:** pages are at `meggacoffee.com/menu`, `/about`, `/gallery`, `/reviews` and `/contact`, without `.html`. The files keep their `.html` names and the links inside them keep `.html`, so the site still opens from the folder on a computer; the publish step takes `.html` off the links, and old `.html` links still open. Use the short form in anything you print or post.
 - **Renew the domain every year.** If it lapses, the site and every printed QR code stop working.
 - The full address is written in each page's canonical, `og:url` and `og:image` tags, and in `sitemap.xml` and `robots.txt`. `404.html` writes its links starting with `/`.
 
@@ -135,7 +136,7 @@ GitHub tells browsers to keep each page for 10 minutes, so someone who opened th
 
 - Add the domain to [Cloudflare](https://www.cloudflare.com/) (free plan) and use Cloudflare's nameservers at the domain seller.
 - In Cloudflare, set **SSL/TLS** to **Full**.
-- Add a **Rules → Transform Rules → Modify Response Header** rule: when the URL path ends in `.html` or is `/`, **set** `Cache-Control` to `no-cache`. Pages are then checked for updates on every visit. Photos and scripts are still cached, so the site stays fast.
+- Add a **Rules → Transform Rules → Modify Response Header** rule: when the URL path has no dot in it (`/`, `/menu`) or ends in `.html`, **set** `Cache-Control` to `no-cache`. Pages are then checked for updates on every visit. Photos and scripts are still cached, so the site stays fast.
 - Test: change a price, push, wait for the Actions run to finish, then reopen the menu on your phone. The new price should show right away.
 
 ## To-do list (not done yet)
@@ -152,10 +153,10 @@ Things decided or suggested but not finished. Tick them off here as you go.
 **Google and other listings** (no code, but the biggest help for being found):
 - [ ] Google Business Profile: use the same name as the website ("Megga Morning Grace Coffee"; Google Maps says "Megga coffee").
 - [ ] Google Business Profile categories: **Coffee shop** (main), plus **Ethiopian restaurant**, **Eritrean restaurant**, **Breakfast restaurant**.
-- [ ] Google Business Profile: **Menu link** = the website's `menu.html`, **Order link** = Uber Eats, and add real photos of the Habesha dishes.
+- [ ] Google Business Profile: **Menu link** = `https://meggacoffee.com/menu`, **Order link** = Uber Eats, and add real photos of the Habesha dishes.
 - [ ] Ask happy customers for Google reviews. Then update `rating:` in `menu-data.js`.
 - [ ] Same name, address and phone on Yelp, TripAdvisor, Apple Maps ([Apple Business Connect](https://businessconnect.apple.com/)) and [Bing Places](https://www.bingplaces.com/) (it can import from Google).
-- [ ] Search Console: submit the sitemap, and use **URL Inspection → Request indexing** on `menu.html` after big menu changes.
+- [ ] Search Console: submit the sitemap, and use **URL Inspection → Request indexing** on `https://meggacoffee.com/menu` after big menu changes.
 
 **Website ideas, not built yet:**
 - [ ] Replace stock and illustrated dish photos with photos of Megga's own plates, starting with the Habesha dishes (new file names, see "Swapping photos").

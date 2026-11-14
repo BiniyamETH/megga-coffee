@@ -5,6 +5,15 @@
 
   if (typeof SITE === "undefined") return;
 
+  /* Short links: on the live site, meggacoffee.com/menu.html shows as meggacoffee.com/menu.
+     The page does not reload; only the address bar changes. Not on a computer preview. */
+  try {
+    if (/(^|\.)meggacoffee\.com$/.test(location.hostname) && window.history && history.replaceState) {
+      var shortPath = location.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
+      if (shortPath !== location.pathname) history.replaceState(history.state, "", shortPath + location.search + location.hash);
+    }
+  } catch (e) {}
+
   var DAY_KEYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
   var DAY_SHORT = { mon: "Mon", tue: "Tue", wed: "Wed", thu: "Thu", fri: "Fri", sat: "Sat", sun: "Sun" };
   var DAY_LONG = { mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", sat: "Saturday", sun: "Sunday" };
@@ -306,7 +315,7 @@
         return g.src && g.src !== "assets/hero.jpg";
       }).slice(0, 4).map(function (g) { return base + g.src; })),
       logo: base + "assets/icon-512.png",
-      menu: base + "menu.html",
+      menu: base + "menu",
       currenciesAccepted: "CAD",
       // Not shown on the page. Google matches these words to searches like "Eritrean food near me",
       // so the two country names stay next to Habesha here.
@@ -334,7 +343,7 @@
     // knows they are all the same business as this website.
     var sameAs = [SITE.reviewsUrl, SITE.orderUrl, SITE.instagram].filter(Boolean);
     if (sameAs.length) data.sameAs = sameAs;
-    data.hasMenu = { "@id": base + "menu.html#menu" };
+    data.hasMenu = { "@id": base + "menu#menu" };
     addJsonLd(data);
 
     var page = document.body.getAttribute("data-page");
@@ -376,15 +385,15 @@
     addJsonLd({
       "@context": "https://schema.org",
       "@type": "Menu",
-      "@id": base + "menu.html#menu",
+      "@id": base + "menu#menu",
       name: SITE.name + " Menu",
-      url: base + "menu.html",
+      url: base + "menu",
       inLanguage: "en-CA",
       hasMenuSection: MENU.map(function (cat) {
         return {
           "@type": "MenuSection",
           name: cat.name,
-          url: base + "menu.html#" + cat.id,
+          url: base + "menu#" + cat.id,
           image: cat.image ? base + cat.image : undefined,
           hasMenuItem: cat.items.map(function (item) {
             var diets = (item.tags || []).filter(function (t) { return DIETS[t]; }).map(function (t) { return DIETS[t]; });
