@@ -32,6 +32,28 @@ jobs:
       - name: Build the plain-text menu into menu.html
         run: node tools/build-menu.js
 
+      # Newer phones download a .webp copy of each photo (about 40% smaller); older phones use the .jpg.
+      # The copies are normally already in the repo (tools/make-webp.py). This makes any that are
+      # missing or older than their .jpg, e.g. for a photo added or replaced on GitHub.
+      # If it can't, the site still works: script.js loads the .jpg when a .webp is missing.
+      - name: Make the lighter .webp copy of any new or replaced photo
+        run: |
+          changed() { git log -1 --format=%ct -- "$1"; }
+          missing=$(find assets -name '*.jpg' -not -path '*/large/*' | while read -r f; do
+            w="${f%.jpg}.webp"
+            if [ ! -f "$w" ] || [ "$(changed "$f")" -gt "$(changed "$w")" ]; then echo "$f"; fi
+          done)
+          if [ -z "$missing" ]; then echo "Every photo already has an up-to-date .webp copy."; exit 0; fi
+          echo "$missing"
+          sudo apt-get install -y -q webp >/dev/null || { echo "Could not install the converter; these photos stay .jpg."; exit 0; }
+          echo "$missing" | while read -r f; do
+            cwebp -quiet -q 74 "$f" -o "${f%.jpg}.webp" || rm -f "${f%.jpg}.webp"
+            # The three 1800px page-top photos also have a 900px copy for phones.
+            case "$f" in assets/gallery/cafe-interior.jpg|assets/gallery/pastry-case.jpg|assets/gallery/cappuccino.jpg)
+              cwebp -quiet -q 74 -resize 900 0 "$f" -o "${f%.jpg}-900.webp" || true ;;
+            esac
+          done
+
       - name: Collect the website files (not README, tools or workflow)
         run: |
           mkdir _site

@@ -32,7 +32,7 @@
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="preload" href="assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" as="image" href="assets/hero.jpg" imagesrcset="assets/hero-900.jpg 1000w, assets/hero.jpg 1536w" imagesizes="(min-width: 900px) 64vw, 100vw" fetchpriority="high">
+  <link rel="preload" as="image" type="image/webp" href="assets/hero.webp" imagesrcset="assets/hero-900.webp 1000w, assets/hero.webp 1536w" imagesizes="(min-width: 900px) 64vw, 100vw" fetchpriority="high">
   <link rel="stylesheet" href="styles.css">
 
   <script src="menu-data.js" defer></script>
@@ -111,7 +111,7 @@
   <main id="main">
     <section class="hero hero-home" aria-labelledby="page-title">
       <div class="hero-media">
-        <img src="assets/hero.jpg" srcset="assets/hero-900.jpg 1000w, assets/hero.jpg 1536w" sizes="(min-width: 900px) 64vw, 100vw" alt="Guests seated inside the café beside a warmly lit coffee counter" width="1536" height="1024" fetchpriority="high" decoding="async">
+        <picture><source type="image/webp" srcset="assets/hero-900.webp 1000w, assets/hero.webp 1536w" sizes="(min-width: 900px) 64vw, 100vw"><img src="assets/hero.jpg" srcset="assets/hero-900.jpg 1000w, assets/hero.jpg 1536w" sizes="(min-width: 900px) 64vw, 100vw" alt="Guests seated inside the café beside a warmly lit coffee counter" width="1536" height="1024" fetchpriority="high" decoding="async"></picture>
       </div>
       <div class="container hero-content">
         <p class="eyebrow">Welcome to</p>
@@ -176,7 +176,7 @@
     <section class="section story" aria-labelledby="story-title">
       <div class="container story-grid">
         <figure class="story-photo reveal">
-          <img src="assets/our-story-cafe.jpg" srcset="assets/our-story-cafe-800.jpg 800w, assets/our-story-cafe.jpg 1200w" sizes="(min-width: 900px) 50vw, 100vw" alt="Illustrated café interior with walnut tables and warm pendant lights above the coffee counter" width="1200" height="751" loading="lazy" decoding="async">
+          <picture><source type="image/webp" srcset="assets/our-story-cafe-800.webp 800w, assets/our-story-cafe.webp 1200w" sizes="(min-width: 900px) 50vw, 100vw"><img src="assets/our-story-cafe.jpg" srcset="assets/our-story-cafe-800.jpg 800w, assets/our-story-cafe.jpg 1200w" sizes="(min-width: 900px) 50vw, 100vw" alt="Illustrated café interior with walnut tables and warm pendant lights above the coffee counter" width="1200" height="751" loading="lazy" decoding="async"></picture>
         </figure>
         <div class="story-text reveal">
           <p class="eyebrow">Our Story</p>

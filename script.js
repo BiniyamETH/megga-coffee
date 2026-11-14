@@ -451,10 +451,13 @@
   // If a photo file is missing, swap in the warm placeholder.
   function watchImages(root) {
     $$("img[data-fallback]", root).forEach(function (img) {
-      img.addEventListener("error", function () {
+      img.addEventListener("error", function onError() {
+        // A missing .webp copy has just been swapped for its .jpg (see "Lighter photos" below): give that a chance.
+        if (img.getAttribute("data-jpg-retry") === "1") { img.setAttribute("data-jpg-retry", "2"); return; }
+        img.removeEventListener("error", onError);
         img.insertAdjacentHTML("afterend", placeholderHTML(img.getAttribute("data-fallback")));
         img.remove();
-      }, { once: true });
+      });
     });
     startLazy(root);
   }
@@ -464,9 +467,29 @@
   var lazyByScript = !("loading" in HTMLImageElement.prototype) && "IntersectionObserver" in window;
   var lazyIO = null;
 
+  /* Lighter photos. Every .jpg in assets/ has a .webp copy that is about 40% smaller
+     (tools/make-webp.py, or the publish step, makes them). Phones that can show .webp get that copy;
+     older phones keep the .jpg. Every browser that has loading="lazy" can also show .webp,
+     so that is the test. The big tap-to-view dish photos (items/large) stay .jpg. */
+  var webpOK = "loading" in HTMLImageElement.prototype;
+  function fast(src) {
+    if (!webpOK || !src || src.indexOf("/large/") !== -1) return src;
+    return src.replace(/\.jpe?g$/i, ".webp");
+  }
+  // Safety net: if a .webp copy is missing (a new photo added without one), load the .jpg instead.
+  document.addEventListener("error", function (e) {
+    var img = e.target;
+    if (!img || img.tagName !== "IMG" || img.getAttribute("data-jpg-retry")) return;
+    var src = img.getAttribute("src") || "";
+    if (!/\.webp$/i.test(src)) return;
+    img.setAttribute("data-jpg-retry", "1");
+    if (img.getAttribute("srcset")) img.setAttribute("srcset", img.getAttribute("srcset").replace(/\.webp/gi, ".jpg"));
+    img.src = src.replace(/\.webp$/i, ".jpg");
+  }, true);
+
   // The src attribute for a lazy photo: src="..." or, on older phones, data-src="...".
   function lazySrc(src) {
-    return (lazyByScript ? 'data-src="' : 'src="') + esc(src) + '"';
+    return (lazyByScript ? 'data-src="' : 'src="') + esc(fast(src)) + '"';
   }
 
   function startLazy(root) {
@@ -492,7 +515,7 @@
   // small + sizes (optional): a 600px-wide copy of the photo, so phones that show it small skip the big file.
   function imgHTML(src, alt, w, h, fallbackLabel, small, sizes) {
     // On older phones the srcset waits in data-srcset too, or it would download straight away.
-    var set = small ? " " + (lazyByScript ? "data-srcset" : "srcset") + '="' + esc(small) + " 600w, " + esc(src) + ' 1200w" sizes="' + sizes + '"' : "";
+    var set = small ? " " + (lazyByScript ? "data-srcset" : "srcset") + '="' + esc(fast(small)) + " 600w, " + esc(fast(src)) + ' 1200w" sizes="' + sizes + '"' : "";
     return '<img ' + lazySrc(src) + set + ' alt="' + esc(alt) + '" width="' + w + '" height="' + h +
       '" loading="lazy" decoding="async" data-fallback="' + esc(fallbackLabel || "") + '">';
   }
@@ -598,7 +621,8 @@
   var photoTicket = 0;
   function showPhoto(img, small, big) {
     var ticket = ++photoTicket;
-    img.src = small || big;
+    img.removeAttribute("data-jpg-retry");
+    img.src = small ? fast(small) : big;   // the small copy is the one already on the page, so it shows at once
     if (!small || small === big) return;
     var loader = new Image();
     loader.onload = function () { if (ticket === photoTicket) img.src = big; };
@@ -829,7 +853,8 @@
     var btn = $("[data-to-top]");
     if (!btn) return;
     function onScroll() { btn.classList.toggle("is-visible", window.scrollY > 900); }
-    onScroll();
+    // Not straight away: asking for the scroll position here would make the phone lay out the whole menu twice.
+    if (window.requestAnimationFrame) requestAnimationFrame(onScroll); else onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
   }
 
@@ -906,7 +931,7 @@
       var titleHTML = '<h2 class="menu-cat-title" id="h-' + esc(cat.id) + '">' + esc(cat.name) + "</h2>" +
         '<span class="cat-count" data-cat-count>' + cat.items.length + " items</span>";
       var head = cat.image
-        ? '<div class="cat-banner"><img ' + (ci === 0 ? 'src="' + esc(cat.image) + '" fetchpriority="high"' : lazySrc(cat.image) + ' loading="lazy"') +
+        ? '<div class="cat-banner"><img ' + (ci === 0 ? 'src="' + esc(fast(cat.image)) + '" fetchpriority="high"' : lazySrc(cat.image) + ' loading="lazy"') +
           ' alt="" width="960" height="320" decoding="async">' +
           '<div class="cat-banner-text">' + titleHTML + "</div></div>"
         : '<div class="cat-heading">' + titleHTML + "</div>";
@@ -1101,6 +1126,9 @@
   // Phones before about 2021 ignore "gap" between items in a row, so icons and buttons touch.
   // Mark them, and styles.css adds the spacing back with margins (.no-flexgap).
   function detectFlexGap() {
+    // Every browser that knows "inset" also has flex gap, so newer phones skip the measuring below
+    // (measuring makes the phone lay out the page an extra time).
+    if (window.CSS && CSS.supports && CSS.supports("inset", "0")) return;
     var box = document.createElement("div");
     box.style.cssText = "display:flex;flex-direction:column;row-gap:1px;position:absolute;visibility:hidden";
     box.appendChild(document.createElement("div"));
@@ -1111,6 +1139,25 @@
     if (!works) document.documentElement.classList.add("no-flexgap");
   }
 
+  /* Faster page changes (Chrome, Edge, Samsung Internet; other browsers ignore it).
+     The menu page is fetched in the background as soon as another page has loaded, and any page
+     on this site starts loading the moment a finger or mouse goes down on its link. */
+  function setupSpeculation() {
+    if (!window.HTMLScriptElement || !HTMLScriptElement.supports || !HTMLScriptElement.supports("speculationrules")) return;
+    var conn = navigator.connection;
+    if (conn && conn.saveData) return;   // the visitor asked their phone to save data
+    var rules = {
+      prerender: [{ where: { and: [{ href_matches: "/*" }, { not: { selector_matches: "[target=_blank], [download]" } }] }, eagerness: "moderate" }]
+    };
+    if (document.body.getAttribute("data-page") !== "menu") {
+      rules.prefetch = [{ urls: [new URL("menu", document.baseURI).href], eagerness: "eager" }];
+    }
+    var tag = document.createElement("script");
+    tag.type = "speculationrules";
+    tag.textContent = JSON.stringify(rules);
+    document.head.appendChild(tag);
+  }
+
   /* ---------- init ---------- */
 
   // Each step runs on its own, so one problem (say, on a very old phone) can't stop the menu or the rest of the page.
@@ -1119,7 +1166,7 @@
   }
   [bindConfig, renderOpenStatus, renderHoursTable, renderStars, renderHighlights, renderGallery,
     renderGalleryPreview, renderGalleryStrip, renderHoursGroups, setupLightbox, renderMenu,
-    detectFlexGap, setupHeader, setupReveal, fixIcons, injectSchema, injectFaqSchema].forEach(run);
+    detectFlexGap, setupHeader, setupReveal, fixIcons, injectSchema, injectFaqSchema, setupSpeculation].forEach(run);
   // Marks the page as script-ready (fade-ins, menu buttons). setupReveal normally does this
   // right after showing the first screen; this is the backup if it failed.
   document.documentElement.classList.add("js");

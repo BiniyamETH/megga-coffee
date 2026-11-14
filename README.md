@@ -77,6 +77,8 @@ For the other photos, add the file to `assets/` and put its path in `menu-data.j
 - Dish photos: `image:` on each item, 240×240 files in `assets/menu/items/` plus a bigger copy with the same name in `assets/menu/items/large/` (shown when someone taps the photo)
 - Gallery: `images.gallery[].src`, with a short `alt` description for screen readers
 
+You only need the `.jpg` files; the lighter `.webp` copies are made for you when the site is published (see "Speed").
+
 **When you replace a photo, give the new file a new name** (e.g. `fata-2.jpg`) and update its `image:` line. Browsers keep photos for up to 10 minutes, so a new photo saved under the old name can take that long to appear; a new name shows straight away.
 
 Any photo left as `""`, or whose file is missing, shows a warm brown placeholder instead. Keep photos under about 300 KB each (export as JPG at about 80% quality) so the site stays fast.
@@ -101,6 +103,16 @@ The site is built to work on old and new phones alike. Keep these rules when cha
 - **Older phones get a simpler version, not a broken one.** `styles.css` has an "Older phones" section, and `script.js` has one too: spacing for phones that ignore `gap`, a photo viewer for iPhones that have no `<dialog>` (before iOS 15.4), and icons for iPhones before iOS 12.2.
 - **When you use a newer CSS feature, write a plain value first**, e.g. `font-size: 1.8rem; font-size: clamp(1.8rem, 3.6vw, 2.4rem);`. Old phones use the first one and ignore the second.
 - **Icons:** `assets/favicon.svg` is the browser-tab icon. `assets/icon-192.png`, `assets/icon-512.png` and `assets/apple-touch-icon.png` (180×180, the iPhone home-screen icon) are PNG copies of it for phones that can't show SVG icons. If the logo changes, replace all four.
+
+## Speed
+
+Tested with Google Lighthouse on a simulated slow phone (November 2026): menu page 95–100, home page 98–100 out of 100. What keeps it fast:
+
+- **Lighter photos (`.webp`).** Every `.jpg` in `assets/` has a `.webp` copy with the same name that is about 40% smaller. Newer phones download the `.webp`; older phones use the `.jpg`. **You only ever add or replace the `.jpg`.** The publish step makes the `.webp` copy for any new or replaced photo. (To make them on your computer instead: `python tools/make-webp.py`.) If a `.webp` is ever missing, the site loads the `.jpg`. The big tap-to-view dish photos in `assets/menu/items/large/` stay `.jpg`.
+- **Photos load only when they are near the screen**, except the first one on each page.
+- **Page changes start early.** In Chrome, Edge and Samsung Internet the menu page is fetched in the background from every other page, and any page starts loading the moment a finger goes down on its link (`setupSpeculation` in `script.js`).
+- **Keep it fast:** keep photos small (see "Swapping photos"), don't add outside scripts, chat widgets, pop-ups or web fonts, and keep `menu.html` free of anything above the menu.
+- **To test:** paste a page link into [PageSpeed Insights](https://pagespeed.web.dev/).
 
 ## Publishing on GitHub Pages
 

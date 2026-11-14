@@ -15,6 +15,11 @@
   src: url("assets/fonts/inter-latin.woff2") format("woff2");
 }
 
+/* <picture> lets newer phones take the lighter .webp copy of a photo and older ones the .jpg.
+   It must not change the layout: the photo inside is sized as if the <picture> were not there. */
+picture { display: block; width: 100%; height: 100%; }
+@supports (display: contents) { picture { display: contents; } }
+
 /* Browsers without <dialog> support (older iPhones) would otherwise show the photo viewers on the page. */
 dialog:not([open]) { display: none; }
 
