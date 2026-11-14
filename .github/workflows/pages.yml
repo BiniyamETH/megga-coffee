@@ -35,7 +35,7 @@ jobs:
       - name: Collect the website files (not README, tools or workflow)
         run: |
           mkdir _site
-          cp -r *.html *.js *.css sitemap.xml assets _site/
+          cp -r *.html *.js *.css sitemap.xml robots.txt assets _site/
 
       # Browsers keep a saved copy of each file for up to 10 minutes (GitHub's setting).
       # Giving menu-data.js, script.js and styles.css a new address on every publish

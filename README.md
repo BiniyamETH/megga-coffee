@@ -14,13 +14,15 @@ styles.css      All styling (colours are at the top, under :root)
 script.js       Shared logic (you should not need to edit this)
 menu-data.js    <- EDIT THIS: business info, hours, photos and the menu
 assets/         Photos, favicon, social-share image
+robots.txt      Tells search engines where the sitemap is
+print/          The menu QR code for printing (not published)
 ```
 
 ## The menu is the most important page
 
 Customers scan a QR code in the café and land on **`menu.html`** on their phone. Every change to the site should keep that page fast, easy to read and working.
 
-- **QR code: not made yet.** Wait until the custom domain is bought (see "When a custom domain is bought" below). Then make the QR code for the new domain's menu page, e.g. `https://meggacoffee.ca/menu.html`, so printed codes never depend on the `github.io` address. Point it at the menu page, not the homepage.
+- **QR code:** `print/menu-qr.png` (for most uses) and `print/menu-qr.svg` (for a print shop; stays sharp at any size). It opens `https://meggacoffee.com/menu.html`. Scan a printed copy with a phone before printing many. Print it at least 3 cm wide and keep the white border around it. The `print` folder is not part of the published site.
 - **Food comes first:** on a phone, the first screen shows the section buttons and the first items with prices. Don't add banners, long text or pop-ups above the menu. The "About our menu" text for Google sits at the bottom of the page on purpose.
 - **What customers can do:** tap a section name, or the grid button, to jump to it. Tap the search button to search ("benny", "latte") or to show only vegetarian, spicy or gluten-free items. Tap a dish photo to see it larger.
 - **After every menu edit**, open the menu on your phone and check that:
@@ -89,7 +91,7 @@ The colours are set once at the top of `styles.css` (`--page`, `--band`, `--cara
 
 When the café's address, phone or hours change, update the plain HTML in the Visit bands and Contact page along with `menu-data.js`. Check the Contact metadata for address or hours references.
 
-Each page has a title, meta description, canonical URL and Open Graph tags in its HTML head. If the public URL changes, update the canonical and Open Graph URLs and `sitemap.xml` together.
+Each page has a title, meta description, canonical URL and Open Graph tags in its HTML head. If the public URL changes, update the canonical and Open Graph URLs, `sitemap.xml` and `robots.txt` together.
 
 ## Older phones and animation
 
@@ -104,7 +106,7 @@ The site is built to work on old and new phones alike. Keep these rules when cha
 
 1. Create a repository and upload all the files, keeping the `assets` and `.github` folders.
 2. Go to **Settings → Pages → Build and deployment** and set **Source** to **GitHub Actions**.
-3. Push to `main`. About a minute later the site is live at `https://<username>.github.io/<repo>/`.
+3. Push to `main`. About a minute later the site is live at `https://meggacoffee.com/`.
 
 Every push runs `.github/workflows/pages.yml`. It writes a plain-text copy of the menu into `menu.html` from `menu-data.js` (`tools/build-menu.js`), then publishes the site. That copy shows right away on slow connections, on very old phones and with JavaScript off, and the full photo menu replaces it once the page's script runs. You only ever edit `menu-data.js`. Leave the `MENU:START` / `MENU:END` markers in `menu.html` alone. It also adds each page's last-changed date to the published `sitemap.xml`, so Google rechecks the menu soon after a price edit. It also gives `menu-data.js`, `script.js` and `styles.css` a new address on each publish (for example `menu-data.js?v=0be6400a`), so browsers never pair a new page with an old saved copy of the menu. That happens only in the published copy, so keep the plain `src="menu-data.js"` in the HTML files.
 
@@ -114,27 +116,27 @@ To preview on your computer, open `index.html` in a browser. For the map and eve
 
 ## Getting found on Google
 
-The site lives at `https://biniyameth.github.io/megga-coffee/`. The café doesn't have its own domain yet.
+The site lives at **`https://meggacoffee.com/`** (bought November 2026). The old `https://biniyameth.github.io/megga-coffee/` address redirects to it, so old links keep working.
 
-1. **Google Search Console:** add the site as a **URL prefix** property and submit `https://biniyameth.github.io/megga-coffee/sitemap.xml`.
-2. **Google Business Profile:** set the website field to the link above.
-3. **Instagram / Uber Eats:** put the same link in the bio or store page.
+1. **Google Search Console:** add `meggacoffee.com` as a property and submit `https://meggacoffee.com/sitemap.xml`.
+2. **Google Business Profile:** set the website field to `https://meggacoffee.com/` and the menu link to `https://meggacoffee.com/menu.html`.
+3. **Instagram / Uber Eats:** put `https://meggacoffee.com/` in the bio or store page.
 
-### When a custom domain is bought (e.g. `meggacoffee.ca`)
+### How the domain is set up
 
-1. Add a `CNAME` file to this folder that holds only the domain, e.g. `meggacoffee.ca`.
-2. At the domain seller, point the domain to GitHub Pages ([GitHub's guide](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site)). Then set the domain under **Settings → Pages → Custom domain** and tick **Enforce HTTPS**.
-3. Replace `https://biniyameth.github.io/megga-coffee/` with the new domain in every page's canonical, `og:url` and `og:image` tags, and in `sitemap.xml`. In `404.html`, replace every `/megga-coffee/` with `/` (its links are written in full so the page works from any broken address).
-4. Add a `robots.txt` that points to the sitemap. Search engines only read it at the root of a domain, so it is useless on the `github.io` address.
-5. Update the website link in Search Console (add the new domain as a property), the Google Business Profile, Instagram and Uber Eats.
-6. Make the menu QR code for `https://<new-domain>/menu.html`. Scan it with a phone to test it before printing.
-7. **Optional: remove the 10-minute delay after updates.** GitHub tells browsers to keep each page for 10 minutes, so someone who opened the menu just before an update can see the old menu for up to 10 minutes. GitHub doesn't let you change that. With your own domain you can:
-   - Add the domain to [Cloudflare](https://www.cloudflare.com/) (free plan) and use Cloudflare's nameservers at the domain seller.
-   - In Cloudflare, set **SSL/TLS** to **Full**.
-   - Add a **Rules → Transform Rules → Modify Response Header** rule: when the URL path ends in `.html` or is `/`, **set** `Cache-Control` to `no-cache`. Pages are then checked for updates on every visit. Photos and scripts are still cached, so the site stays fast.
-   - Test: change a price, push, wait for the Actions run to finish, then reopen the menu on your phone. The new price should show right away.
+- The domain's DNS (at the domain seller) points to GitHub Pages: four `A` records for `meggacoffee.com` and a `CNAME` for `www`. `www.meggacoffee.com` redirects to `meggacoffee.com`.
+- The domain is set in the repo under **Settings → Pages → Custom domain**, with **Enforce HTTPS** ticked. No `CNAME` file is needed, because the site is published by GitHub Actions.
+- **Renew the domain every year.** If it lapses, the site and every printed QR code stop working.
+- The full address is written in each page's canonical, `og:url` and `og:image` tags, and in `sitemap.xml` and `robots.txt`. `404.html` writes its links starting with `/`.
 
-GitHub redirects the old `github.io` address to the new domain automatically, so old links keep working. Things that update themselves and need no change: the sitemap dates, the `?v=` addresses for scripts, and the café details Google reads (they follow the canonical link).
+### Optional: remove the 10-minute delay after updates
+
+GitHub tells browsers to keep each page for 10 minutes, so someone who opened the menu just before an update can see the old menu for up to 10 minutes. GitHub doesn't let you change that. With the domain you can:
+
+- Add the domain to [Cloudflare](https://www.cloudflare.com/) (free plan) and use Cloudflare's nameservers at the domain seller.
+- In Cloudflare, set **SSL/TLS** to **Full**.
+- Add a **Rules → Transform Rules → Modify Response Header** rule: when the URL path ends in `.html` or is `/`, **set** `Cache-Control` to `no-cache`. Pages are then checked for updates on every visit. Photos and scripts are still cached, so the site stays fast.
+- Test: change a price, push, wait for the Actions run to finish, then reopen the menu on your phone. The new price should show right away.
 
 ## To-do list (not done yet)
 
@@ -157,9 +159,10 @@ Things decided or suggested but not finished. Tick them off here as you go.
 
 **Website ideas, not built yet:**
 - [ ] Replace stock and illustrated dish photos with photos of Megga's own plates, starting with the Habesha dishes (new file names, see "Swapping photos").
-- [ ] Old pages refresh themselves: the publish step writes a small `version.txt`, and a page that is older than it reloads once. This fixes the 10-minute delay without a domain or Cloudflare.
+- [ ] Old pages refresh themselves: the publish step writes a small `version.txt`, and a page that is older than it reloads once. This fixes the 10-minute delay without Cloudflare.
 - [ ] Use a Habesha dish photo as the menu page's share picture (`og:image` in `menu.html`), for links shared on WhatsApp and Facebook.
-- [ ] Buy the domain, then follow "When a custom domain is bought" above, including the QR code.
+- [x] Buy the domain and switch the site to it, with the QR code (done November 2026: `meggacoffee.com`).
+- [ ] Update the website link on Google Business Profile, Search Console, Instagram and Uber Eats to `https://meggacoffee.com/`.
 
 ## Photo credits
 
