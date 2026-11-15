@@ -106,7 +106,7 @@ The site is built to work on old and new phones alike. Keep these rules when cha
 
 ## Speed
 
-Tested with Google Lighthouse on a simulated slow phone (November 2026): menu page 95–100, home page 98–100 out of 100. What keeps it fast:
+Tested with Google Lighthouse on a simulated slow phone (November 2026): menu page 92–99, home page 98–99 out of 100 (it varies from run to run). What keeps it fast:
 
 - **Lighter photos (`.webp`).** Every `.jpg` in `assets/` has a `.webp` copy with the same name that is about 40% smaller. Newer phones download the `.webp`; older phones use the `.jpg`. **You only ever add or replace the `.jpg`.** The publish step makes the `.webp` copy for any new or replaced photo. (To make them on your computer instead: `python tools/make-webp.py`.) If a `.webp` is ever missing, the site loads the `.jpg`. The big tap-to-view dish photos in `assets/menu/items/large/` stay `.jpg`.
 - **Photos load only when they are near the screen**, except the first one on each page.
