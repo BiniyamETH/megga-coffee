@@ -686,8 +686,13 @@
     var nav = $("[data-nav]");
     if (!header) return;
 
+    // Only written when it differs from the value in styles.css: changing it makes the phone
+    // restyle the whole page, which is slow on the long menu.
     function setHeaderVar() {
-      document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
+      var h = header.offsetHeight + "px";
+      var root = document.documentElement;
+      var now = window.getComputedStyle ? getComputedStyle(root).getPropertyValue("--header-h").replace(/\s/g, "") : "";
+      if (now !== h) root.style.setProperty("--header-h", h);
     }
     requestAnimationFrame(setHeaderVar);
     window.addEventListener("resize", setHeaderVar);
@@ -777,8 +782,8 @@
     // indexOf: iPhones before iOS 13 report "-webkit-sticky".
     var headerSticky = header && getComputedStyle(header).position.indexOf("sticky") !== -1;
     var offset = (headerSticky ? header.offsetHeight : 0) + tools.offsetHeight;
+    if (offset === menuOffsetPx) return;   // unchanged: writing it again would only cost the phone work
     menuOffsetPx = offset;
-    document.documentElement.style.setProperty("--menu-offset", offset + "px");
     document.documentElement.style.scrollPaddingTop = (offset + 10) + "px";
   }
 
