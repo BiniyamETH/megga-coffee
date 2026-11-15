@@ -122,13 +122,29 @@
   function renderOpenStatus() {
     var st = openStatus();
     $$("[data-open-status]").forEach(function (el) {
-      if (!st) { el.hidden = true; return; }
+      el.hidden = !st;
+      if (!st) return;
       el.classList.toggle("is-open", st.open);
       el.classList.toggle("is-closed", !st.open);
-      el.innerHTML = '<span class="status-dot" aria-hidden="true"></span>' +
+      var html = '<span class="status-dot" aria-hidden="true"></span>' +
         (st.open ? "Open now" : "Closed") +
         (st.text ? '<span class="status-detail"> · ' + esc(st.text) + "</span>" : "");
+      if (el.innerHTML !== html) el.innerHTML = html;
     });
+    var sentence = openNowSentence(st);
+    $$('[data-bind="openNowSentence"]').forEach(function (el) {
+      if (el.textContent !== sentence) el.textContent = sentence;
+    });
+  }
+
+  // Keep the badge and FAQ in sync while the page stays open or is shown again.
+  function keepOpenStatusFresh() {
+    if (!$("[data-open-status]")) return;
+    function refreshWhenVisible() { if (!document.hidden) renderOpenStatus(); }
+    renderOpenStatus();
+    setInterval(refreshWhenVisible, 60000);
+    window.addEventListener("pageshow", refreshWhenVisible);
+    document.addEventListener("visibilitychange", refreshWhenVisible);
   }
 
   // Groups consecutive days with identical hours: "Mon–Fri 8:00 a.m. – 9:00 p.m. · Sat closed"
@@ -172,7 +188,7 @@
         (isToday ? ' <span class="visually-hidden">(today)</span>' : "") + "</th><td>" +
         (r ? formatRange(r) : "Closed") + "</td></tr>";
     }).join("");
-    table.insertAdjacentHTML("beforeend", "<tbody>" + rows + "</tbody>");
+    table.tBodies[0].innerHTML = rows;
   }
 
   /* ---------- config binding ---------- */
@@ -204,8 +220,7 @@
   }
 
   // "We're open right now until 9 p.m." / "We're closed right now and open again tomorrow at 8 a.m."
-  function openNowSentence() {
-    var st = openStatus();
+  function openNowSentence(st) {
     if (!st) return "";
     if (st.open) return st.text ? "We're open right now until " + st.text.replace(/^Closes /, "") : "We're open right now.";
     var m = st.text.replace(/^Opens /, "").match(/^(.*?)(\d.*)$/);
@@ -241,7 +256,6 @@
     ratingCount: SITE.rating.count,
     payments: payments.join(" · "),
     paymentsLower: listJoin(payments.map(function (p) { return p.toLowerCase(); })),
-    openNowSentence: openNowSentence(),
     hoursSentence: hoursSentence(),
     vegCount: vegItems.length,
     vegList: listJoin(vegItems.slice(0, 4).map(function (n) { return n.toLowerCase(); })),
@@ -306,10 +320,12 @@
     var base = new URL("./", canonical ? canonical.href : location.href).href;
     var data = {
       "@context": "https://schema.org",
-      "@type": "CafeOrCoffeeShop",
+      // A café that also serves full breakfasts and Habesha meals, so both types.
+      "@type": ["CafeOrCoffeeShop", "Restaurant"],
       "@id": base + "#cafe",
       name: SITE.name,
       alternateName: SITE.alternateName,
+      description: SITE.description || undefined,
       url: base,
       image: [base + "assets/hero.jpg"].concat(galleryItems().filter(function (g) {
         return g.src && g.src !== "assets/hero.jpg";
@@ -317,9 +333,7 @@
       logo: base + "assets/icon-512.png",
       menu: base + "menu",
       currenciesAccepted: "CAD",
-      // Not shown on the page. Google matches these words to searches like "Eritrean food near me",
-      // so the two country names stay next to Habesha here.
-      servesCuisine: ["Coffee", "Habesha", "Ethiopian", "Eritrean", "Breakfast", "Brunch", "Greek", "Vegetarian"],
+      servesCuisine: ["Habesha", "Ethiopian", "Eritrean", "East African"],
       address: {
         "@type": "PostalAddress",
         streetAddress: a.street,
@@ -448,20 +462,6 @@
       "</div>";
   }
 
-  // If a photo file is missing, swap in the warm placeholder.
-  function watchImages(root) {
-    $$("img[data-fallback]", root).forEach(function (img) {
-      img.addEventListener("error", function onError() {
-        // A missing .webp copy has just been swapped for its .jpg (see "Lighter photos" below): give that a chance.
-        if (img.getAttribute("data-jpg-retry") === "1") { img.setAttribute("data-jpg-retry", "2"); return; }
-        img.removeEventListener("error", onError);
-        img.insertAdjacentHTML("afterend", placeholderHTML(img.getAttribute("data-fallback")));
-        img.remove();
-      });
-    });
-    startLazy(root);
-  }
-
   /* Lazy photos. Newer browsers use loading="lazy". Older phones ignore it and would download
      every photo on the page at once, so for them the photo waits in data-src until it is close to the screen. */
   var lazyByScript = !("loading" in HTMLImageElement.prototype) && "IntersectionObserver" in window;
@@ -476,16 +476,39 @@
     if (!webpOK || !src || src.indexOf("/large/") !== -1) return src;
     return src.replace(/\.jpe?g$/i, ".webp");
   }
-  // Safety net: if a .webp copy is missing (a new photo added without one), load the .jpg instead.
-  document.addEventListener("error", function (e) {
-    var img = e.target;
-    if (!img || img.tagName !== "IMG" || img.getAttribute("data-jpg-retry")) return;
+  // Retry the original JPG before removing a thumbnail or showing a placeholder.
+  function recoverImage(img) {
+    var picture = img.parentNode;
+    if (picture && picture.tagName === "PICTURE") {
+      var webpSources = $$('source[type="image/webp"]', picture);
+      if (webpSources.length) {
+        webpSources.forEach(function (source) { source.remove(); });
+        return;
+      }
+    }
     var src = img.getAttribute("src") || "";
-    if (!/\.webp$/i.test(src)) return;
-    img.setAttribute("data-jpg-retry", "1");
-    if (img.getAttribute("srcset")) img.setAttribute("srcset", img.getAttribute("srcset").replace(/\.webp/gi, ".jpg"));
-    img.src = src.replace(/\.webp$/i, ".jpg");
+    var srcset = img.getAttribute("srcset") || "";
+    if (/\.webp$/i.test(src) || /\.webp\s/i.test(srcset)) {
+      if (srcset) img.setAttribute("srcset", srcset.replace(/\.webp/gi, ".jpg"));
+      if (/\.webp$/i.test(src)) img.src = src.replace(/\.webp$/i, ".jpg");
+      return;
+    }
+    var btn = img.closest(".thumb-btn");
+    if (btn) {
+      btn.parentNode.classList.remove("has-photo");
+      btn.remove();
+    } else if (img.hasAttribute("data-fallback")) {
+      img.insertAdjacentHTML("afterend", placeholderHTML(img.getAttribute("data-fallback")));
+      img.remove();
+    }
+  }
+  document.addEventListener("error", function (e) {
+    if (e.target && e.target.tagName === "IMG") recoverImage(e.target);
   }, true);
+  // An eager image can finish before the deferred script attaches its error listener.
+  $$("picture img").forEach(function (img) {
+    if (img.complete && !img.naturalWidth) recoverImage(img);
+  });
 
   // The src attribute for a lazy photo: src="..." or, on older phones, data-src="...".
   function lazySrc(src) {
@@ -540,7 +563,7 @@
         (h.sub ? '<span class="mc-sub">' + esc(h.sub) + "</span>" : "") + "</span>" +
         '<span class="mc-arrow" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span></span></a></li>';
     }).join("");
-    watchImages(list);
+    startLazy(list);
   }
 
   function galleryItems() {
@@ -558,7 +581,7 @@
     }).slice(0, 6).map(function (g) {
       return '<li><a class="strip-photo" href="gallery.html">' + imgHTML(g.src, g.alt || g.caption, 400, 300, g.caption, g.small, "(min-width: 900px) 300px, 60vw") + "</a></li>";
     }).join("");
-    watchImages(strip);
+    startLazy(strip);
   }
 
   // Small 3-photo preview on the homepage; each links to the Gallery page.
@@ -569,7 +592,7 @@
     preview.innerHTML = picks.map(function (g) {
       return '<li><a class="mini-photo" href="gallery.html">' + imgHTML(g.src, g.alt || g.caption, 400, 400, g.caption, g.small, "(min-width: 900px) 300px, 60vw") + "</a></li>";
     }).join("");
-    watchImages(preview);
+    startLazy(preview);
   }
 
   function renderGallery() {
@@ -588,7 +611,7 @@
         (g.src && g.caption ? '<figcaption>' + esc(g.caption) + "</figcaption>" : "") +
         "</figure></li>";
     }).join("");
-    watchImages(list);
+    startLazy(list);
   }
 
   /* Photo viewers open as a native <dialog>. Phones without it (iPhones before iOS 15.4) get the
@@ -621,12 +644,17 @@
   var photoTicket = 0;
   function showPhoto(img, small, big) {
     var ticket = ++photoTicket;
-    img.removeAttribute("data-jpg-retry");
-    img.src = small ? fast(small) : big;   // the small copy is the one already on the page, so it shows at once
+    img.src = fast(small || big);
     if (!small || small === big) return;
     var loader = new Image();
-    loader.onload = function () { if (ticket === photoTicket) img.src = big; };
-    loader.src = big;
+    var largePhoto = fast(big);
+    loader.onload = function () { if (ticket === photoTicket) img.src = loader.src; };
+    loader.onerror = function () {
+      if (ticket !== photoTicket || largePhoto === big) return;
+      largePhoto = big;
+      loader.src = big;
+    };
+    loader.src = largePhoto;
   }
 
   /* Full-size photo viewer on the Gallery page (arrow keys, Esc to close). */
@@ -918,7 +946,7 @@
         var haystack = searchText([item.name, item.desc, item.keywords, cat.name, cat.keywords].join(" "));
         var thumb = item.image
           ? '<button class="thumb-btn" type="button" data-dish="' + ci + "-" + ii + '" aria-label="View photo: ' + esc(item.name) + '">' +
-            '<img class="item-thumb" ' + lazySrc(item.image) + ' alt="" width="200" height="200" loading="lazy" decoding="async"></button>'
+            '<img class="item-thumb" ' + lazySrc(item.image) + ' alt="' + esc(item.name) + '" width="200" height="200" loading="lazy" decoding="async"></button>'
           : "";
         return '<li class="menu-item' + (thumb ? " has-photo" : "") + '" data-tags="' + esc(tags.join(" ")) + '" data-search="' + esc(haystack) + '">' +
           thumb +
@@ -945,15 +973,7 @@
         '<ul class="menu-list" role="list">' + items + "</ul></section>";
     }).join("");
 
-    watchImages(root);
-    // A missing item photo just drops the thumbnail; the row stays text-only.
-    $$(".item-thumb", root).forEach(function (img) {
-      img.addEventListener("error", function () {
-        var btn = img.closest(".thumb-btn");
-        btn.parentNode.classList.remove("has-photo");
-        btn.remove();
-      }, { once: true });
-    });
+    startLazy(root);
     var total = $$(".menu-item", root).length;
 
     function applyFilters() {
@@ -1102,7 +1122,8 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(setMenuOffset);
 
     // Content is rendered by JS, so jump to #category (e.g. from the homepage cards) once it exists.
-    var startId = location.hash ? decodeURIComponent(location.hash.slice(1)) : "";
+    var startId = "";
+    try { startId = location.hash ? decodeURIComponent(location.hash.slice(1)) : ""; } catch (err) { startId = ""; }
     requestAnimationFrame(function () {
       if (startId && document.getElementById(startId)) jumpTo(startId, false);
       else setActive(sectionOnScreen());
@@ -1169,16 +1190,10 @@
   function run(step) {
     try { step(); } catch (err) { if (window.console) console.error(err); }
   }
-  [bindConfig, renderOpenStatus, renderHoursTable, renderStars, renderHighlights, renderGallery,
+  [bindConfig, keepOpenStatusFresh, renderHoursTable, renderStars, renderHighlights, renderGallery,
     renderGalleryPreview, renderGalleryStrip, renderHoursGroups, setupLightbox, renderMenu,
     detectFlexGap, setupHeader, setupReveal, fixIcons, injectSchema, injectFaqSchema, setupSpeculation].forEach(run);
   // Marks the page as script-ready (fade-ins, menu buttons). setupReveal normally does this
   // right after showing the first screen; this is the backup if it failed.
   document.documentElement.classList.add("js");
-  // Keep "Open now" and the hours FAQ sentence right if the page stays open past opening/closing time.
-  setInterval(function () {
-    renderOpenStatus();
-    var sentence = openNowSentence();
-    $$('[data-bind="openNowSentence"]').forEach(function (el) { el.textContent = sentence; });
-  }, 60 * 1000);
 })();

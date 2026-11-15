@@ -122,7 +122,7 @@ Tested with Google Lighthouse on a simulated slow phone (November 2026): menu pa
 
 Every push runs `.github/workflows/pages.yml`. It writes a plain-text copy of the menu into `menu.html` from `menu-data.js` (`tools/build-menu.js`), then publishes the site. That copy shows right away on slow connections, on very old phones and with JavaScript off, and the full photo menu replaces it once the page's script runs. You only ever edit `menu-data.js`. Leave the `MENU:START` / `MENU:END` markers in `menu.html` alone. It also adds each page's last-changed date to the published `sitemap.xml`, so Google rechecks the menu soon after a price edit. It also gives `menu-data.js`, `script.js` and `styles.css` a new address on each publish (for example `menu-data.js?v=0be6400a`), so browsers never pair a new page with an old saved copy of the menu. That happens only in the published copy, so keep the plain `src="menu-data.js"` in the HTML files.
 
-**If an update doesn't appear:** open the repo's **Actions** tab. A red ❌ means `menu-data.js` has a mistake (for example a missing comma or a price written as `"3.95"`), and the log names the item or line. The live site stays as it was until you fix it and push again. To check before pushing, run `node tools/build-menu.js` (then `git checkout menu.html` to undo the generated copy; committing it is harmless too).
+**If an update doesn't appear:** open the repo's **Actions** tab and read the failed step. For menu data errors such as missing photo files or prices written as strings, the build log names the item or line. To check the menu before pushing, run `node tools/build-menu.js`. It updates the generated menu and photo-credit blocks in `menu.html` while preserving the surrounding page.
 
 To preview on your computer, open `index.html` in a browser. For the map and everything else to behave exactly as it will online, run `python -m http.server` in this folder and visit http://localhost:8000.
 
@@ -133,6 +133,29 @@ The site lives at **`https://meggacoffee.com/`** (bought November 2026). The old
 1. **Google Search Console:** add `meggacoffee.com` as a property and submit `https://meggacoffee.com/sitemap.xml`.
 2. **Google Business Profile:** set the website field to `https://meggacoffee.com/` and the menu link to `https://meggacoffee.com/menu`.
 3. **Instagram / Uber Eats:** put `https://meggacoffee.com/` in the bio or store page.
+
+### Danforth East update
+
+| Area | Changes |
+| --- | --- |
+| Menu photos | If a thumbnail WebP fails, the original JPG gets a chance to load. If both fail, the thumbnail disappears and the dish name and price stay visible. Dish photos also have descriptive alt text. |
+| Page and gallery photos | Responsive photos retry their JPG sources. The gallery viewer uses the optimized photo when available and keeps the thumbnail visible until the larger photo loads. |
+| Menu links | Malformed URL fragments such as `#%zz` no longer interrupt section highlighting. |
+| Opening hours | One timer refreshes the badge and Contact FAQ using Toronto time. They also refresh when returning to the page. The Contact page has plain HTML hours for visitors with JavaScript disabled. |
+| Homepage and menu | Page titles describe the café and its Danforth breakfast and brunch menu. The page copy names Danforth East and the address, links to hours and directions, and describes the Habesha dishes in the context of Ethiopian and Eritrean food traditions. |
+| Contact and Our Story | The Contact page explains how to walk from the Strathmore Boulevard entrance at Coxwell Station and answers neighbourhood, takeout and delivery questions. Our Story names the Habesha coffee ceremony directly. |
+| Structured data | The business description and `CafeOrCoffeeShop` and `Restaurant` types identify the café. The business record links to the menu with item names, prices and CAD currency. |
+
+The business address and ordering options are listed on [Uber Eats](https://www.ubereats.com/ca/store/megga-morning-grace-coffee/lcxvV_vkUyulXjWnfndXcA). The walking directions use the [TTC's Coxwell Station entrance information](https://www.ttc.ca/subway-stations/coxwell-station).
+
+Google's local results depend on relevance, distance and prominence. Keep the Business Profile address, hours, photos and menu link current. [Google Business Profile local ranking guidance](https://support.google.com/business/answer/7091)
+
+### Verification for this update
+
+- `node --check script.js`, `node --check menu-data.js` and `node tools/build-menu.js` passed. The generated HTML has 126 menu items with prices across 14 sections.
+- Checked all seven HTML pages for local link and image targets, fragment links and duplicate IDs. The six indexable pages have canonical URLs matching the sitemap. The 404 page has `noindex`.
+- Targeted JavaScript checks passed for WebP-to-JPG recovery, missing thumbnails, gallery photo switching, Toronto closing time, badge and FAQ refresh, and the generated business and menu structured data.
+- Browser access to the local preview was blocked. Mobile layout, search and touch interactions still need a browser pass for this update. To verify on a phone, open the menu from the QR code, jump to a section, search for “benny” and tap a dish photo.
 
 ### How the domain is set up
 
