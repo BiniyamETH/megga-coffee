@@ -1,5 +1,5 @@
 /* =====================================================================
-   MEGGA MORNING GRACE COFFEE — SITE CONFIG + MENU
+   MEGGA COFFEE — SITE CONFIG + MENU
    ---------------------------------------------------------------------
    Edit this file to change business info, hours, prices or menu items.
    See README.md for the plain HTML business details to update as well.
@@ -11,15 +11,14 @@
    ===================================================================== */
 
 const SITE = {
-  name: "Megga Morning Grace Coffee",
-  alternateName: "Megga Coffee",
+  name: "Megga Coffee",
 
   // The two lines of the logo in the header and footer.
-  logoTop: "MEGGA MORNING GRACE COFFEE",
+  logoTop: "MEGGA COFFEE",
   logoBottom: "Coffee · Community · Toronto",
 
   // Business description used in the structured data.
-  description: "Megga Morning Grace Coffee is a café and brunch spot at 1696 Danforth Ave in Toronto's Danforth East, near Coxwell Station. The menu includes espresso, Habesha dishes such as ful and fata, eggs Benedict and pancakes.",
+  description: "Megga Coffee is a café and brunch spot at 1696 Danforth Ave in Toronto's Danforth East, near Coxwell Station. The menu includes espresso, Habesha dishes such as ful and fata, eggs Benedict and pancakes.",
 
   city: "Toronto",
   address: {
@@ -50,7 +49,7 @@ const SITE = {
   priceRange: "$$",
 
   // Google rating — update these numbers when your reviews change.
-  rating: { value: 5.0, count: 25 },
+  rating: { value: 5.0, count: 26 },
 
   // Opening hours, 24-hour clock, Toronto time.
   // To close on a day, write:  sun: null,
@@ -75,12 +74,12 @@ const SITE = {
     // The homepage strip also skips any photo that is already shown elsewhere on the homepage.
     // small: a 600px-wide copy used where the photo is shown small (homepage). Optional.
     gallery: [
-      { src: "assets/gallery/cafe-interior.jpg", small: "assets/gallery/cafe-interior-600.jpg", alt: "Inside Megga Morning Grace Coffee: pendant lights, framed photos and the coffee bar", caption: "Our café", preview: true },
+      { src: "assets/gallery/cafe-interior.jpg", small: "assets/gallery/cafe-interior-600.jpg", alt: "Inside Megga Coffee: pendant lights, framed photos and the coffee bar", caption: "Our café", preview: true },
       { src: "assets/gallery/pastry-case.jpg", small: "assets/gallery/pastry-case-600.jpg", alt: "Croissants, muffins and loaf cakes in the pastry case", caption: "Fresh pastries", preview: true },
-      { src: "assets/gallery/megga-cups.jpg", small: "assets/gallery/megga-cups-600.jpg", alt: "Megga Morning Grace Coffee takeaway cups on the counter", caption: "Coffee to go" },
+      { src: "assets/gallery/megga-cups.jpg", small: "assets/gallery/megga-cups-600.jpg", alt: "Megga Coffee takeaway cups on the counter", caption: "Coffee to go" },
       { src: "assets/gallery/dessert-case.jpg", small: "assets/gallery/dessert-case-600.jpg", alt: "Colourful frozen desserts in the display freezer", caption: "Frozen treats" },
       { src: "assets/gallery/cappuccino.jpg", small: "assets/gallery/cappuccino-600.jpg", alt: "A cappuccino on the counter", caption: "Cappuccino", preview: true },
-      { src: "assets/hero.jpg", alt: "Guests chatting over coffee inside Megga Morning Grace Coffee", caption: "Café life", home: false }
+      { src: "assets/hero.jpg", alt: "Guests chatting over coffee inside Megga Coffee", caption: "Café life", home: false }
     ]
     // Tip: on desktop the first photo is shown large, so 5 or 9 photos fill the grid neatly.
   },

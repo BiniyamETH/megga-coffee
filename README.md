@@ -1,4 +1,4 @@
-# Megga Morning Grace Coffee website
+# Megga Coffee website
 
 A plain HTML/CSS/JavaScript site with no build step. It works on GitHub Pages or any static host.
 
@@ -186,7 +186,7 @@ Things decided or suggested but not finished. Tick them off here as you go.
 - [ ] Which dishes are **spicy** (`tags: ["s"]`) or **vegetarian** (`tags: ["v"]`)?
 
 **Google and other listings** (no code, but the biggest help for being found):
-- [ ] Google Business Profile: use the same name as the website ("Megga Morning Grace Coffee"; Google Maps says "Megga coffee").
+- [ ] Google Business Profile: use the same name as the website, "Megga Coffee".
 - [ ] Google Business Profile categories: **Coffee shop** (main), plus **Ethiopian restaurant**, **Eritrean restaurant**, **Breakfast restaurant**.
 - [ ] Google Business Profile: **Menu link** = `https://meggacoffee.com/menu`, **Order link** = Uber Eats, and add real photos of the Habesha dishes.
 - [ ] Ask happy customers for Google reviews. Then update `rating:` in `menu-data.js`.

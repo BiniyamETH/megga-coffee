@@ -1,4 +1,4 @@
-/* Megga Morning Grace Coffee — shared site script.
+/* Megga Coffee — shared site script.
    Reads SITE and MENU from menu-data.js. You should not need to edit this file. */
 (function () {
   "use strict";
