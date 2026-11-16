@@ -42,7 +42,7 @@ Everything you'll normally change is in **`menu-data.js`**. Open it in any text 
 | Hours | `hours:` uses a 24-hour clock, e.g. `mon: ["08:00", "21:00"]`. To close on a day, write `sun: null,`. The "Open now / Closed" badge, the hours table and Google's data all update from this. |
 | Instagram | `instagram: "https://www.instagram.com/yourname"`. Leave it `""` to hide it. |
 | Price range (for Google) | `priceRange: "$$"`. Use `"$"` for under $10 a person or `"$$$"` for $20–30. |
-| Google rating | `rating: { value: 5.0, count: 25 }` |
+| Google rating | `rating: { value: 5.0, count: 26 }` |
 | Uber Eats link | `orderUrl:`. The link is also written in the HTML files (Visit band, footer, and under the menu), so replace it there too. |
 | Google Maps listing link | `reviewsUrl:`. It is also written in the HTML files ("Write a review" links), so replace it there too. |
 
@@ -225,4 +225,4 @@ The category photos in `assets/menu/` are free stock photos from [Unsplash](http
 
 ### Ethiopian roots section
 
-The "Coffee, the Ethiopian Way" section on the homepage uses three free Unsplash photos in `assets/ethiopia/`: `jebena-pour.jpg` (photo-1774529233247-d3f34ed11994), `coffee-ceremony.jpg` (photo-1630861413071-a424a4d6d155) and `coffee-cherries.jpg` (photo-1515694590185-73647ba02c10). Its text is in `index.html`, under the comment `<!-- ETHIOPIAN ROOTS -->`. If the café holds coffee ceremonies or serves Ethiopian beans, add that there.
+The "Coffee, the Habesha Way" section on the Our Story page uses three free Unsplash photos in `assets/ethiopia/`: `jebena-pour.jpg` (photo-1774529233247-d3f34ed11994), `coffee-ceremony.jpg` (photo-1630861413071-a424a4d6d155) and `coffee-cherries.jpg` (photo-1515694590185-73647ba02c10). Its text is in `about.html`, under the comment `<!-- HABESHA ROOTS -->`. If the café holds coffee ceremonies or serves Ethiopian beans, add that there.

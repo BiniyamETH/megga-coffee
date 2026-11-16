@@ -324,7 +324,6 @@
       "@type": ["CafeOrCoffeeShop", "Restaurant"],
       "@id": base + "#cafe",
       name: SITE.name,
-      alternateName: SITE.alternateName,
       description: SITE.description || undefined,
       url: base,
       image: [base + "assets/hero.jpg"].concat(galleryItems().filter(function (g) {
@@ -369,7 +368,6 @@
         "@type": "WebSite",
         "@id": base + "#website",
         name: SITE.name,
-        alternateName: SITE.alternateName,
         url: base,
         inLanguage: "en-CA",
         publisher: { "@id": base + "#cafe" }
@@ -582,17 +580,6 @@
       return '<li><a class="strip-photo" href="gallery.html">' + imgHTML(g.src, g.alt || g.caption, 400, 300, g.caption, g.small, "(min-width: 900px) 300px, 60vw") + "</a></li>";
     }).join("");
     startLazy(strip);
-  }
-
-  // Small 3-photo preview on the homepage; each links to the Gallery page.
-  function renderGalleryPreview() {
-    var preview = $("[data-gallery-preview]");
-    if (!preview) return;
-    var picks = galleryItems().filter(function (g) { return g.preview && g.src; }).slice(0, 3);
-    preview.innerHTML = picks.map(function (g) {
-      return '<li><a class="mini-photo" href="gallery.html">' + imgHTML(g.src, g.alt || g.caption, 400, 400, g.caption, g.small, "(min-width: 900px) 300px, 60vw") + "</a></li>";
-    }).join("");
-    startLazy(preview);
   }
 
   function renderGallery() {
@@ -1191,7 +1178,7 @@
     try { step(); } catch (err) { if (window.console) console.error(err); }
   }
   [bindConfig, keepOpenStatusFresh, renderHoursTable, renderStars, renderHighlights, renderGallery,
-    renderGalleryPreview, renderGalleryStrip, renderHoursGroups, setupLightbox, renderMenu,
+    renderGalleryStrip, renderHoursGroups, setupLightbox, renderMenu,
     detectFlexGap, setupHeader, setupReveal, fixIcons, injectSchema, injectFaqSchema, setupSpeculation].forEach(run);
   // Marks the page as script-ready (fade-ins, menu buttons). setupReveal normally does this
   // right after showing the first screen; this is the backup if it failed.
