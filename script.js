@@ -332,7 +332,7 @@
       logo: base + "assets/icon-512.png",
       menu: base + "menu",
       currenciesAccepted: "CAD",
-      servesCuisine: ["Habesha", "Ethiopian", "Eritrean", "East African"],
+      servesCuisine: ["Coffee", "Breakfast", "Brunch", "Sandwiches", "Burgers", "Vegetarian", "Greek", "Habesha", "Ethiopian", "Eritrean"],
       address: {
         "@type": "PostalAddress",
         streetAddress: a.street,
@@ -357,7 +357,9 @@
     var sameAs = [SITE.reviewsUrl, SITE.orderUrl, SITE.instagram].filter(Boolean);
     if (sameAs.length) data.sameAs = sameAs;
     data.hasMenu = { "@id": base + "menu#menu" };
-    addJsonLd(data);
+    // The published pages already carry this block in their HTML (tools/build-menu.js), so search
+    // engines that don't run scripts see it too. Only add it here when it is missing.
+    if (!$('script[data-schema="cafe"]')) addJsonLd(data);
 
     var page = document.body.getAttribute("data-page");
 

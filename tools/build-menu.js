@@ -41,7 +41,7 @@ function esc(str) {
 // Load menu-data.js the way a browser would and read MENU from it.
 var context = {};
 try {
-  vm.runInNewContext(fs.readFileSync(dataFile, "utf8") + "\n;this.MENU = MENU;", context, { filename: "menu-data.js" });
+  vm.runInNewContext(fs.readFileSync(dataFile, "utf8") + "\n;this.MENU = MENU; this.SITE = SITE;", context, { filename: "menu-data.js" });
 } catch (err) {
   fail("menu-data.js has an error, so the site was not updated.\n" + (err.stack || err));
 }
@@ -109,6 +109,76 @@ var page = fs.readFileSync(pageFile, "utf8");
 page = between(page, START, END, html, "MENU:START / MENU:END");
 page = between(page, CREDITS_START, CREDITS_END, creditsHTML, "CREDITS:START / CREDITS:END");
 fs.writeFileSync(pageFile, page);
+
+/* The café's details for search engines (name, address, hours, phone), written into the <head>
+   of every page from SITE in menu-data.js. script.js builds the same block in the browser; having
+   it in the HTML means search engines that don't run scripts read it too. */
+var SITE = context.SITE;
+var DAY_KEYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+var DAY_LONG = { mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", sat: "Saturday", sun: "Sunday" };
+var SCHEMA_START = "<!-- SCHEMA:START (built by tools/build-menu.js from menu-data.js; do not edit by hand) -->";
+var SCHEMA_END = "<!-- SCHEMA:END -->";
+
+function cafeSchema(base) {
+  var groups = [];
+  DAY_KEYS.forEach(function (k) {
+    var r = SITE.hours[k], last = groups[groups.length - 1];
+    if (last && String(last.range) === String(r)) last.days.push(DAY_LONG[k]);
+    else groups.push({ days: [DAY_LONG[k]], range: r });
+  });
+  var digits = String(SITE.phone || "").replace(/[^0-9]/g, "");
+  if (digits.length === 10) digits = "1" + digits;
+  var payments = (SITE.payments || []).filter(Boolean);
+  var photos = ((SITE.images && SITE.images.gallery) || []).filter(function (g) { return g.src && g.src !== "assets/hero.jpg"; });
+  var sameAs = [SITE.reviewsUrl, SITE.orderUrl, SITE.instagram].filter(Boolean);
+  return {
+    "@context": "https://schema.org",
+    "@type": ["CafeOrCoffeeShop", "Restaurant"],
+    "@id": base + "#cafe",
+    name: SITE.name,
+    description: SITE.description || undefined,
+    url: base,
+    image: [base + "assets/hero.jpg"].concat(photos.slice(0, 4).map(function (g) { return base + g.src; })),
+    logo: base + "assets/icon-512.png",
+    menu: base + "menu",
+    currenciesAccepted: "CAD",
+    servesCuisine: ["Coffee", "Breakfast", "Brunch", "Sandwiches", "Burgers", "Vegetarian", "Greek", "Habesha", "Ethiopian", "Eritrean"],
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: SITE.address.street,
+      addressLocality: SITE.address.city,
+      addressRegion: SITE.address.region,
+      postalCode: SITE.address.postalCode,
+      addressCountry: SITE.address.country
+    },
+    geo: { "@type": "GeoCoordinates", latitude: SITE.geo.lat, longitude: SITE.geo.lng },
+    hasMap: SITE.reviewsUrl,
+    openingHoursSpecification: groups.filter(function (g) { return g.range; }).map(function (g) {
+      return { "@type": "OpeningHoursSpecification", dayOfWeek: g.days, opens: g.range[0], closes: g.range[1] };
+    }),
+    potentialAction: { "@type": "OrderAction", target: SITE.orderUrl },
+    telephone: digits ? "+" + digits : undefined,
+    paymentAccepted: payments.length ? payments.join(", ") : undefined,
+    priceRange: SITE.priceRange || undefined,
+    sameAs: sameAs.length ? sameAs : undefined,
+    hasMenu: { "@id": base + "menu#menu" }
+  };
+}
+
+if (!SITE || !SITE.address || !SITE.hours) fail("SITE in menu-data.js is missing its address or hours.");
+["index", "about", "menu", "gallery", "reviews", "contact"].forEach(function (name) {
+  var file = path.join(root, name + ".html");
+  var text = fs.readFileSync(file, "utf8");
+  var canonical = /<link rel="canonical" href="([^"]+)"/.exec(text);
+  if (!canonical) fail(name + ".html has no canonical link.");
+  var base = new URL("./", canonical[1]).href;
+  // Written with "<" escaped so nothing in the data can close the script tag early.
+  var json = JSON.stringify(cafeSchema(base)).split("<").join("\\u003c");
+  var a = text.indexOf(SCHEMA_START), b = text.indexOf(SCHEMA_END);
+  if (a === -1 || b === -1 || b < a) fail(name + ".html is missing the SCHEMA:START / SCHEMA:END markers.");
+  fs.writeFileSync(file, text.slice(0, a + SCHEMA_START.length) + "\n" +
+    '  <script type="application/ld+json" data-schema="cafe">' + json + "</script>\n  " + text.slice(b));
+});
 
 var count = MENU.reduce(function (n, c) { return n + c.items.length; }, 0);
 console.log("build-menu: wrote " + count + " items in " + MENU.length + " sections to menu.html");
