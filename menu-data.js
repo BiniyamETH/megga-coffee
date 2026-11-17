@@ -94,7 +94,7 @@ const SITE = {
 
   // "A Taste of the Menu" on the homepage. Each line points at one dish in MENU below:
   // "category" is the category id and "name" is the dish name, spelled exactly as in MENU.
-  // The photo and price come from the menu, so a price change there shows here too.
+  // The photo comes from the menu. Prices are not shown on the homepage.
   // "label" (optional) is a longer name to show, e.g. "Canadian Benedict" instead of "Canadian".
   // A line that matches no dish is simply left out. Six dishes fill the rows neatly.
   featured: [

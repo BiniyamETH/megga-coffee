@@ -567,7 +567,7 @@
     startLazy(list);
   }
 
-  // "A Taste of the Menu" on the homepage: the dishes listed in SITE.featured, with the photo and price from MENU.
+  // "A Taste of the Menu" on the homepage: the dishes listed in SITE.featured, with the photo from MENU (no prices here).
   function renderFeatured() {
     var list = $("[data-featured]");
     if (!list) return;
@@ -580,8 +580,7 @@
         html += '<li class="reveal"><a class="feat-card" href="menu.html#' + esc(cat.id) + '">' +
           (item.image ? '<img class="item-thumb" ' + lazySrc(item.image) + ' alt="" width="200" height="200" loading="lazy" decoding="async">' : "") +
           '<span class="feat-text"><span class="feat-name">' + esc(f.label || item.name) + "</span>" +
-          '<span class="feat-cat">' + esc(cat.name) + "</span></span>" +
-          '<span class="item-price">' + formatPrice(item.price) + "</span></a></li>";
+          '<span class="feat-cat">' + esc(cat.name) + "</span></span></a></li>";
       });
     }
     list.innerHTML = html;

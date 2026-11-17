@@ -190,8 +190,8 @@ if (!SITE || !SITE.address || !SITE.hours) fail("SITE in menu-data.js is missing
     '  <script type="application/ld+json" data-schema="cafe">' + json + "</script>\n" + site + "  " + text.slice(b));
 });
 
-/* Homepage "A Taste of the Menu": a plain-HTML copy of the dishes in SITE.featured (name, section,
-   price), so search engines and phones without JavaScript read them too. script.js swaps in the
+/* Homepage "A Taste of the Menu": a plain-HTML copy of the dishes in SITE.featured (name and
+   section, no prices), so search engines and phones without JavaScript read them too. script.js swaps in the
    version with photos. */
 var FEAT_START = "<!-- FEATURED:START (built by tools/build-menu.js from menu-data.js; do not edit by hand) -->";
 var FEAT_END = "<!-- FEATURED:END -->";
@@ -200,8 +200,7 @@ var featured = (SITE.featured || []).map(function (f) {
   var item = cat && cat.items.filter(function (i) { return i.name === f.name; })[0];
   if (!item) { console.warn('build-menu: featured dish "' + f.name + '" (' + f.category + ") is not on the menu, so the homepage leaves it out."); return ""; }
   return '          <li><a class="feat-card" href="menu.html#' + esc(cat.id) + '"><span class="feat-text"><span class="feat-name">' +
-    esc(f.label || item.name) + '</span><span class="feat-cat">' + esc(cat.name) + '</span></span><span class="item-price">$' +
-    item.price.toFixed(2) + "</span></a></li>";
+    esc(f.label || item.name) + '</span><span class="feat-cat">' + esc(cat.name) + "</span></span></a></li>";
 }).filter(Boolean).join("\n");
 var homeFile = path.join(root, "index.html");
 var home = fs.readFileSync(homeFile, "utf8");

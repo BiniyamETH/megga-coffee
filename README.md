@@ -150,7 +150,7 @@ The business address and ordering options are listed on [Uber Eats](https://www.
 
 Google's local results depend on relevance, distance and prominence. Keep the Business Profile address, hours, photos and menu link current. [Google Business Profile local ranking guidance](https://support.google.com/business/answer/7091)
 
-**Homepage (November 2026):** the dishes under "A Taste of the Menu" are chosen in `featured` in `menu-data.js`. `tools/build-menu.js` writes their names and prices into `index.html` (between the `FEATURED` markers) and adds the site-name details for Google to the homepage `<head>`, so search engines read both without running scripts.
+**Homepage (November 2026):** the dishes under "A Taste of the Menu" are chosen in `featured` in `menu-data.js`. `tools/build-menu.js` writes their names into `index.html` (between the `FEATURED` markers) and adds the site-name details for Google to the homepage `<head>`, so search engines read both without running scripts. The homepage shows no prices; those are only on the menu page.
 
 ### Verification for this update
 
