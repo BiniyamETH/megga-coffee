@@ -176,9 +176,38 @@ if (!SITE || !SITE.address || !SITE.hours) fail("SITE in menu-data.js is missing
   var json = JSON.stringify(cafeSchema(base)).split("<").join("\\u003c");
   var a = text.indexOf(SCHEMA_START), b = text.indexOf(SCHEMA_END);
   if (a === -1 || b === -1 || b < a) fail(name + ".html is missing the SCHEMA:START / SCHEMA:END markers.");
+  // Homepage only: the site's name for search results (shown above the link).
+  var site = name !== "index" ? "" : '  <script type="application/ld+json" data-schema="website">' + JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": base + "#website",
+    name: SITE.name,
+    url: base,
+    inLanguage: "en-CA",
+    publisher: { "@id": base + "#cafe" }
+  }).split("<").join("\\u003c") + "</script>\n";
   fs.writeFileSync(file, text.slice(0, a + SCHEMA_START.length) + "\n" +
-    '  <script type="application/ld+json" data-schema="cafe">' + json + "</script>\n  " + text.slice(b));
+    '  <script type="application/ld+json" data-schema="cafe">' + json + "</script>\n" + site + "  " + text.slice(b));
 });
+
+/* Homepage "A Taste of the Menu": a plain-HTML copy of the dishes in SITE.featured (name, section,
+   price), so search engines and phones without JavaScript read them too. script.js swaps in the
+   version with photos. */
+var FEAT_START = "<!-- FEATURED:START (built by tools/build-menu.js from menu-data.js; do not edit by hand) -->";
+var FEAT_END = "<!-- FEATURED:END -->";
+var featured = (SITE.featured || []).map(function (f) {
+  var cat = MENU.filter(function (c) { return c.id === f.category; })[0];
+  var item = cat && cat.items.filter(function (i) { return i.name === f.name; })[0];
+  if (!item) { console.warn('build-menu: featured dish "' + f.name + '" (' + f.category + ") is not on the menu, so the homepage leaves it out."); return ""; }
+  return '          <li><a class="feat-card" href="menu.html#' + esc(cat.id) + '"><span class="feat-text"><span class="feat-name">' +
+    esc(f.label || item.name) + '</span><span class="feat-cat">' + esc(cat.name) + '</span></span><span class="item-price">$' +
+    item.price.toFixed(2) + "</span></a></li>";
+}).filter(Boolean).join("\n");
+var homeFile = path.join(root, "index.html");
+var home = fs.readFileSync(homeFile, "utf8");
+var fa = home.indexOf(FEAT_START), fb = home.indexOf(FEAT_END);
+if (fa === -1 || fb === -1 || fb < fa) fail("index.html is missing the FEATURED:START / FEATURED:END markers.");
+fs.writeFileSync(homeFile, home.slice(0, fa + FEAT_START.length) + "\n" + (featured ? featured + "\n" : "") + "          " + home.slice(fb));
 
 var count = MENU.reduce(function (n, c) { return n + c.items.length; }, 0);
 console.log("build-menu: wrote " + count + " items in " + MENU.length + " sections to menu.html");

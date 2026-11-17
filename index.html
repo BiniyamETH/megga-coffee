@@ -37,6 +37,7 @@
 
   <!-- SCHEMA:START (built by tools/build-menu.js from menu-data.js; do not edit by hand) -->
   <script type="application/ld+json" data-schema="cafe">{"@context":"https://schema.org","@type":["CafeOrCoffeeShop","Restaurant"],"@id":"https://meggacoffee.com/#cafe","name":"Megga Coffee","description":"Megga Coffee is a café and brunch spot at 1696 Danforth Ave in Toronto's Danforth East, near Coxwell Station. The menu includes espresso, Habesha dishes such as ful and fata, eggs Benedict and pancakes.","url":"https://meggacoffee.com/","image":["https://meggacoffee.com/assets/hero.jpg","https://meggacoffee.com/assets/gallery/cafe-interior.jpg","https://meggacoffee.com/assets/gallery/pastry-case.jpg","https://meggacoffee.com/assets/gallery/megga-cups.jpg","https://meggacoffee.com/assets/gallery/dessert-case.jpg"],"logo":"https://meggacoffee.com/assets/icon-512.png","menu":"https://meggacoffee.com/menu","currenciesAccepted":"CAD","servesCuisine":["Coffee","Breakfast","Brunch","Sandwiches","Burgers","Vegetarian","Greek","Habesha","Ethiopian","Eritrean"],"address":{"@type":"PostalAddress","streetAddress":"1696 Danforth Ave","addressLocality":"Toronto","addressRegion":"ON","postalCode":"M4C 1H8","addressCountry":"CA"},"geo":{"@type":"GeoCoordinates","latitude":43.6842185,"longitude":-79.3206684},"hasMap":"https://www.google.com/maps/place/Megga+coffee/@43.6842185,-79.3206684,17z/data=!4m6!3m5!1s0x89d4cd0e040bd121:0x5b02da0321c5b6d7!8m2!3d43.6842185!4d-79.3206684!16s%2Fg%2F11z4dqq0qw","openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"08:00","closes":"21:00"}],"potentialAction":{"@type":"OrderAction","target":"https://www.ubereats.com/ca/store/megga-morning-grace-coffee/lcxvV_vkUyulXjWnfndXcA"},"telephone":"+16475759431","paymentAccepted":"Credit cards, Debit cards","priceRange":"$$","sameAs":["https://www.google.com/maps/place/Megga+coffee/@43.6842185,-79.3206684,17z/data=!4m6!3m5!1s0x89d4cd0e040bd121:0x5b02da0321c5b6d7!8m2!3d43.6842185!4d-79.3206684!16s%2Fg%2F11z4dqq0qw","https://www.ubereats.com/ca/store/megga-morning-grace-coffee/lcxvV_vkUyulXjWnfndXcA"],"hasMenu":{"@id":"https://meggacoffee.com/menu#menu"}}</script>
+  <script type="application/ld+json" data-schema="website">{"@context":"https://schema.org","@type":"WebSite","@id":"https://meggacoffee.com/#website","name":"Megga Coffee","url":"https://meggacoffee.com/","inLanguage":"en-CA","publisher":{"@id":"https://meggacoffee.com/#cafe"}}</script>
   <!-- SCHEMA:END -->
   <script src="menu-data.js" defer></script>
   <script src="script.js" defer></script>
@@ -115,6 +116,7 @@
         <p class="eyebrow">Welcome to</p>
         <h1 id="page-title" class="hero-title"><span data-bind="name">Megga Coffee</span></h1>
         <p class="hero-lead">A neighbourhood café in Toronto’s Danforth East, just east of Coxwell Station. Come for espresso, Habesha breakfast or brunch favourites like eggs Benedict and pancakes.</p>
+        <p class="hero-hours"><span class="status" data-open-status aria-live="polite"></span> <span data-bind="hoursSummary">Open daily · 8:00 a.m. – 9:00 p.m.</span></p>
         <div class="btn-row">
           <a class="btn btn-caramel" href="menu.html">View Menu <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
           <a class="btn btn-outline" href="https://www.google.com/maps/search/?api=1&amp;query=Megga+coffee+1696+Danforth+Ave+Toronto" data-href="directionsUrl" target="_blank" rel="noopener">Get Directions</a>
@@ -129,6 +131,29 @@
           <h2 id="cards-title" class="section-title lined">Coffee, Breakfast &amp; Brunch</h2>
         </div>
         <ul class="card-row" role="list" data-highlights></ul>
+      </div>
+    </section>
+
+    <!-- A TASTE OF THE MENU: the dishes are chosen in "featured" in menu-data.js; prices come from the menu -->
+    <section class="section taste" aria-labelledby="taste-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Try These</p>
+          <h2 id="taste-title" class="section-title">A Taste of the Menu</h2>
+          <p class="section-lead">Espresso drinks, Habesha breakfast, eggs Benedict, pancakes and vegetarian plates, a short walk from Coxwell Station.</p>
+        </div>
+        <ul class="taste-list" role="list" data-featured>
+          <!-- FEATURED:START (built by tools/build-menu.js from menu-data.js; do not edit by hand) -->
+          <li><a class="feat-card" href="menu.html#specialty-coffees"><span class="feat-text"><span class="feat-name">Cappuccino</span><span class="feat-cat">Specialty Coffees</span></span><span class="item-price">$4.00</span></a></li>
+          <li><a class="feat-card" href="menu.html#habesha-dishes"><span class="feat-text"><span class="feat-name">Ful Special</span><span class="feat-cat">Habesha Dishes</span></span><span class="item-price">$15.00</span></a></li>
+          <li><a class="feat-card" href="menu.html#benedicts"><span class="feat-text"><span class="feat-name">Canadian Benedict</span><span class="feat-cat">Benedicts</span></span><span class="item-price">$14.95</span></a></li>
+          <li><a class="feat-card" href="menu.html#pancakes"><span class="feat-text"><span class="feat-name">Blueberry Pancakes</span><span class="feat-cat">Pancakes</span></span><span class="item-price">$9.95</span></a></li>
+          <li><a class="feat-card" href="menu.html#breakfast-sandwiches"><span class="feat-text"><span class="feat-name">Toasted Western</span><span class="feat-cat">Breakfast Sandwiches</span></span><span class="item-price">$8.95</span></a></li>
+          <li><a class="feat-card" href="menu.html#vegetarian"><span class="feat-text"><span class="feat-name">Falafel Plate</span><span class="feat-cat">Vegetarian</span></span><span class="item-price">$13.95</span></a></li>
+          <!-- FEATURED:END -->
+        </ul>
+        <p class="center-link reveal"><a class="text-link" href="menu.html">See the full menu <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+        <p class="taste-note">Prices and items may change. Please confirm in store. Food photos are for illustration only.</p>
       </div>
     </section>
 
@@ -160,10 +185,10 @@
             <a class="text-link" href="menu.html#vegetarian">Vegetarian dishes <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
           </li>
           <li class="way reveal">
-            <svg class="icon" aria-hidden="true"><use href="#i-jebena"/></svg>
-            <h3>Habesha Roots</h3>
-            <p>Coffee is at the heart of Habesha culture, and the Horn of Africa is where coffee began. Try an Ethiopian and Eritrean <a class="text-link" href="menu.html#habesha-dishes">Habesha breakfast</a> like ful or fata.</p>
-            <a class="text-link" href="about.html#habesha">Our roots <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <svg class="icon" aria-hidden="true"><use href="#i-utensils"/></svg>
+            <h3>Habesha Breakfast</h3>
+            <p>Ethiopian and Eritrean dishes like ful, fata, kicha fitfit and tbsi, alongside the brunch classics.</p>
+            <a class="text-link" href="menu.html#habesha-dishes">Habesha dishes <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
           </li>
         </ul>
         <p class="center-link reveal">Short on time? <a class="text-link" href="https://www.ubereats.com/ca/store/megga-morning-grace-coffee/lcxvV_vkUyulXjWnfndXcA" data-href="orderUrl" target="_blank" rel="noopener">Order online for pickup or delivery <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
@@ -183,6 +208,25 @@
           <a class="btn btn-outline" href="about.html">Read Our Story <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
           <svg class="leaf-art" viewBox="0 0 160 160" aria-hidden="true"><path d="M30 150C60 110 85 70 140 18"/><path d="M58 112c-26-6-40-26-38-52 26 4 40 24 38 52z"/><path d="M58 112c-12-16-24-34-38-52"/><path d="M84 80c-4-26 10-46 36-54 4 26-10 46-36 54z"/><path d="M84 80c10-18 22-36 36-54"/><path d="M104 56c22 2 38 16 42 40-24-2-38-16-42-40z"/><path d="M104 56c14 14 28 26 42 40"/><circle cx="62" cy="128" r="5"/><circle cx="74" cy="122" r="4"/></svg>
         </div>
+      </div>
+    </section>
+
+    <!-- HABESHA COFFEE -->
+    <section class="section ethiopia" aria-labelledby="roots-title">
+      <div class="container story-grid">
+        <div class="story-text reveal">
+          <p class="eyebrow">Our Habesha Roots</p>
+          <h2 id="roots-title" class="section-title">Where Coffee Began</h2>
+          <span class="flag-bar" aria-hidden="true"><span></span><span></span><span></span></span>
+          <p>Arabica coffee first grew wild in the highlands of the Horn of Africa. In Habesha homes, sharing a cup with family and neighbours is part of everyday life, and we bring that same warmth to the Danforth.</p>
+          <div class="btn-row">
+            <a class="btn btn-caramel" href="about.html#habesha">Our Roots <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <a class="btn btn-outline" href="menu.html#specialty-coffees">Coffee Menu</a>
+          </div>
+        </div>
+        <figure class="story-photo roots-photo reveal">
+          <picture><source type="image/webp" srcset="assets/ethiopia/jebena-pour.webp"><img src="assets/ethiopia/jebena-pour.jpg" alt="Coffee poured from a traditional clay jebena into a small cup" width="1100" height="1300" loading="lazy" decoding="async"></picture>
+        </figure>
       </div>
     </section>
 
@@ -223,6 +267,39 @@
           </li>
         </ul>
         <p class="center-link reveal"><a class="text-link" href="reviews.html">See all reviews <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+      </div>
+    </section>
+
+    <!-- QUICK ANSWERS: a few of the questions from the Contact page; answers fill in from menu-data.js -->
+    <section class="section faq" aria-labelledby="faq-title">
+      <div class="container faq-inner">
+        <div class="section-head reveal">
+          <p class="eyebrow">Good to Know</p>
+          <h2 id="faq-title" class="section-title lined">Quick Answers</h2>
+        </div>
+        <div class="faq-list">
+          <details class="faq-item reveal">
+            <summary>Where is Megga Coffee?</summary>
+            <div class="faq-answer"><p>We’re at <span data-bind="addressLine1">1696 Danforth Ave</span>, <span data-bind="addressLine2">Toronto, ON M4C 1H8</span>, in Danforth East between Coxwell and Woodbine. <a href="https://www.google.com/maps/search/?api=1&amp;query=Megga+coffee+1696+Danforth+Ave+Toronto" data-href="directionsUrl" target="_blank" rel="noopener">Get directions in Google Maps</a>.</p></div>
+          </details>
+          <details class="faq-item reveal">
+            <summary>What are your hours?</summary>
+            <div class="faq-answer"><p><span data-bind="hoursSentence">We’re open daily from 8:00 a.m. to 9:00 p.m.</span> <span data-bind="openNowSentence"></span></p></div>
+          </details>
+          <details class="faq-item reveal">
+            <summary>Do you have vegetarian options?</summary>
+            <div class="faq-answer"><p>Yes. Look for the leaf icon on the <a href="menu.html#vegetarian">menu</a>, or tap the Vegetarian filter. We also offer gluten-free toast.</p></div>
+          </details>
+          <details class="faq-item reveal">
+            <summary>Do you offer takeout and delivery?</summary>
+            <div class="faq-answer"><p>Yes. Stop by to order takeout or check <a href="https://www.ubereats.com/ca/store/megga-morning-grace-coffee/lcxvV_vkUyulXjWnfndXcA" data-href="orderUrl" target="_blank" rel="noopener">Uber Eats</a> for pickup and delivery options.</p></div>
+          </details>
+          <details class="faq-item reveal">
+            <summary>Which subway station is closest?</summary>
+            <div class="faq-answer"><p>Coxwell Station on TTC Line 2 (Bloor–Danforth). We’re a short walk east along Danforth Avenue, at number 1696.</p></div>
+          </details>
+        </div>
+        <p class="center-link reveal"><a class="text-link" href="contact.html#faq">More questions answered <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
       </div>
     </section>
   </main>

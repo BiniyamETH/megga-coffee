@@ -365,7 +365,8 @@
 
     // Homepage: tell Google the site's name (shown above the link in results).
     if (page === "home") {
-      addJsonLd({
+      // Already in the published HTML (tools/build-menu.js); only add it when it is missing.
+      if (!$('script[data-schema="website"]')) addJsonLd({
         "@context": "https://schema.org",
         "@type": "WebSite",
         "@id": base + "#website",
@@ -563,6 +564,29 @@
         (h.sub ? '<span class="mc-sub">' + esc(h.sub) + "</span>" : "") + "</span>" +
         '<span class="mc-arrow" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span></span></a></li>';
     }).join("");
+    startLazy(list);
+  }
+
+  // "A Taste of the Menu" on the homepage: the dishes listed in SITE.featured, with the photo and price from MENU.
+  function renderFeatured() {
+    var list = $("[data-featured]");
+    if (!list) return;
+    var html = "";
+    if (typeof MENU !== "undefined") {
+      (SITE.featured || []).forEach(function (f) {
+        var cat = MENU.filter(function (c) { return c.id === f.category; })[0];
+        var item = cat && cat.items.filter(function (i) { return i.name === f.name; })[0];
+        if (!item) return; // renamed or removed from the menu: leave it out
+        html += '<li class="reveal"><a class="feat-card" href="menu.html#' + esc(cat.id) + '">' +
+          (item.image ? '<img class="item-thumb" ' + lazySrc(item.image) + ' alt="" width="200" height="200" loading="lazy" decoding="async">' : "") +
+          '<span class="feat-text"><span class="feat-name">' + esc(f.label || item.name) + "</span>" +
+          '<span class="feat-cat">' + esc(cat.name) + "</span></span>" +
+          '<span class="item-price">' + formatPrice(item.price) + "</span></a></li>";
+      });
+    }
+    list.innerHTML = html;
+    var section = list.closest("section");
+    if (section) section.hidden = !html;
     startLazy(list);
   }
 
@@ -1179,7 +1203,7 @@
   function run(step) {
     try { step(); } catch (err) { if (window.console) console.error(err); }
   }
-  [bindConfig, keepOpenStatusFresh, renderHoursTable, renderStars, renderHighlights, renderGallery,
+  [bindConfig, keepOpenStatusFresh, renderHoursTable, renderStars, renderHighlights, renderFeatured, renderGallery,
     renderGalleryStrip, renderHoursGroups, setupLightbox, renderMenu,
     detectFlexGap, setupHeader, setupReveal, fixIcons, injectSchema, injectFaqSchema, setupSpeculation].forEach(run);
   // Marks the page as script-ready (fade-ins, menu buttons). setupReveal normally does this

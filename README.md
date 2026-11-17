@@ -3,7 +3,7 @@
 A plain HTML/CSS/JavaScript site with no build step. It works on GitHub Pages or any static host.
 
 ```
-index.html      Home: hero, menu cards, why Megga, our story, photo strip, reviews
+index.html      Home: hero, menu cards, a taste of the menu, why Megga, our story, Habesha coffee, photo strip, reviews, quick answers
 menu.html       Menu (built from menu-data.js)
 about.html      Our Story + Ethiopian coffee roots
 gallery.html    Photo gallery (tap a photo to view it full-size)
@@ -149,6 +149,8 @@ The site lives at **`https://meggacoffee.com/`** (bought November 2026). The old
 The business address and ordering options are listed on [Uber Eats](https://www.ubereats.com/ca/store/megga-morning-grace-coffee/lcxvV_vkUyulXjWnfndXcA). The walking directions use the [TTC's Coxwell Station entrance information](https://www.ttc.ca/subway-stations/coxwell-station).
 
 Google's local results depend on relevance, distance and prominence. Keep the Business Profile address, hours, photos and menu link current. [Google Business Profile local ranking guidance](https://support.google.com/business/answer/7091)
+
+**Homepage (November 2026):** the dishes under "A Taste of the Menu" are chosen in `featured` in `menu-data.js`. `tools/build-menu.js` writes their names and prices into `index.html` (between the `FEATURED` markers) and adds the site-name details for Google to the homepage `<head>`, so search engines read both without running scripts.
 
 ### Verification for this update
 

@@ -90,6 +90,20 @@ const SITE = {
     { label: "Drinks",               sub: "Juice, smoothies & soft drinks",   category: "drinks",               image: "assets/cards/drinks.jpg", small: "assets/cards/drinks-600.jpg" },
     { label: "Breakfast & Brunch",   sub: "Benedicts, omelettes, pancakes", category: "benedicts",            image: "assets/cards/breakfast.jpg", small: "assets/cards/breakfast-600.jpg" },
     { label: "Sandwiches & Burgers", sub: "Sandwiches, burgers, salads",    category: "breakfast-sandwiches", image: "assets/cards/sandwiches.jpg", small: "assets/cards/sandwiches-600.jpg" }
+  ],
+
+  // "A Taste of the Menu" on the homepage. Each line points at one dish in MENU below:
+  // "category" is the category id and "name" is the dish name, spelled exactly as in MENU.
+  // The photo and price come from the menu, so a price change there shows here too.
+  // "label" (optional) is a longer name to show, e.g. "Canadian Benedict" instead of "Canadian".
+  // A line that matches no dish is simply left out. Six dishes fill the rows neatly.
+  featured: [
+    { category: "specialty-coffees",    name: "Cappuccino" },
+    { category: "habesha-dishes",       name: "Ful Special" },
+    { category: "benedicts",            name: "Canadian",  label: "Canadian Benedict" },
+    { category: "pancakes",             name: "Blueberry", label: "Blueberry Pancakes" },
+    { category: "breakfast-sandwiches", name: "Toasted Western" },
+    { category: "vegetarian",           name: "Falafel Plate" }
   ]
 };
 
