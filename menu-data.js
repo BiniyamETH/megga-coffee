@@ -49,7 +49,7 @@ const SITE = {
   priceRange: "$$",
 
   // Google rating — update these numbers when your reviews change.
-  rating: { value: 5.0, count: 26 },
+  rating: { value: 5.0, count: 27 },
 
   // Opening hours, 24-hour clock, Toronto time.
   // To close on a day, write:  sun: null,
