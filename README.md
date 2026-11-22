@@ -200,7 +200,8 @@ Things decided or suggested but not finished. Tick them off here as you go.
 - [ ] Old pages refresh themselves: the publish step writes a small `version.txt`, and a page that is older than it reloads once. This fixes the 10-minute delay without Cloudflare.
 - [ ] Use a Habesha dish photo as the menu page's share picture (`og:image` in `menu.html`), for links shared on WhatsApp and Facebook.
 - [x] Buy the domain and switch the site to it, with the QR code (done November 2026: `meggacoffee.com`).
-- [ ] Update the website link on Google Business Profile, Search Console, Instagram and Uber Eats to `https://meggacoffee.com/`.
+- [x] Website link on Google Business Profile and Search Console set to `https://meggacoffee.com/` (checked November 21, 2026).
+- [ ] Update the website link on Instagram and Uber Eats to `https://meggacoffee.com/`. The Uber Eats store is being renamed from "Megga Morning Grace Coffee"; once it is, put its new link in `orderUrl:` in `menu-data.js` and in the HTML files.
 
 ## Photo credits
 
