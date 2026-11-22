@@ -759,6 +759,13 @@ main > .menu-cards:last-child { padding-bottom: 4rem; }
   .gallery-more .icon { flex: none; margin-top: .2em; }
 }
 
+/* Narrow phones (iPhone SE and smaller): the round arrow on the homepage menu cards
+   doesn't fit beside long titles like "Sandwiches & Burgers" and sticks out of the card.
+   The whole card is the link, so the arrow can go. */
+@media (max-width: 360px) {
+  .mc-arrow { display: none; }
+}
+
 /* Without JavaScript (or before it runs) the menu is a plain list, so hide the buttons that need it. */
 html:not(.js) [data-sections-toggle],
 html:not(.js) [data-search-toggle] { visibility: hidden; }
