@@ -37,6 +37,10 @@ const SITE = {
   // Shown under "Payments" in the Contact section. Leave [] to hide.
   payments: ["Credit cards", "Debit cards"], // from Google Maps listing
 
+  // What the café offers guests, for Google ("amenityFeature") and llms.txt. Only list what is
+  // really true; remove a line if it stops being true. Confirmed by the owner, November 2026.
+  amenities: ["Free Wi-Fi", "Laptop friendly", "Power outlets", "Restroom", "Outdoor seating", "Parking nearby"],
+
   // Optional. Leave "" to hide. Example: "https://www.instagram.com/meggacoffee"
   instagram: "",
 

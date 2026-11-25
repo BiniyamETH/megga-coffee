@@ -352,6 +352,11 @@
     if (SITE.phone) data.telephone = phoneE164(SITE.phone);
     if (payments.length) data.paymentAccepted = payments.join(", ");
     if (SITE.priceRange) data.priceRange = SITE.priceRange;
+    if ((SITE.amenities || []).length) {
+      data.amenityFeature = SITE.amenities.map(function (n) {
+        return { "@type": "LocationFeatureSpecification", name: n, value: true };
+      });
+    }
     // The café's other pages on the web (Google Maps, Uber Eats, Instagram), so Google
     // knows they are all the same business as this website.
     var sameAs = [SITE.reviewsUrl, SITE.orderUrl, SITE.instagram].filter(Boolean);

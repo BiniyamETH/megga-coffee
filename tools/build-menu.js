@@ -160,6 +160,9 @@ function cafeSchema(base) {
     telephone: digits ? "+" + digits : undefined,
     paymentAccepted: payments.length ? payments.join(", ") : undefined,
     priceRange: SITE.priceRange || undefined,
+    amenityFeature: (SITE.amenities || []).length ? SITE.amenities.map(function (n) {
+      return { "@type": "LocationFeatureSpecification", name: n, value: true };
+    }) : undefined,
     sameAs: sameAs.length ? sameAs : undefined,
     hasMenu: { "@id": base + "menu#menu" }
   };
@@ -241,6 +244,8 @@ var llms = [
   "- Neighbourhood: Danforth East, Toronto, a short walk from Coxwell subway station (Line 2)",
   SITE.phone ? "- Phone: " + SITE.phone : "",
   (SITE.payments || []).length ? "- Payment: " + SITE.payments.join(", ") : "",
+  (SITE.amenities || []).length ? "- Amenities: " + SITE.amenities.join(", ") : "",
+  (SITE.amenities || []).indexOf("Free Wi-Fi") !== -1 ? "- Work and study: free Wi-Fi with no password and power outlets. Guests are welcome to stay with a laptop to work or study any time the café is open." : "",
   SITE.rating ? "- Google rating: " + SITE.rating.value.toFixed(1) + " stars from " + SITE.rating.count + " reviews" : "",
   "- Order delivery or pickup: " + SITE.orderUrl,
   "- Directions: " + SITE.directionsUrl,
