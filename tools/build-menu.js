@@ -245,7 +245,7 @@ var llms = [
   SITE.phone ? "- Phone: " + SITE.phone : "",
   (SITE.payments || []).length ? "- Payment: " + SITE.payments.join(", ") : "",
   (SITE.amenities || []).length ? "- Amenities: " + SITE.amenities.join(", ") : "",
-  (SITE.amenities || []).indexOf("Free Wi-Fi") !== -1 ? "- Work and study: free Wi-Fi with no password and power outlets. Guests are welcome to stay with a laptop to work or study any time the café is open." : "",
+  (SITE.amenities || []).indexOf("Free Wi-Fi") !== -1 ? "- Work and study: free Wi-Fi and power outlets. Guests are welcome to stay with a laptop to work or study any time the café is open." : "",
   SITE.rating ? "- Google rating: " + SITE.rating.value.toFixed(1) + " stars from " + SITE.rating.count + " reviews" : "",
   "- Order delivery or pickup: " + SITE.orderUrl,
   "- Directions: " + SITE.directionsUrl,
