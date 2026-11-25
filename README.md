@@ -15,6 +15,7 @@ script.js       Shared logic (you should not need to edit this)
 menu-data.js    <- EDIT THIS: business info, hours, photos and the menu
 assets/         Photos, favicon, social-share image
 robots.txt      Tells search engines where the sitemap is
+llms.txt        Summary + full menu for AI search (built from menu-data.js; do not edit by hand)
 print/          The menu QR code for printing (not published)
 ```
 

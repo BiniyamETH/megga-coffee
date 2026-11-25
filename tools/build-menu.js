@@ -208,5 +208,66 @@ var fa = home.indexOf(FEAT_START), fb = home.indexOf(FEAT_END);
 if (fa === -1 || fb === -1 || fb < fa) fail("index.html is missing the FEATURED:START / FEATURED:END markers.");
 fs.writeFileSync(homeFile, home.slice(0, fa + FEAT_START.length) + "\n" + (featured ? featured + "\n" : "") + "          " + home.slice(fb));
 
+/* llms.txt: a plain-text summary of the café (details, hours and the full menu with prices) for
+   AI assistants and AI search (ChatGPT, Gemini, Perplexity, Copilot). They can read it in one go
+   instead of piecing the facts together from the pages. Built from menu-data.js, so it never goes stale. */
+function to12h(t) {
+  var p = t.split(":"), h = +p[0], m = p[1];
+  return (h % 12 || 12) + (m === "00" ? "" : ":" + m) + (h < 12 ? " a.m." : " p.m.");
+}
+var DAY_SHORT = { mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", sat: "Saturday", sun: "Sunday" };
+var hourGroups = [];
+DAY_KEYS.forEach(function (k) {
+  var r = SITE.hours[k], last = hourGroups[hourGroups.length - 1];
+  if (last && String(last.range) === String(r)) last.days.push(k);
+  else hourGroups.push({ days: [k], range: r });
+});
+var hoursLines = hourGroups.map(function (g) {
+  var days = g.days.length === 7 ? "Every day"
+    : g.days.length === 1 ? DAY_SHORT[g.days[0]]
+    : DAY_SHORT[g.days[0]] + " to " + DAY_SHORT[g.days[g.days.length - 1]];
+  return "- " + days + ": " + (g.range ? to12h(g.range[0]) + " to " + to12h(g.range[1]) : "Closed");
+});
+var homeUrl = /<link rel="canonical" href="([^"]+)"/.exec(fs.readFileSync(homeFile, "utf8"))[1];
+var a = SITE.address;
+var llms = [
+  "# " + SITE.name,
+  "",
+  "> " + SITE.description,
+  "",
+  "## Visit",
+  "",
+  "- Address: " + a.street + ", " + a.city + ", " + a.region + " " + a.postalCode + ", Canada",
+  "- Neighbourhood: Danforth East, Toronto, a short walk from Coxwell subway station (Line 2)",
+  SITE.phone ? "- Phone: " + SITE.phone : "",
+  (SITE.payments || []).length ? "- Payment: " + SITE.payments.join(", ") : "",
+  SITE.rating ? "- Google rating: " + SITE.rating.value.toFixed(1) + " stars from " + SITE.rating.count + " reviews" : "",
+  "- Order delivery or pickup: " + SITE.orderUrl,
+  "- Directions: " + SITE.directionsUrl,
+  "",
+  "## Hours (Toronto time)",
+  "",
+  hoursLines.join("\n"),
+  "",
+  "## Pages",
+  "",
+  "- [Menu](" + homeUrl + "menu): full menu with prices and photos",
+  "- [About](" + homeUrl + "about): the café's story and its Habesha (Ethiopian and Eritrean) roots",
+  "- [Contact](" + homeUrl + "contact): hours, map and directions",
+  "- [Reviews](" + homeUrl + "reviews): what guests say on Google",
+  "- [Gallery](" + homeUrl + "gallery): photos of the café",
+  "",
+  "## Menu (prices in Canadian dollars)"
+].filter(function (line, i, all) { return line !== "" || all[i - 1] !== ""; }).join("\n") + "\n" +
+  MENU.map(function (cat) {
+    return "\n### " + cat.name + "\n\n" + cat.items.map(function (item) {
+      var tags = (item.tags || []).map(function (t) { return TAGS[t].label.toLowerCase(); });
+      return "- " + item.name + ": $" + item.price.toFixed(2) +
+        (item.desc ? ". " + item.desc.replace(/^[^\x00-ɏ]+ · /, "") : "") +
+        (tags.length ? " (" + tags.join(", ") + ")" : "");
+    }).join("\n") + "\n";
+  }).join("");
+fs.writeFileSync(path.join(root, "llms.txt"), llms);
+
 var count = MENU.reduce(function (n, c) { return n + c.items.length; }, 0);
 console.log("build-menu: wrote " + count + " items in " + MENU.length + " sections to menu.html");

@@ -1,0 +1,195 @@
+# Megga Coffee
+
+> Megga Coffee is a café and brunch spot at 1696 Danforth Ave in Toronto's Danforth East, near Coxwell Station. The menu includes espresso, Habesha dishes such as ful and fata, eggs Benedict and pancakes.
+
+## Visit
+
+- Address: 1696 Danforth Ave, Toronto, ON M4C 1H8, Canada
+- Neighbourhood: Danforth East, Toronto, a short walk from Coxwell subway station (Line 2)
+- Phone: (647) 575-9431
+- Payment: Credit cards, Debit cards
+- Google rating: 5.0 stars from 27 reviews
+- Order delivery or pickup: https://www.ubereats.com/ca/store/megga-morning-grace-coffee/lcxvV_vkUyulXjWnfndXcA
+- Directions: https://www.google.com/maps/search/?api=1&query=Megga+coffee+1696+Danforth+Ave+Toronto
+
+## Hours (Toronto time)
+
+- Every day: 8 a.m. to 9 p.m.
+
+## Pages
+
+- [Menu](https://meggacoffee.com/menu): full menu with prices and photos
+- [About](https://meggacoffee.com/about): the café's story and its Habesha (Ethiopian and Eritrean) roots
+- [Contact](https://meggacoffee.com/contact): hours, map and directions
+- [Reviews](https://meggacoffee.com/reviews): what guests say on Google
+- [Gallery](https://meggacoffee.com/gallery): photos of the café
+
+## Menu (prices in Canadian dollars)
+
+### Specialty Coffees
+
+- Single Espresso: $3.50
+- Double Espresso: $4.00
+- Espresso Macchiato: $3.50
+- Cappuccino: $4.00
+- Americano: $4.00
+- Red Eye: $3.50
+- Café Latte: $4.00
+- Vanilla Latte: $4.00
+- Caramel Latte: $4.00
+- Flat White: $4.00
+- Mocha: $5.00
+- Matcha Latte: $5.00
+- Regular Coffee: $4.00
+
+### Iced Coffee
+
+- Iced Coffee: $5.00
+- Iced Latte: $5.00
+- Iced Espresso: $5.00
+- Iced Americano: $5.00
+
+### Tea & Hot Drinks
+
+- Black Tea: $3.00
+- Green Tea: $3.00
+- Chai Tea: $3.00
+- Hot Chocolate: $4.50
+- Hot Chocolate with Espresso: $5.00
+
+### Juices & Soft Drinks
+
+- Fresh Orange Juice: $5.25
+- Fruit Smoothie (Small): $8.00
+- Fruit Smoothie (Large): $10.00
+- Minute Maid Juice: $3.00
+- Coca-Cola: $3.00
+- Canada Dry: $3.00
+- Bottled Water: $2.00
+
+### Habesha Dishes
+
+- Ful Normal: $12.00. Mashed fava beans with onion, tomato and chili, served with bread
+- Ful Special: $15.00. Our ful with extra toppings
+- Fata Normal (with 2): $12.00. Torn bread soaked in a spiced berbere tomato sauce
+- Fata Special (with 2): $15.00. Our fata with extra toppings
+- Kicha Fitfit: $15.00. Torn kicha flatbread tossed in spiced butter and berbere
+- Ga’at: $15.00. Thick porridge with spiced butter and berbere, served with yogurt
+- Dulot Tbsi: $20.00. Finely chopped meat sautéed with onion, chili and spiced butter
+- Keyih Tbsi: $20.00. Tibs: meat sautéed in a red berbere sauce with onion
+
+### Breakfast Sandwiches
+
+- Egg Sandwich: $6.00
+- Egg Sandwich Special: $8.00
+- Chicken Breast Sandwich: $5.50
+- Chicken Breast Special: $10.00
+- Turkey Breast Sandwich: $5.50
+- Ham Sandwich: $5.50
+- Turkey Breast Special: $8.00
+- Turkey Special: $10.00
+- BLT: $8.95
+- Single Peameal and Egg: $8.95
+- Toasted Western: $8.95
+- BELT: $9.95
+- Double Peameal and Cheese: $9.95
+- BBLT: $10.95
+- TBLT: $10.95
+- 2 Lil Piggies: $12.95
+- 3 Lil Piggies: $13.95
+- Monster Peameal: $13.95
+- D'Angelo BELT: $13.95
+- Steak and Egg: $14.95
+
+### Breakfast Dishes
+
+- Egg, Potato, Salad, Tomato & Green Pepper: $12.00
+- Frittata Special: $16.00
+- Megga Special Breakfast: $15.00
+- Standard Breakfast: $9.95
+- Eggs and Beans: $10.75
+- The Greek: $11.75
+- Build Your Own Meat Lovers: $13.95. 4 choices of diner cut
+- The Great One: $14.95
+- Steak and Eggs: $18.95
+
+### Benedicts
+
+- Canadian: $14.95
+- Eggs Florentine: $14.95
+- Spicy Benny: $14.95 (spicy)
+- Greek: $15.95
+- Grilled Cheese: $16.95
+- Philly Cheese Steak: $17.95
+- Supreme: $17.95
+- Sunrise: $17.95
+- Pulled Pork: $17.95
+- Steak: $18.95
+- Salmon: $20.95
+- Halloumi: $20.95
+
+### Omelettes
+
+- Spinach and Feta: $12.95
+- Three Cheese: $12.95
+- Western: $12.95
+- Ham and Cheese: $12.95
+- Greek Feta Potato: $13.95
+- Veggie: $13.95
+- Bacon and Cheddar: $13.95
+- Canadian: $13.95
+
+### Pancakes
+
+- Single: $3.95
+- Stack of 4: $8.95
+- Chocolate Chip: $9.95
+- Blueberry: $9.95
+
+### Burgers
+
+- Hamburger: $11.95
+- Cheeseburger: $13.25
+- Bacon Cheeseburger: $14.95
+- Greek Burger: $14.95
+- Western: $15.95
+- Uncle Philly: $16.95
+- Mob: $17.95
+- Big Ben: $18.95
+
+### Lunch Dishes
+
+- Jerk Salad: $8.00
+- Aristotle: $12.95
+- The Herc: $12.95
+- Steak and Salad: $15.95
+- Greek Jerk: $15.95
+- Aristotle with Chicken: $16.95
+- The Herc with Chicken: $16.95
+
+### Vegetarian
+
+- Spicy Veggie Wrap: $11.50 (vegetarian, spicy)
+- Veggie Plate Small: $11.50 (vegetarian)
+- Veggie Plate Large: $13.50 (vegetarian)
+- Falafel Plate: $13.95 (vegetarian)
+- Tzatziki Veggie Wrap: $14.50 (vegetarian)
+- Hummus Veggie Wrap: $14.50 (vegetarian)
+- Med Beef Plant Based: $15.95 (vegetarian)
+
+### Home Fries and Sides
+
+- Home Fries: $4.95
+- Spicy Home Fries: $5.95 (spicy)
+- Greek Home Fries: $8.50
+- Spicy Home Fries with Cheddar and Bacon: $11.50 (spicy)
+- Bacon: $4.95
+- Sausage: $4.95
+- Ham: $4.95
+- Peameal Bacon: $5.50
+- Yogurt and Honey: $5.25
+- Yogurt, Honey and Granola: $6.25
+- Buttered Toast: $2.50
+- Gluten Free Toast: $3.50 (gluten free)
+- Hollandaise: $3.25
+- Extra Grilled Chicken: $6.95
