@@ -18,7 +18,7 @@ const SITE = {
   logoBottom: "Coffee · Community · Toronto",
 
   // Business description used in the structured data.
-  description: "Megga Coffee is a café and brunch spot at 1696 Danforth Ave in Toronto's Danforth East, near Coxwell Station. The menu includes espresso, Habesha dishes such as ful and fata, eggs Benedict and pancakes.",
+  description: "Megga Coffee is a café and brunch spot at 1696 Danforth Ave in Toronto's Danforth East, near Coxwell Station. The menu includes espresso, Habesha dishes such as ful and fata, eggs Benedict and pancakes. Free Wi-Fi, power outlets and laptop-friendly seating make it a good café to work or study.",
 
   city: "Toronto",
   address: {

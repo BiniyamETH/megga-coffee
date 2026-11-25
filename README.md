@@ -43,6 +43,7 @@ Everything you'll normally change is in **`menu-data.js`**. Open it in any text 
 | Hours | `hours:` uses a 24-hour clock, e.g. `mon: ["08:00", "21:00"]`. To close on a day, write `sun: null,`. The "Open now / Closed" badge, the hours table and Google's data all update from this. |
 | Instagram | `instagram: "https://www.instagram.com/yourname"`. Leave it `""` to hide it. |
 | Price range (for Google) | `priceRange: "$$"`. Use `"$"` for under $10 a person or `"$$$"` for $20–30. |
+| Amenities (Wi-Fi, outlets…) | `amenities: [...]`. Goes into Google's data and `llms.txt`. Only list what is really true. The home page and Contact page also mention them in plain text, so change those too (see "Work & study"). |
 | Google rating | `rating: { value: 5.0, count: 26 }` |
 | Uber Eats link | `orderUrl:`. The link is also written in the HTML files (Visit band, footer, and under the menu), so replace it there too. |
 | Google Maps listing link | `reviewsUrl:`. It is also written in the HTML files ("Write a review" links), so replace it there too. |
@@ -151,6 +152,21 @@ The business address and ordering options are listed on [Uber Eats](https://www.
 
 Google's local results depend on relevance, distance and prominence. Keep the Business Profile address, hours, photos and menu link current. [Google Business Profile local ranking guidance](https://support.google.com/business/answer/7091)
 
+### Work & study (free Wi-Fi, laptop friendly)
+
+Added November 25, 2026, after the owner confirmed: **free Wi-Fi, laptops welcome any time we're open, power outlets, a customer restroom, outdoor seating and parking nearby.** The aim is to show up when people search for things like "cafe with free wifi", "study cafe near me" or "laptop friendly cafe Toronto".
+
+| Where | What it says |
+| --- | --- |
+| `amenities` in `menu-data.js` | The list of amenities. The publish step turns it into Google's `amenityFeature` data on every page and the "Amenities" lines in `llms.txt`. |
+| `description` in `menu-data.js` | Ends with "Free Wi-Fi, power outlets and laptop-friendly seating make it a good café to work or study." Used in Google's data and `llms.txt`. |
+| Home page (`index.html`) | Meta description says "laptop-friendly café with free Wi-Fi". The "Work & Study" section ("A Free Wi-Fi Café to Work or Study on the Danforth") has three cards: Free Wi-Fi, Power Outlets, Stay a While. Quick Answers has "Can I work or study at Megga Coffee?" |
+| Contact page (`contact.html`) | Meta description says "a café with free Wi-Fi". The FAQ has "Do you have free Wi-Fi?", "Can I work or study at the café?" and "Is there parking and a restroom?" These are also sent to Google as FAQ data. |
+
+**Wording rules:** say just "free Wi-Fi", never mention a password. Say "parking nearby", not "free parking" (not confirmed). Don't call it "quiet" unless the owner says so. If an amenity stops being true, remove it from `amenities` **and** from the text in `index.html` and `contact.html`.
+
+**What the website can and can't do:** the pages now use the words people search for, but for "near me" searches Google mostly uses the **Google Business Profile**, so turn on the matching attributes there (see the to-do list). Results usually take a few weeks to change. Check the Search Console Queries report for searches containing "wifi", "study" or "laptop".
+
 **Homepage (November 2026):** the dishes under "A Taste of the Menu" are chosen in `featured` in `menu-data.js`. `tools/build-menu.js` writes their names into `index.html` (between the `FEATURED` markers) and adds the site-name details for Google to the homepage `<head>`, so search engines read both without running scripts. The homepage shows no prices; those are only on the menu page.
 
 ### Verification for this update
@@ -192,11 +208,12 @@ Things decided or suggested but not finished. Tick them off here as you go.
 - [ ] Google Business Profile: use the same name as the website, "Megga Coffee".
 - [ ] Google Business Profile categories: **Coffee shop** (main), plus **Ethiopian restaurant**, **Eritrean restaurant**, **Breakfast restaurant**.
 - [ ] Google Business Profile: **Menu link** = `https://meggacoffee.com/menu`, **Order link** = Uber Eats, and add real photos of the Habesha dishes.
-- [ ] Ask happy customers for Google reviews. Then update `rating:` in `menu-data.js`.
+- [ ] Google Business Profile → **Edit profile → More**: turn on **Wi-Fi / Free Wi-Fi**, **Good for working on laptop**, **Restroom**, **Outdoor seating** and **Parking**. This matters most for "cafe with wifi near me" and "study cafe near me" searches. Also add a photo of the seating with laptops or people working.
+- [ ] Ask happy customers for Google reviews. Reviews that mention "wifi" or "study" help too, but let customers write their own words. Then update `rating:` in `menu-data.js`.
 - [ ] Same name, address and phone on Yelp, TripAdvisor, Apple Maps ([Apple Business Connect](https://businessconnect.apple.com/)) and [Bing Places](https://www.bingplaces.com/) (it can import from Google).
 - [ ] Search Console: submit the sitemap, and use **URL Inspection → Request indexing** on `https://meggacoffee.com/menu` after big menu changes.
 - [ ] [Bing Webmaster Tools](https://www.bing.com/webmasters): sign up and choose **Import from Google Search Console**, signing in with the Google account that owns the Search Console property. ChatGPT search and Copilot get much of their web results from Bing, so this gets the site into AI search sooner.
-- [ ] Early December 2026: in Search Console, check that `/contact` is indexed and look at the Queries report again.
+- [ ] Early December 2026: in Search Console, check that `/contact` is indexed and look at the Queries report again, including searches with "wifi", "study" or "laptop".
 
 **Website ideas, not built yet:**
 - [ ] Replace stock and illustrated dish photos with photos of Megga's own plates, starting with the Habesha dishes (new file names, see "Swapping photos").
