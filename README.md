@@ -195,6 +195,8 @@ Things decided or suggested but not finished. Tick them off here as you go.
 - [ ] Ask happy customers for Google reviews. Then update `rating:` in `menu-data.js`.
 - [ ] Same name, address and phone on Yelp, TripAdvisor, Apple Maps ([Apple Business Connect](https://businessconnect.apple.com/)) and [Bing Places](https://www.bingplaces.com/) (it can import from Google).
 - [ ] Search Console: submit the sitemap, and use **URL Inspection → Request indexing** on `https://meggacoffee.com/menu` after big menu changes.
+- [ ] [Bing Webmaster Tools](https://www.bing.com/webmasters): sign up and choose **Import from Google Search Console**, signing in with the Google account that owns the Search Console property. ChatGPT search and Copilot get much of their web results from Bing, so this gets the site into AI search sooner.
+- [ ] Early December 2026: in Search Console, check that `/contact` is indexed and look at the Queries report again.
 
 **Website ideas, not built yet:**
 - [ ] Replace stock and illustrated dish photos with photos of Megga's own plates, starting with the Habesha dishes (new file names, see "Swapping photos").
